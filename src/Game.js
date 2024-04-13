@@ -1,5 +1,5 @@
-export const TicTacToe = {
-    setup: () => ({ cells: Array(9).fill(null) }),
+export const GuessWho = {
+    setup: () => ({ cells: Array(10).fill(null) }),
 
     moves: {
         clickCell: ({ G, playerID }, id) => {
