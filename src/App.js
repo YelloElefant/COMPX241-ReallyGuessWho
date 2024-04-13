@@ -12,7 +12,6 @@ class GuessWhoClient {
     }
 
     createBoard() {
-        // Create cells in rows for the Tic-Tac-Toe board.
         const rows = [];
         for (let i = 0; i < 5; i++) {
             const cells = [];
@@ -23,8 +22,6 @@ class GuessWhoClient {
             rows.push(`<tr>${cells.join('')}</tr>`);
         }
 
-        // Add the HTML to our app <div>.
-        // We’ll use the empty <p> to display the game winner later.
         this.rootElement.innerHTML = `
           <table>${rows.join('')}</table>
           <p class="winner"></p>
