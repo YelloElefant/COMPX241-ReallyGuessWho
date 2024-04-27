@@ -50,11 +50,23 @@ class GuessWhoClient {
             const id = parseInt(event.target.dataset.id);
             const tableNum = parseInt(event.target.dataset.tablenum);
             const playerTurn = this.client.getState().ctx.currentPlayer;
-            console.log(playerTurn, tableNum)
-            if (playerTurn == tableNum) { this.client.moves.clickCell(id, tableNum); }
-            else {
-                alert("Wrong board!");
+            console.log(playerTurn != tableNum)
+            console.log(event.target.innerHTML == playerTurn);
+            let passscore = 0;
+
+            if (playerTurn != tableNum) {
+                alert("Wrong Board!");
+                return
             }
+            else { passscore++; }
+            if (event.target.innerHTML == playerTurn) {
+                alert("Already clicked!");
+                return
+            }
+            else { passscore++; }
+
+            if (passscore == 2) { this.client.moves.clickCell(id, tableNum); }
+
         };
         // Attach the event listener to each of the board cells.
         const cells = this.rootElement.querySelectorAll('.cell');
@@ -62,6 +74,9 @@ class GuessWhoClient {
             cell.onclick = handleCellClick;
         });
     }
+
+
+
 
     update(state) {
         // Get all the board cells.
@@ -80,8 +95,12 @@ class GuessWhoClient {
             cell.textContent = cellValue !== null ? cellValue : '';
         });
 
+        let currentPlayer = state.ctx.currentPlayer;
+        currentPlayer === "0" ? this.rootElement.querySelector("#turn").textContent = "Player Turn: 0" : this.rootElement.querySelector("#turn").textContent = "Player Turn: 1";
 
-        state.ctx.currentPlayer === "0" ? this.rootElement.querySelector("#turn").textContent = "Player Turn: 0" : this.rootElement.querySelector("#turn").textContent = "Player Turn: 1";
+
+
+
         // Get the gameover message element.
         const messageEl = this.rootElement.querySelector('.winner');
         // Update the element to show a winner if any.
