@@ -17,4 +17,8 @@ export const GuessWho = {
 
         },
     },
+    turn: {
+        maxMoves: 1,
+        minMoves: 1,
+    },
 };
