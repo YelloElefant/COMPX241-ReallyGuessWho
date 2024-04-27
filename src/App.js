@@ -40,7 +40,13 @@ class GuessWhoClient {
             images.push(`https://picsum.photos/50/50?random=${i}`);
 
         }
+
+
+
+
+
         return images;
+
     }
 
     attachListeners() {
@@ -117,3 +123,35 @@ class GuessWhoClient {
 }
 const appElement = document.getElementById('app');
 const app = new GuessWhoClient(appElement);
+
+
+
+
+
+class SPARQLQueryDispatcher {
+    constructor(endpoint) {
+        this.endpoint = endpoint;
+    }
+
+    query(sparqlQuery) {
+        const fullUrl = this.endpoint + '?query=' + encodeURIComponent(sparqlQuery);
+        const headers = { 'Accept': 'application/sparql-results+json' };
+
+        return fetch(fullUrl, { headers }).then(body => body.json());
+    }
+}
+
+const endpointUrl = 'https://query.wikidata.org/sparql';
+const sparqlQuery = `SELECT ?actor ?actorLabel ?image WHERE {
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+  ?actor wdt:P106 wd:Q33999.
+  OPTIONAL { ?actor wdt:P18 ?image. }
+}
+LIMIT 50`;
+
+const queryDispatcher = new SPARQLQueryDispatcher(endpointUrl);
+queryDispatcher.query(sparqlQuery).then(response => {
+    const images = response.results.bindings[1].actorLabel.value;
+    console.log(images);
+})
+

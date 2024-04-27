@@ -16778,6 +16778,32 @@ class GuessWhoClient {
 }
 const appElement = document.getElementById('app');
 const app = new GuessWhoClient(appElement);
+class SPARQLQueryDispatcher {
+  constructor(endpoint) {
+    this.endpoint = endpoint;
+  }
+  query(sparqlQuery) {
+    const fullUrl = this.endpoint + '?query=' + encodeURIComponent(sparqlQuery);
+    const headers = {
+      'Accept': 'application/sparql-results+json'
+    };
+    return fetch(fullUrl, {
+      headers
+    }).then(body => body.json());
+  }
+}
+const endpointUrl = 'https://query.wikidata.org/sparql';
+const sparqlQuery = `SELECT ?actor ?actorLabel ?image WHERE {
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+  ?actor wdt:P106 wd:Q33999.
+  OPTIONAL { ?actor wdt:P18 ?image. }
+}
+LIMIT 50`;
+const queryDispatcher = new SPARQLQueryDispatcher(endpointUrl);
+queryDispatcher.query(sparqlQuery).then(response => {
+  const images = response.results.bindings[1].actorLabel.value;
+  console.log(images);
+});
 },{"boardgame.io/client":"node_modules/boardgame.io/dist/esm/client.js","./Game":"src/Game.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -16803,7 +16829,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "44193" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "43727" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
