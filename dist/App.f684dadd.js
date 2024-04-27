@@ -16692,15 +16692,16 @@ class GuessWhoClient {
     this.attachListeners();
     this.client.subscribe(state => this.update(state));
   }
-  createBoard(tableNum) {
+  async createBoard(tableNum) {
     this.rootElement.innerHTML += `<h2>Table ${tableNum}</h2>`;
     const rows = [];
-    const images = this.getImages();
+    const images = await this.getImages();
+    console.log(images);
     for (let i = 0; i < 5; i++) {
       const cells = [];
       for (let j = 0; j < 10; j++) {
         const id = 10 * i + j;
-        cells.push(`<td  style="background-image: url(${images[id]})" class="cell" data-id="${id}" data-tablenum="${tableNum}"></td>`);
+        cells.push(`<td  style="background-image: url(${images[id].image.value})" class="cell" data-id="${id}" data-tablenum="${tableNum}"></td>`);
       }
       rows.push(`<tr>${cells.join('')}</tr>`);
     }
@@ -16710,11 +16711,32 @@ class GuessWhoClient {
         `;
   }
   getImages() {
-    const images = [];
-    for (let i = 0; i < 50; i++) {
-      images.push(`https://picsum.photos/50/50?random=${i}`);
+    class SPARQLQueryDispatcher {
+      constructor(endpoint) {
+        this.endpoint = endpoint;
+      }
+      query(sparqlQuery) {
+        const fullUrl = this.endpoint + '?query=' + encodeURIComponent(sparqlQuery);
+        const headers = {
+          'Accept': 'application/sparql-results+json'
+        };
+        return fetch(fullUrl, {
+          headers
+        }).then(body => body.json());
+      }
     }
-    return images;
+    const endpointUrl = 'https://query.wikidata.org/sparql';
+    const sparqlQuery = `SELECT ?actor ?actorLabel ?image WHERE {
+         SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+            ?actor wdt:P106 wd:Q33999.
+            OPTIONAL { ?actor wdt:P18 ?image. }
+            }
+            LIMIT 50`;
+    const queryDispatcher = new SPARQLQueryDispatcher(endpointUrl);
+    queryDispatcher.query(sparqlQuery).then(response => {
+      console.log(response.results.bindings[1]);
+      return response.results.bindings;
+    });
   }
   attachListeners() {
     // This event handler will read the cell id from a cell’s
@@ -16778,32 +16800,6 @@ class GuessWhoClient {
 }
 const appElement = document.getElementById('app');
 const app = new GuessWhoClient(appElement);
-class SPARQLQueryDispatcher {
-  constructor(endpoint) {
-    this.endpoint = endpoint;
-  }
-  query(sparqlQuery) {
-    const fullUrl = this.endpoint + '?query=' + encodeURIComponent(sparqlQuery);
-    const headers = {
-      'Accept': 'application/sparql-results+json'
-    };
-    return fetch(fullUrl, {
-      headers
-    }).then(body => body.json());
-  }
-}
-const endpointUrl = 'https://query.wikidata.org/sparql';
-const sparqlQuery = `SELECT ?actor ?actorLabel ?image WHERE {
-  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
-  ?actor wdt:P106 wd:Q33999.
-  OPTIONAL { ?actor wdt:P18 ?image. }
-}
-LIMIT 50`;
-const queryDispatcher = new SPARQLQueryDispatcher(endpointUrl);
-queryDispatcher.query(sparqlQuery).then(response => {
-  const images = response.results.bindings[1].actorLabel.value;
-  console.log(images);
-});
 },{"boardgame.io/client":"node_modules/boardgame.io/dist/esm/client.js","./Game":"src/Game.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -16829,7 +16825,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "43727" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "41001" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
