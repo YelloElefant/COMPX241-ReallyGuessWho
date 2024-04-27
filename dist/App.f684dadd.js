@@ -16692,11 +16692,12 @@ class GuessWhoClient {
   }
   createBoard(tableNum) {
     const rows = [];
+    const images = this.getImages();
     for (let i = 0; i < 5; i++) {
       const cells = [];
       for (let j = 0; j < 10; j++) {
         const id = 10 * i + j;
-        cells.push(`<td class="cell" data-id="${id}" data-tablenum="${tableNum}"></td>`);
+        cells.push(`<td  style="background-image: url(${images[id]})" class="cell" data-id="${id}" data-tablenum="${tableNum}"></td>`);
       }
       rows.push(`<tr>${cells.join('')}</tr>`);
     }
@@ -16704,6 +16705,13 @@ class GuessWhoClient {
           <table>${rows.join('')}</table>
           <p class="winner"></p>
         `;
+  }
+  getImages() {
+    const images = [];
+    for (let i = 0; i < 50; i++) {
+      images.push(`https://picsum.photos/50/50?random=${i}`);
+    }
+    return images;
   }
   attachListeners() {
     // This event handler will read the cell id from a cell’s
@@ -16773,7 +16781,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "46009" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "35385" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
