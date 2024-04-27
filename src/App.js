@@ -38,6 +38,7 @@ class GuessWhoClient {
         const images = [];
         for (let i = 0; i < 50; i++) {
             images.push(`https://picsum.photos/50/50?random=${i}`);
+
         }
         return images;
     }
