@@ -151,7 +151,7 @@ LIMIT 50`;
 
 const queryDispatcher = new SPARQLQueryDispatcher(endpointUrl);
 queryDispatcher.query(sparqlQuery).then(response => {
-    const images = response.results.bindings[1].actorLabel.value;
+    const images = response.results;
     console.log(images);
 })
 
