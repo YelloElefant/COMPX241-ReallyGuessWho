@@ -6,6 +6,8 @@ class GuessWhoClient {
         this.client = Client({ game: GuessWho });
         this.client.start();
         this.rootElement = rootElement;
+        this.rootElement.innerHTML = "<h1>Guess Who</h1>";
+        this.rootElement.innerHTML += "<h2 id='turn'>Player Turn: </h2>";
         this.createBoard(0);
         this.rootElement.innerHTML += "<br>"
         this.createBoard(1);
@@ -14,6 +16,7 @@ class GuessWhoClient {
     }
 
     createBoard(tableNum) {
+        this.rootElement.innerHTML += `<h2>Table ${tableNum}</h2>`;
         const rows = [];
         const images = this.getImages();
         for (let i = 0; i < 5; i++) {
@@ -73,7 +76,7 @@ class GuessWhoClient {
         });
 
 
-
+        state.ctx.currentPlayer === "0" ? this.rootElement.querySelector("#turn").textContent = "Player Turn: 0" : this.rootElement.querySelector("#turn").textContent = "Player Turn: 1";
         // Get the gameover message element.
         const messageEl = this.rootElement.querySelector('.winner');
         // Update the element to show a winner if any.
