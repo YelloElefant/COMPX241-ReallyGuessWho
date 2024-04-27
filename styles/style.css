@@ -1,0 +1,10 @@
+* {
+    font-family: monospace;
+    box-sizing: border-box;
+}
+
+td {
+    color: red;
+    font-size: 30px;
+    font-weight: bold;
+}

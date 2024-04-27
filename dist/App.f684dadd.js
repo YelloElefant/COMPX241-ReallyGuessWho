@@ -16684,6 +16684,8 @@ class GuessWhoClient {
     });
     this.client.start();
     this.rootElement = rootElement;
+    this.rootElement.innerHTML = "<h1>Guess Who</h1>";
+    this.rootElement.innerHTML += "<h2 id='turn'>Player Turn: </h2>";
     this.createBoard(0);
     this.rootElement.innerHTML += "<br>";
     this.createBoard(1);
@@ -16691,6 +16693,7 @@ class GuessWhoClient {
     this.client.subscribe(state => this.update(state));
   }
   createBoard(tableNum) {
+    this.rootElement.innerHTML += `<h2>Table ${tableNum}</h2>`;
     const rows = [];
     const images = this.getImages();
     for (let i = 0; i < 5; i++) {
@@ -16719,8 +16722,13 @@ class GuessWhoClient {
     const handleCellClick = event => {
       const id = parseInt(event.target.dataset.id);
       const tableNum = parseInt(event.target.dataset.tablenum);
-      this.client.moves.clickCell(id, tableNum);
-      console.log(event.target.dataset);
+      const playerTurn = this.client.getState().ctx.currentPlayer;
+      console.log(playerTurn, tableNum);
+      if (playerTurn == tableNum) {
+        this.client.moves.clickCell(id, tableNum);
+      } else {
+        alert("Wrong board!");
+      }
     };
     // Attach the event listener to each of the board cells.
     const cells = this.rootElement.querySelectorAll('.cell');
@@ -16743,7 +16751,7 @@ class GuessWhoClient {
       const cellValue = state.G.cells1[cellId];
       cell.textContent = cellValue !== null ? cellValue : '';
     });
-
+    state.ctx.currentPlayer === "0" ? this.rootElement.querySelector("#turn").textContent = "Player Turn: 0" : this.rootElement.querySelector("#turn").textContent = "Player Turn: 1";
     // Get the gameover message element.
     const messageEl = this.rootElement.querySelector('.winner');
     // Update the element to show a winner if any.
@@ -16781,7 +16789,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "35385" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "38255" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

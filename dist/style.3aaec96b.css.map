@@ -1,0 +1,1 @@
+{"version":3,"sources":["style.css"],"names":[],"mappings":"AAAA,EACI,qBAAsB,CACtB,qBACJ,CAEA,GACI,SAAU,CACV,cAAe,CACf,eACJ","file":"style.3aaec96b.css","sourceRoot":"..","sourcesContent":["* {\n    font-family: monospace;\n    box-sizing: border-box;\n}\n\ntd {\n    color: red;\n    font-size: 30px;\n    font-weight: bold;\n}"]}

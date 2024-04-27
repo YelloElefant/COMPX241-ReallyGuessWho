@@ -48,8 +48,12 @@ class GuessWhoClient {
         const handleCellClick = event => {
             const id = parseInt(event.target.dataset.id);
             const tableNum = parseInt(event.target.dataset.tablenum);
-            this.client.moves.clickCell(id, tableNum);
-            console.log(event.target.dataset);
+            const playerTurn = this.client.getState().ctx.currentPlayer;
+            console.log(playerTurn, tableNum)
+            if (playerTurn == tableNum) { this.client.moves.clickCell(id, tableNum); }
+            else {
+                alert("Wrong board!");
+            }
         };
         // Attach the event listener to each of the board cells.
         const cells = this.rootElement.querySelectorAll('.cell');
