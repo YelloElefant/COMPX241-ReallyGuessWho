@@ -16799,10 +16799,6 @@ async function startGame() {
 }
 async function getImages() {
   let imagesList;
-  let errorImage = [];
-  for (let l = 0; l < 50; l++) {
-    errorImage.push(`https://picsum.photos/50/50?random=${l}`);
-  }
   console.log("runnig");
   const endpointUrl = 'https://query.wikidata.org/sparql';
   const sparqlQuery = `SELECT ?actorLabel ?image WHERE {
@@ -16823,7 +16819,7 @@ async function getImages() {
             value: imagesList[i].actorLabel.value
           },
           image: {
-            value: errorImage[i]
+            value: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNUsx1LY3dPUcMt02PYqC_VDJuHoxuRJYe7-CguhdPmA&s"
           }
         };
       }

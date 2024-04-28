@@ -142,11 +142,7 @@ async function startGame() {
 async function getImages() {
     let imagesList;
 
-    let errorImage = [];
 
-    for (let l = 0; l < 50; l++) {
-        errorImage.push(`https://picsum.photos/50/50?random=${l}`);
-    }
 
     console.log("runnig")
 
@@ -168,7 +164,7 @@ async function getImages() {
         for (let i = 0; i < imagesList.length; i++) {
             if (Object.values(imagesList[i]).length < 2) {
                 console.log("Error " + [i] + ": No image found for " + imagesList[i].actorLabel.value);
-                imagesList[i] = { actorLabel: { value: imagesList[i].actorLabel.value }, image: { value: errorImage[i] } };
+                imagesList[i] = { actorLabel: { value: imagesList[i].actorLabel.value }, image: { value: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNUsx1LY3dPUcMt02PYqC_VDJuHoxuRJYe7-CguhdPmA&s" } };
             }
         }
 
