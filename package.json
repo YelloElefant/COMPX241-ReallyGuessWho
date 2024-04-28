@@ -1,6 +1,7 @@
 {
   "dependencies": {
-    "boardgame.io": "^0.50.2"
+    "boardgame.io": "^0.50.2",
+    "request": "^2.88.2"
   },
   "name": "boardgametest",
   "version": "1.0.0",
