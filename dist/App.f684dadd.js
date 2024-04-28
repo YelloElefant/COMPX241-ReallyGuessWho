@@ -16672,13 +16672,36 @@ const GuessWho = exports.GuessWho = {
     minMoves: 1
   }
 };
+},{}],"src/SPARQLQueryDispatcher.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.SPARQLQueryDispatcher = void 0;
+class SPARQLQueryDispatcher {
+  constructor(endpoint) {
+    this.endpoint = endpoint;
+  }
+  query(sparqlQuery) {
+    const fullUrl = this.endpoint + '?query=' + encodeURIComponent(sparqlQuery);
+    const headers = {
+      'Accept': 'application/sparql-results+json'
+    };
+    return fetch(fullUrl, {
+      headers
+    }).then(body => body.json());
+  }
+}
+exports.SPARQLQueryDispatcher = SPARQLQueryDispatcher;
 },{}],"src/App.js":[function(require,module,exports) {
 "use strict";
 
 var _client = require("boardgame.io/client");
 var _Game = require("./Game");
+var _SPARQLQueryDispatcher = require("./SPARQLQueryDispatcher");
 class GuessWhoClient {
-  constructor(rootElement) {
+  constructor(rootElement, imagesList) {
     this.client = (0, _client.Client)({
       game: _Game.GuessWho
     });
@@ -16686,57 +16709,28 @@ class GuessWhoClient {
     this.rootElement = rootElement;
     this.rootElement.innerHTML = "<h1>Guess Who</h1>";
     this.rootElement.innerHTML += "<h2 id='turn'>Player Turn: </h2>";
-    this.createBoard(0);
+    this.createBoard(0, imagesList);
     this.rootElement.innerHTML += "<br>";
-    this.createBoard(1);
+    this.createBoard(1, imagesList);
     this.attachListeners();
     this.client.subscribe(state => this.update(state));
   }
-  async createBoard(tableNum) {
+  createBoard(tableNum, images) {
+    console.log('making' + tableNum);
     this.rootElement.innerHTML += `<h2>Table ${tableNum}</h2>`;
     const rows = [];
-    const images = await this.getImages();
-    console.log(images);
     for (let i = 0; i < 5; i++) {
       const cells = [];
       for (let j = 0; j < 10; j++) {
         const id = 10 * i + j;
+        console.log(images[id].image);
         cells.push(`<td  style="background-image: url(${images[id].image.value})" class="cell" data-id="${id}" data-tablenum="${tableNum}"></td>`);
       }
       rows.push(`<tr>${cells.join('')}</tr>`);
     }
     this.rootElement.innerHTML += `
-          <table>${rows.join('')}</table>
-          <p class="winner"></p>
-        `;
-  }
-  getImages() {
-    class SPARQLQueryDispatcher {
-      constructor(endpoint) {
-        this.endpoint = endpoint;
-      }
-      query(sparqlQuery) {
-        const fullUrl = this.endpoint + '?query=' + encodeURIComponent(sparqlQuery);
-        const headers = {
-          'Accept': 'application/sparql-results+json'
-        };
-        return fetch(fullUrl, {
-          headers
-        }).then(body => body.json());
-      }
-    }
-    const endpointUrl = 'https://query.wikidata.org/sparql';
-    const sparqlQuery = `SELECT ?actor ?actorLabel ?image WHERE {
-         SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
-            ?actor wdt:P106 wd:Q33999.
-            OPTIONAL { ?actor wdt:P18 ?image. }
-            }
-            LIMIT 50`;
-    const queryDispatcher = new SPARQLQueryDispatcher(endpointUrl);
-    queryDispatcher.query(sparqlQuery).then(response => {
-      console.log(response.results.bindings[1]);
-      return response.results.bindings;
-    });
+      <table>${rows.join('')}</table>
+      <p class="winner"></p>`;
   }
   attachListeners() {
     // This event handler will read the cell id from a cell’s
@@ -16798,9 +16792,51 @@ class GuessWhoClient {
     }
   }
 }
-const appElement = document.getElementById('app');
-const app = new GuessWhoClient(appElement);
-},{"boardgame.io/client":"node_modules/boardgame.io/dist/esm/client.js","./Game":"src/Game.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+async function startGame() {
+  const imageList = await getImages();
+  const appElement = document.getElementById('app');
+  const app = new GuessWhoClient(appElement, imageList);
+}
+async function getImages() {
+  let imagesList;
+  let errorImage = [];
+  for (let l = 0; l < 50; l++) {
+    errorImage.push(`https://picsum.photos/50/50?random=${l}`);
+  }
+  console.log("runnig");
+  const endpointUrl = 'https://query.wikidata.org/sparql';
+  const sparqlQuery = `SELECT ?actorLabel ?image WHERE {
+      SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+      ?actor wdt:P106 wd:Q33999.
+      OPTIONAL { ?actor wdt:P18 ?image. }
+    }
+    LIMIT 50`;
+  const queryDispatcher = new _SPARQLQueryDispatcher.SPARQLQueryDispatcher(endpointUrl);
+  await queryDispatcher.query(sparqlQuery).then(response => {
+    imagesList = response.results.bindings;
+    console.log(imagesList);
+    for (let i = 0; i < imagesList.length; i++) {
+      if (Object.values(imagesList[i]).length < 2) {
+        console.log("Error " + [i] + ": No image found for " + imagesList[i].actorLabel.value);
+        imagesList[i] = {
+          actorLabel: {
+            value: imagesList[i].actorLabel.value
+          },
+          image: {
+            value: errorImage[i]
+          }
+        };
+      }
+    }
+
+    //console.log(images[1]);
+    console.log("run");
+  });
+  console.log(imagesList);
+  return imagesList;
+}
+startGame();
+},{"boardgame.io/client":"node_modules/boardgame.io/dist/esm/client.js","./Game":"src/Game.js","./SPARQLQueryDispatcher":"src/SPARQLQueryDispatcher.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -16825,7 +16861,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "41001" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "42641" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
