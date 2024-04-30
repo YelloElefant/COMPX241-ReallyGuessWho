@@ -1,6 +1,7 @@
 import { Client } from 'boardgame.io/client';
 import { GuessWho } from './Game';
 import { SPARQLQueryDispatcher } from './SPARQLQueryDispatcher';
+import request from 'request';
 
 
 class GuessWhoClient {
@@ -38,8 +39,8 @@ class GuessWhoClient {
 
         for (let i = 0; i < 5; i++) {
             const cells = [];
-            for (let j = 0; j < 10; j++) {
-                const id = 10 * i + j;
+            for (let j = 0; j < 6; j++) {
+                const id = 6 * i + j;
                 console.log(images[id].image);
                 cells.push(`<td  style="background-image: url(${images[id].image.value})" class="cell" data-id="${id}" data-tablenum="${tableNum}"></td>`);
             }
@@ -180,6 +181,6 @@ async function getImages() {
 }
 
 
-
-
 startGame();
+
+
