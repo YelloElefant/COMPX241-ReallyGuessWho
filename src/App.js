@@ -153,7 +153,7 @@ async function getImages() {
       ?actor wdt:P106 wd:Q33999.
       OPTIONAL { ?actor wdt:P18 ?image. }
     }
-    LIMIT 50`;
+    LIMIT 60`;
 
     const queryDispatcher = new SPARQLQueryDispatcher(endpointUrl);
     await queryDispatcher.query(sparqlQuery).then(response => {
@@ -163,10 +163,18 @@ async function getImages() {
 
 
         for (let i = 0; i < imagesList.length; i++) {
-            if (Object.values(imagesList[i]).length < 2) {
+
+
+            while (Object.values(imagesList[i]).length < 2) {
+
                 console.log("Error " + [i] + ": No image found for " + imagesList[i].actorLabel.value);
-                imagesList[i] = { actorLabel: { value: imagesList[i].actorLabel.value }, image: { value: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNUsx1LY3dPUcMt02PYqC_VDJuHoxuRJYe7-CguhdPmA&s" } };
+                //imagesList[i] = { actorLabel: { value: imagesList[i].actorLabel.value }, image: { value: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNUsx1LY3dPUcMt02PYqC_VDJuHoxuRJYe7-CguhdPmA&s" } };
+                imagesList.splice(i, 1);
+
             }
+
+
+
         }
 
         //console.log(images[1]);

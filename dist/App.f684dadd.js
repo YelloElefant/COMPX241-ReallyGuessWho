@@ -16645,8 +16645,8 @@ Object.defineProperty(exports, "__esModule", {
 exports.GuessWho = void 0;
 const GuessWho = exports.GuessWho = {
   setup: () => ({
-    cells0: Array(50).fill(null),
-    cells1: Array(50).fill(null)
+    cells0: Array(30).fill(null),
+    cells1: Array(30).fill(null)
   }),
   moves: {
     clickCell: (_ref, id, tableNum) => {
@@ -120411,8 +120411,8 @@ class GuessWhoClient {
     const rows = [];
     for (let i = 0; i < 5; i++) {
       const cells = [];
-      for (let j = 0; j < 10; j++) {
-        const id = 10 * i + j;
+      for (let j = 0; j < 6; j++) {
+        const id = 6 * i + j;
         console.log(images[id].image);
         cells.push(`<td  style="background-image: url(${images[id].image.value})" class="cell" data-id="${id}" data-tablenum="${tableNum}"></td>`);
       }
@@ -120496,22 +120496,16 @@ async function getImages() {
       ?actor wdt:P106 wd:Q33999.
       OPTIONAL { ?actor wdt:P18 ?image. }
     }
-    LIMIT 50`;
+    LIMIT 60`;
   const queryDispatcher = new _SPARQLQueryDispatcher.SPARQLQueryDispatcher(endpointUrl);
   await queryDispatcher.query(sparqlQuery).then(response => {
     imagesList = response.results.bindings;
     console.log(imagesList);
     for (let i = 0; i < imagesList.length; i++) {
-      if (Object.values(imagesList[i]).length < 2) {
+      while (Object.values(imagesList[i]).length < 2) {
         console.log("Error " + [i] + ": No image found for " + imagesList[i].actorLabel.value);
-        imagesList[i] = {
-          actorLabel: {
-            value: imagesList[i].actorLabel.value
-          },
-          image: {
-            value: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNUsx1LY3dPUcMt02PYqC_VDJuHoxuRJYe7-CguhdPmA&s"
-          }
-        };
+        //imagesList[i] = { actorLabel: { value: imagesList[i].actorLabel.value }, image: { value: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNUsx1LY3dPUcMt02PYqC_VDJuHoxuRJYe7-CguhdPmA&s" } };
+        imagesList.splice(i, 1);
       }
     }
 
@@ -120547,7 +120541,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "39871" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "36645" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

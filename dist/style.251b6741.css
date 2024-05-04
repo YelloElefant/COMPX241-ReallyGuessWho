@@ -16,4 +16,10 @@
     background-size: cover;
 }
 
+#scorboard {
+    display: flex;
+    justify-content: center;
+    margin: 10px;
+}
+
 /*# sourceMappingURL=/style.251b6741.css.map */
