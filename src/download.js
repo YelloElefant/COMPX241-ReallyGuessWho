@@ -21,3 +21,6 @@ function downloadImage(url, filepath) {
 downloadImage('', '../images/lena.png')
     .then(console.log)
     .catch(console.error);
+
+
+console.log('Download Started');
