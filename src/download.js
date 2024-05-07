@@ -51,7 +51,7 @@ function downloadImage(url, filepath) {
 
 let imagesList;
 
-async function test() {
+async function getImageList() {
 
 
     const endpointUrl = 'https://query.wikidata.org/sparql';
@@ -102,15 +102,37 @@ async function test() {
         );
 }
 
-test().then(() => {
+
+getImageList().then(() => {
     downloadImages();
 
 }).catch(console.error);
 
 async function downloadImages() {
     imagesList.forEach(async element => {
-        await downloadImage(element.image.value, element.filepath)
-            .then(console.log)
-            .catch(console.error);
+        if (!checkForImage(element.filepath)) {
+            await downloadImage(element.image.value, element.filepath)
+                .then(console.log)
+                .catch(console.error);
+        }
+        else {
+            console.log("Image already exists: " + element.filepath);
+        }
+
+
     });
+}
+
+// export { SPARQLQueryDispatcher, getImageList, downloadImage, imagesList };
+
+
+// if (!checkForImage('./images/lena.png')) {
+//     downloadImage('https://upload.wikimedia.org/wikipedia/en/thumb/7/7d/Lenna_%28test_image%29.png/440px-Lenna_%28test_image%29.png', './images/lena.png')
+//         .then(console.log)
+//         .catch(console.error);
+// }
+
+function checkForImage(imagePath) {
+    if (fs.existsSync(imagePath)) { return true; }
+    return false;
 }
