@@ -6,9 +6,9 @@ import { SPARQLQueryDispatcher } from './SPARQLQueryDispatcher.js';
 
 let client = http;
 
-var topicsJson = JSON.parse(fs.readFileSync('../data/topics.json', 'utf8'));
-
-
+let topicsJson = JSON.parse(fs.readFileSync('./data/topics.json', 'utf8'));
+// console.log(topicsJson);
+// console.log(topicsJson.topics[0]);
 
 function downloadImage(url, filepath) {
     return new Promise((resolve, reject) => {
@@ -38,18 +38,16 @@ function downloadImage(url, filepath) {
 
 
 
-let list;
 
-async function getImageList() {
+async function getImageList(topicObj) {
 
+    console.log("Getting images for " + topicObj.name);
 
-    const endpointUrl = 'https://query.wikidata.org/sparql';
-    const sparqlQuery = `SELECT ?actorLabel ?image WHERE {
-      SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
-      ?actor wdt:P106 wd:Q33999.
-      OPTIONAL { ?actor wdt:P18 ?image. }
-    }
-    LIMIT 60`;
+    let list
+    const endpointUrl = topicsJson.SPARQL.url;
+    const sparqlQuery = topicObj.querry;
+
+    console.log("Querying " + endpointUrl + " with " + sparqlQuery)
 
     const queryDispatcher = new SPARQLQueryDispatcher(endpointUrl);
     await queryDispatcher.query(sparqlQuery)
@@ -89,10 +87,11 @@ async function getImageList() {
         .catch(
             console.error
         );
+    return list;
 }
 
 
-getImageList().then(() => {
+getImageList(topicsJson.topics[0]).then((list) => {
     downloadImages(list);
 
 }).catch(console.error);
