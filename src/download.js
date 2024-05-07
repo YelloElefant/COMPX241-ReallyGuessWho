@@ -6,6 +6,9 @@ import { SPARQLQueryDispatcher } from './SPARQLQueryDispatcher.js';
 
 let client = http;
 
+var topicsJson = JSON.parse(fs.readFileSync('../data/topics.json', 'utf8'));
+
+
 
 function downloadImage(url, filepath) {
     return new Promise((resolve, reject) => {
@@ -109,7 +112,7 @@ async function downloadImages(imagesList) {
     });
 }
 
-// export { SPARQLQueryDispatcher, getImageList, downloadImage, imagesList };
+// export { getImageList, downloadImage, imagesList };
 
 
 // if (!checkForImage('./images/lena.png')) {
