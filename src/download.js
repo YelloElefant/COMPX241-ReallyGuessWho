@@ -7,6 +7,7 @@ import { SPARQLQueryDispatcher } from './SPARQLQueryDispatcher.js';
 let client = http;
 let topicsJson = JSON.parse(fs.readFileSync('./data/topics.json', 'utf8'));
 
+// create image directories for each topic
 topicsJson.topics.forEach(topic => {
     let directoryPath = "./images/" + topic.name;
     if (!fs.existsSync(directoryPath)) {
