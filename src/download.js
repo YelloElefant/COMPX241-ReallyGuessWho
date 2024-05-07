@@ -2,25 +2,9 @@ import fetch from 'node-fetch';
 import https from 'https';
 import http from 'http';
 import fs from 'fs';
+import { SPARQLQueryDispatcher } from './SPARQLQueryDispatcher.js';
 
 let client = http;
-
-class SPARQLQueryDispatcher {
-    constructor(endpoint) {
-        this.endpoint = endpoint;
-    }
-
-    query(sparqlQuery) {
-        const fullUrl = this.endpoint + '?query=' + encodeURIComponent(sparqlQuery);
-        const headers = { 'Accept': 'application/sparql-results+json' };
-
-        return fetch(fullUrl, { headers }).then(body => body.json());
-    }
-}
-
-
-
-
 
 
 function downloadImage(url, filepath) {
@@ -48,6 +32,8 @@ function downloadImage(url, filepath) {
         });
     });
 }
+
+
 
 let imagesList;
 
