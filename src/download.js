@@ -5,10 +5,8 @@ import fs from 'fs';
 import { SPARQLQueryDispatcher } from './SPARQLQueryDispatcher.js';
 
 let client = http;
-
 let topicsJson = JSON.parse(fs.readFileSync('./data/topics.json', 'utf8'));
-// console.log(topicsJson);
-// console.log(topicsJson.topics[0]);
+
 
 function downloadImage(url, filepath) {
     return new Promise((resolve, reject) => {
@@ -35,9 +33,6 @@ function downloadImage(url, filepath) {
         });
     });
 }
-
-
-
 
 async function getImageList(topicObj) {
 
@@ -90,12 +85,6 @@ async function getImageList(topicObj) {
     return list;
 }
 
-
-getImageList(topicsJson.topics[0]).then((list) => {
-    downloadImages(list);
-
-}).catch(console.error);
-
 async function downloadImages(imagesList) {
     imagesList.forEach(async element => {
         if (!checkForImage(element.filepath)) {
@@ -111,16 +100,16 @@ async function downloadImages(imagesList) {
     });
 }
 
-// export { getImageList, downloadImage, imagesList };
-
-
-// if (!checkForImage('./images/lena.png')) {
-//     downloadImage('https://upload.wikimedia.org/wikipedia/en/thumb/7/7d/Lenna_%28test_image%29.png/440px-Lenna_%28test_image%29.png', './images/lena.png')
-//         .then(console.log)
-//         .catch(console.error);
-// }
-
 function checkForImage(imagePath) {
     if (fs.existsSync(imagePath)) { return true; }
     return false;
 }
+
+
+getImageList(topicsJson.topics[0]).then((list) => {
+    downloadImages(list);
+
+}).catch(console.error);
+
+
+
