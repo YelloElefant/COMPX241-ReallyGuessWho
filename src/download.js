@@ -1,4 +1,9 @@
-import fetch, { fileFrom } from "node-fetch";
+import fetch from 'node-fetch';
+import https from 'https';
+import http from 'http';
+import fs from 'fs';
+
+let client = http;
 
 class SPARQLQueryDispatcher {
     constructor(endpoint) {
@@ -14,14 +19,27 @@ class SPARQLQueryDispatcher {
 }
 
 
+
+
+
+
 function downloadImage(url, filepath) {
     return new Promise((resolve, reject) => {
+        if (url.toString().indexOf("https") === 0) {
+            client = https;
+        }
         client.get(url, (res) => {
             if (res.statusCode === 200) {
                 res.pipe(fs.createWriteStream(filepath))
                     .on('error', reject)
                     .once('close', () => resolve(filepath));
-            } else {
+            } else if (res.statusCode === 301 || res.statusCode === 302) {
+                //Recursively follow redirects, only a 200 status code will resolve.
+                downloadImage(res.headers.location, filepath)
+                    .then(resolve)
+                    .catch(reject);
+            }
+            else {
                 // Consume response data to free up memory
                 res.resume();
                 reject(new Error(`Request Failed With a Status Code: ${res.statusCode}`));
@@ -30,6 +48,8 @@ function downloadImage(url, filepath) {
         });
     });
 }
+
+let imagesList;
 
 async function test() {
 
@@ -43,46 +63,54 @@ async function test() {
     LIMIT 60`;
 
     const queryDispatcher = new SPARQLQueryDispatcher(endpointUrl);
-    await queryDispatcher.query(sparqlQuery).then(response => {
-        let imagesList = response.results.bindings;
+    await queryDispatcher.query(sparqlQuery)
+        .then(response => {
+            imagesList = response.results.bindings;
 
 
 
-        for (let i = 0; i < imagesList.length; i++) {
+            for (let i = 0; i < imagesList.length; i++) {
 
 
-            while (Object.values(imagesList[i]).length < 2) {
+                while (Object.values(imagesList[i]).length < 2) {
 
-                console.log("Error " + [i] + ": No image found for " + imagesList[i].actorLabel.value);
-                //imagesList[i] = { actorLabel: { value: imagesList[i].actorLabel.value }, image: { value: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNUsx1LY3dPUcMt02PYqC_VDJuHoxuRJYe7-CguhdPmA&s" } };
-                imagesList.splice(i, 1);
+                    console.log("Error " + [i] + ": No image found for " + imagesList[i].actorLabel.value);
+                    //imagesList[i] = { actorLabel: { value: imagesList[i].actorLabel.value }, image: { value: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNUsx1LY3dPUcMt02PYqC_VDJuHoxuRJYe7-CguhdPmA&s" } };
+                    imagesList.splice(i, 1);
+
+                }
+
+
 
             }
 
-
-
-        }
-
-        console.log(imagesList);
-        imagesList.forEach(element => {
-            //console.log(element.image.value)
-            let filepath = "../images/" + element.image.value.split('/')[5]
-
-            downloadImage(imagesList.image.value, filepath)
-        });
-        console.log(imagesList.length)
+            //console.log(imagesList);
+            imagesList.forEach(element => {
+                //console.log(element.image.value)
+                let stringToSplit = element.image.value;
+                let filepath = "./images/" + stringToSplit.split('/')[5]
+                //add filepath to element
+                element.filepath = filepath;
+            });
+            //console.log(imagesList.length)
 
 
 
-    })
+        })
         .catch(
             console.error
         );
 }
 
-test();
+test().then(() => {
+    downloadImages();
 
-//downloadImage('', '../images/lena.png')
-//    .then(console.log)
-//    .catch(console.error);
+}).catch(console.error);
 
+async function downloadImages() {
+    imagesList.forEach(async element => {
+        await downloadImage(element.image.value, element.filepath)
+            .then(console.log)
+            .catch(console.error);
+    });
+}
