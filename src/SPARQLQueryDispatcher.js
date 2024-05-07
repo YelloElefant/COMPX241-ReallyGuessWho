@@ -1,3 +1,5 @@
+import fetch from 'node-fetch';
+
 export class SPARQLQueryDispatcher {
     constructor(endpoint) {
         this.endpoint = endpoint;
