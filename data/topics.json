@@ -2,7 +2,7 @@
     "topics": [
         {
             "name": "Actors",
-            "querry": "SELECT ?actorLabel ?image WHERE {SERVICE wikibase:label { bd:serviceParam wikibase:language '[AUTO_LANGUAGE],en'.}?actor wdt:P106 wd:Q33999.OPTIONAL { ?actor wdt:P18 ?image.}}LIMIT 60"
+            "querry": "SELECT ?actorLabel ?image WHERE {\nSERVICE wikibase:label { bd:serviceParam wikibase:language \"[AUTO_LANGUAGE],en\". }\n?actor wdt:P106 wd:Q33999.\nOPTIONAL { ?actor wdt:P18 ?image.}\n}\nLIMIT 60"
         },
         {
             "name": "Test",
