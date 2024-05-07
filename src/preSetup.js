@@ -7,3 +7,5 @@ topicsJson.topics.forEach(topic => {
     console.log(topic.name, topic.querry);
 
 });
+
+console.log(topicsJson.SPARQL.url);
