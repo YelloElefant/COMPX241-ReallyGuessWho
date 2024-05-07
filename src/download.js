@@ -7,6 +7,14 @@ import { SPARQLQueryDispatcher } from './SPARQLQueryDispatcher.js';
 let client = http;
 let topicsJson = JSON.parse(fs.readFileSync('./data/topics.json', 'utf8'));
 
+topicsJson.topics.forEach(topic => {
+    let directoryPath = "./images/" + topic.name;
+    if (!fs.existsSync(directoryPath)) {
+        fs.mkdirSync(directoryPath);
+    }
+});
+
+
 // function to download a specifc image from a url and save it to a filepath
 function downloadImage(url, filepath) {
     return new Promise((resolve, reject) => {
@@ -71,7 +79,7 @@ async function getImageList(topicObj) {
             list.forEach(element => {
                 //console.log(element.image.value)
                 let stringToSplit = element.image.value;
-                let filepath = "./images/" + stringToSplit.split('/')[5]
+                let filepath = "./images/" + topicObj.name + "/" + stringToSplit.split('/')[5]
                 //add filepath to element
                 element.filepath = filepath;
             });
