@@ -35,7 +35,7 @@ function downloadImage(url, filepath) {
 
 
 
-let imagesList;
+let list;
 
 async function getImageList() {
 
@@ -51,18 +51,18 @@ async function getImageList() {
     const queryDispatcher = new SPARQLQueryDispatcher(endpointUrl);
     await queryDispatcher.query(sparqlQuery)
         .then(response => {
-            imagesList = response.results.bindings;
+            list = response.results.bindings;
 
 
 
-            for (let i = 0; i < imagesList.length; i++) {
+            for (let i = 0; i < list.length; i++) {
 
 
-                while (Object.values(imagesList[i]).length < 2) {
+                while (Object.values(list[i]).length < 2) {
 
-                    console.log("Error " + [i] + ": No image found for " + imagesList[i].actorLabel.value + ", trying " + imagesList[i + 1].actorLabel.value);
-                    //imagesList[i] = { actorLabel: { value: imagesList[i].actorLabel.value }, image: { value: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNUsx1LY3dPUcMt02PYqC_VDJuHoxuRJYe7-CguhdPmA&s" } };
-                    imagesList.splice(i, 1);
+                    console.log("Error " + [i] + ": No image found for " + list[i].actorLabel.value + ", trying " + list[i + 1].actorLabel.value);
+                    //list[i] = { actorLabel: { value: list[i].actorLabel.value }, image: { value: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNUsx1LY3dPUcMt02PYqC_VDJuHoxuRJYe7-CguhdPmA&s" } };
+                    list.splice(i, 1);
 
                 }
 
@@ -70,15 +70,15 @@ async function getImageList() {
 
             }
 
-            //console.log(imagesList);
-            imagesList.forEach(element => {
+            //console.log(list);
+            list.forEach(element => {
                 //console.log(element.image.value)
                 let stringToSplit = element.image.value;
                 let filepath = "./images/" + stringToSplit.split('/')[5]
                 //add filepath to element
                 element.filepath = filepath;
             });
-            //console.log(imagesList.length)
+            //console.log(list.length)
 
 
 
@@ -90,11 +90,11 @@ async function getImageList() {
 
 
 getImageList().then(() => {
-    downloadImages();
+    downloadImages(list);
 
 }).catch(console.error);
 
-async function downloadImages() {
+async function downloadImages(imagesList) {
     imagesList.forEach(async element => {
         if (!checkForImage(element.filepath)) {
             await downloadImage(element.image.value, element.filepath)
