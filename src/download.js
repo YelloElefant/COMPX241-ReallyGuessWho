@@ -60,7 +60,7 @@ async function getImageList() {
 
                 while (Object.values(imagesList[i]).length < 2) {
 
-                    console.log("Error " + [i] + ": No image found for " + imagesList[i].actorLabel.value);
+                    console.log("Error " + [i] + ": No image found for " + imagesList[i].actorLabel.value + ", trying " + imagesList[i + 1].actorLabel.value);
                     //imagesList[i] = { actorLabel: { value: imagesList[i].actorLabel.value }, image: { value: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNUsx1LY3dPUcMt02PYqC_VDJuHoxuRJYe7-CguhdPmA&s" } };
                     imagesList.splice(i, 1);
 
