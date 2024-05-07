@@ -7,7 +7,7 @@ import { SPARQLQueryDispatcher } from './SPARQLQueryDispatcher.js';
 let client = http;
 let topicsJson = JSON.parse(fs.readFileSync('./data/topics.json', 'utf8'));
 
-
+// function to download a specifc image from a url and save it to a filepath
 function downloadImage(url, filepath) {
     return new Promise((resolve, reject) => {
         if (url.toString().indexOf("https") === 0) {
@@ -34,6 +34,7 @@ function downloadImage(url, filepath) {
     });
 }
 
+// function to get a list of images from a SPARQL endpoint
 async function getImageList(topicObj) {
 
     console.log("Getting images for " + topicObj.name);
@@ -85,6 +86,7 @@ async function getImageList(topicObj) {
     return list;
 }
 
+// function to download a list of images
 async function downloadImages(imagesList) {
     imagesList.forEach(async element => {
         if (!checkForImage(element.filepath)) {
@@ -100,6 +102,7 @@ async function downloadImages(imagesList) {
     });
 }
 
+// function to check if an image exists
 function checkForImage(imagePath) {
     if (fs.existsSync(imagePath)) { return true; }
     return false;
