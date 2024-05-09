@@ -117,66 +117,9 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"src/SPARQLQueryDispatcher.js":[function(require,module,exports) {
-"use strict";
+})({"src/preSetup.js":[function(require,module,exports) {
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.SPARQLQueryDispatcher = void 0;
-class SPARQLQueryDispatcher {
-  constructor(endpoint) {
-    this.endpoint = endpoint;
-  }
-  query(sparqlQuery) {
-    const fullUrl = this.endpoint + '?query=' + encodeURIComponent(sparqlQuery);
-    const headers = {
-      'Accept': 'application/sparql-results+json'
-    };
-    return fetch(fullUrl, {
-      headers
-    }).then(body => body.json());
-  }
-}
-exports.SPARQLQueryDispatcher = SPARQLQueryDispatcher;
-},{}],"src/preSetup.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.imagesList = void 0;
-var _SPARQLQueryDispatcher = require("./SPARQLQueryDispatcher");
-const imagesList = exports.imagesList = getImages();
-async function getImages() {
-  let imagesList;
-  console.log("runnig");
-  const endpointUrl = 'https://query.wikidata.org/sparql';
-  const sparqlQuery = `SELECT ?actorLabel ?image WHERE {
-      SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
-      ?actor wdt:P106 wd:Q33999.
-      OPTIONAL { ?actor wdt:P18 ?image. }
-    }
-    LIMIT 60`;
-  const queryDispatcher = new _SPARQLQueryDispatcher.SPARQLQueryDispatcher(endpointUrl);
-  await queryDispatcher.query(sparqlQuery).then(response => {
-    imagesList = response.results.bindings;
-    console.log(imagesList);
-    for (let i = 0; i < imagesList.length; i++) {
-      while (Object.values(imagesList[i]).length < 2) {
-        console.log("Error " + [i] + ": No image found for " + imagesList[i].actorLabel.value);
-        //imagesList[i] = { actorLabel: { value: imagesList[i].actorLabel.value }, image: { value: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNUsx1LY3dPUcMt02PYqC_VDJuHoxuRJYe7-CguhdPmA&s" } };
-        imagesList.splice(i, 1);
-      }
-    }
-
-    //console.log(images[1]);
-    console.log("run");
-  });
-  console.log(imagesList);
-  return imagesList;
-}
-},{"./SPARQLQueryDispatcher":"src/SPARQLQueryDispatcher.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -201,7 +144,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "36645" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "37619" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
