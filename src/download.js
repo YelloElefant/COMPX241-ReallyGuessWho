@@ -125,3 +125,5 @@ getImageList(topicsJson.topics[0]).then((list) => {
 
 
 
+
+export { getImageList, downloadImages, downloadImage, checkForImage };
