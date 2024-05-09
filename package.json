@@ -3,7 +3,6 @@
     "boardgame.io": "^0.50.2",
     "http": "^0.0.1-security",
     "inspector": "^0.5.0",
-    "node-fetch": "^3.3.2",
     "request": "^2.88.2"
   },
   "name": "boardgametest",
@@ -20,6 +19,5 @@
   },
   "browserslist": "defaults and supports async-functions",
   "author": "YelloElefant",
-  "license": "ISC",
-  "type": "module"
+  "license": "ISC"
 }
