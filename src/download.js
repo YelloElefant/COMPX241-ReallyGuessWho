@@ -8,7 +8,7 @@ let topicsJson = JSON.parse(fs.readFileSync('./data/topics.json', 'utf8'));
 
 // create image directories for each topic
 topicsJson.topics.forEach(topic => {
-    let directoryPath = "./images/" + topic.name;
+    let directoryPath = topic.imageDirPath;
     if (!fs.existsSync(directoryPath)) {
         fs.mkdirSync(directoryPath);
     }
