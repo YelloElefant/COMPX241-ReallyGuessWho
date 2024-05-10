@@ -24,3 +24,4 @@ need to add
 each topic is defined like...
 * `name` -> name for the topic
 * `querry` -> the SPARQL querry that is to be run to gether the infomation for this topic
+* `imageDirPath` -> ralitive folder path which holds the images to use for the specific topic
