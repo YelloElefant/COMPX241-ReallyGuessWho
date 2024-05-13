@@ -1,5 +1,5 @@
 export const GuessWho = {
-    setup: () => ({ cells0: Array(50).fill(null), cells1: Array(50).fill(null) }),
+    setup: () => ({ cells0: Array(30).fill(null), cells1: Array(30).fill(null) }),
 
     moves: {
         clickCell: ({ G, playerID }, id, tableNum) => {

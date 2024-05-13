@@ -1,47 +1,58 @@
 import { Client } from 'boardgame.io/client';
 import { GuessWho } from './Game';
+import { SPARQLQueryDispatcher } from './SPARQLQueryDispatcher';
+import request from 'request';
+
 
 class GuessWhoClient {
-    constructor(rootElement) {
+
+    constructor(rootElement, imagesList) {
         this.client = Client({ game: GuessWho });
         this.client.start();
+
+
         this.rootElement = rootElement;
         this.rootElement.innerHTML = "<h1>Guess Who</h1>";
         this.rootElement.innerHTML += "<h2 id='turn'>Player Turn: </h2>";
-        this.createBoard(0);
+
+        this.createBoard(0, imagesList);
         this.rootElement.innerHTML += "<br>"
-        this.createBoard(1);
+        this.createBoard(1, imagesList);
+
         this.attachListeners();
         this.client.subscribe(state => this.update(state));
+
+
+
     }
 
-    createBoard(tableNum) {
+
+
+
+
+    createBoard(tableNum, images) {
+        console.log('making' + tableNum)
         this.rootElement.innerHTML += `<h2>Table ${tableNum}</h2>`;
         const rows = [];
-        const images = this.getImages();
+
+
+
         for (let i = 0; i < 5; i++) {
             const cells = [];
-            for (let j = 0; j < 10; j++) {
-                const id = 10 * i + j;
-                cells.push(`<td  style="background-image: url(${images[id]})" class="cell" data-id="${id}" data-tablenum="${tableNum}"></td>`);
+            for (let j = 0; j < 6; j++) {
+                const id = 6 * i + j;
+                console.log(images[id].image);
+                cells.push(`<td  style="background-image: url(${images[id].image.value})" class="cell" data-id="${id}" data-tablenum="${tableNum}"></td>`);
             }
             rows.push(`<tr>${cells.join('')}</tr>`);
-        }
 
+        }
         this.rootElement.innerHTML += `
-          <table>${rows.join('')}</table>
-          <p class="winner"></p>
-        `;
+      <table>${rows.join('')}</table>
+      <p class="winner"></p>`;
     }
 
-    getImages() {
-        const images = [];
-        for (let i = 0; i < 50; i++) {
-            images.push(`https://picsum.photos/50/50?random=${i}`);
 
-        }
-        return images;
-    }
 
     attachListeners() {
         // This event handler will read the cell id from a cell’s
@@ -115,5 +126,69 @@ class GuessWhoClient {
     }
 
 }
-const appElement = document.getElementById('app');
-const app = new GuessWhoClient(appElement);
+
+async function startGame() {
+
+    const imageList = await getImages()
+
+    const appElement = document.getElementById('app');
+    const app = new GuessWhoClient(appElement, imageList
+    );
+
+
+}
+
+
+
+async function getImages() {
+    let imagesList;
+
+
+
+    console.log("runnig")
+
+    const endpointUrl = 'https://query.wikidata.org/sparql';
+    const sparqlQuery = `SELECT ?actorLabel ?image WHERE {
+      SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+      ?actor wdt:P106 wd:Q33999.
+      OPTIONAL { ?actor wdt:P18 ?image. }
+    }
+    LIMIT 60`;
+
+    const queryDispatcher = new SPARQLQueryDispatcher(endpointUrl);
+    await queryDispatcher.query(sparqlQuery).then(response => {
+        imagesList = response.results.bindings;
+
+        console.log(imagesList);
+
+
+        for (let i = 0; i < imagesList.length; i++) {
+
+
+            while (Object.values(imagesList[i]).length < 2) {
+
+                console.log("Error " + [i] + ": No image found for " + imagesList[i].actorLabel.value);
+                //imagesList[i] = { actorLabel: { value: imagesList[i].actorLabel.value }, image: { value: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNUsx1LY3dPUcMt02PYqC_VDJuHoxuRJYe7-CguhdPmA&s" } };
+                imagesList.splice(i, 1);
+
+            }
+
+
+
+        }
+
+        //console.log(images[1]);
+        console.log("run")
+
+
+
+    });
+
+    console.log(imagesList);
+    return imagesList;
+}
+
+
+startGame();
+
+
