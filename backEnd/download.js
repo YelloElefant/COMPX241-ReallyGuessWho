@@ -132,41 +132,36 @@ function checkForImage(imagePath) {
 let port = 3000
 
 
+const server = http.createServer();
 
-const io = new Server();
+const io = new Server(server, {});
 
 
-const server = http.createServer((req, res) => {
-    res.writeHead(200, { 'Content-Type': 'text/html' });
-    res.end('<h1>Hello, world!</h1>');
+
+
+
+
+io.on("connect_error", (err) => {
+    console.log(`connect_error due to ${err.message}`);
 });
 
+// Add a connect listener
+io.on('connection', (socket) => {
 
+    console.log('Client connected.');
 
-
-
-
-io.on('connection', socket => {
-    socket.emit('request', /* … */); // emit an event to the socket
-    io.emit('broadcast', /* … */); // emit an event to all connected sockets
-
-
-    socket.on('reply', () => {
-        console.log("reply recived")
-    }); // listen to the event
-
-    socket.on('new message', (data) => {
-        // we tell the client to execute 'new message'
-        socket.broadcast.emit('new message', {
-            username: socket.username,
-            message: data
-        });
+    //add private message lsitener
+    socket.on('private message', (user, msg) => {
+        console.log('I received a private message by ', user, ' saying ',
+            msg);
     });
 
 
-
+    // Disconnect listener
+    socket.on('disconnect', function () {
+        console.log('Client disconnected.');
+    });
 });
-
 
 
 server.listen(port, () => {
