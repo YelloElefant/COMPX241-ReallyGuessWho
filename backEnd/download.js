@@ -1,13 +1,16 @@
 import https from 'https';
 import http from 'http';
 import fs from 'fs';
-import { SPARQLQueryDispatcher } from '../src/SPARQLQueryDispatcher.js';
+import { SPARQLQueryDispatcher } from './SPARQLQueryDispatcher.js';
+//use socket.io
+import { Server } from 'socket.io';
+
 
 
 
 
 let client = http;
-let topicsJson = JSON.parse(fs.readFileSync('../data/topics.json', 'utf8'));
+let topicsJson = JSON.parse(fs.readFileSync('./data/topics.json', 'utf8'));
 
 // create image directories for each topic
 topicsJson.topics.forEach(topic => {
@@ -126,4 +129,46 @@ function checkForImage(imagePath) {
 
 // }).catch(console.error);
 
+let port = 3000
 
+
+
+const io = new Server();
+
+
+const server = http.createServer((req, res) => {
+    res.writeHead(200, { 'Content-Type': 'text/html' });
+    res.end('<h1>Hello, world!</h1>');
+});
+
+
+
+
+
+
+io.on('connection', socket => {
+    socket.emit('request', /* … */); // emit an event to the socket
+    io.emit('broadcast', /* … */); // emit an event to all connected sockets
+
+
+    socket.on('reply', () => {
+        console.log("reply recived")
+    }); // listen to the event
+
+    socket.on('new message', (data) => {
+        // we tell the client to execute 'new message'
+        socket.broadcast.emit('new message', {
+            username: socket.username,
+            message: data
+        });
+    });
+
+
+
+});
+
+
+
+server.listen(port, () => {
+    console.log('Server listening at port %d', port);
+});

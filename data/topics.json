@@ -3,12 +3,12 @@
         {
             "name": "Actors",
             "querry": "SELECT ?actorLabel ?image WHERE {\nSERVICE wikibase:label { bd:serviceParam wikibase:language \"[AUTO_LANGUAGE],en\". }\n?actor wdt:P106 wd:Q33999.\nOPTIONAL { ?actor wdt:P18 ?image.}\n}\nLIMIT 60",
-            "imageDirPath": "../images/actors/"
+            "imageDirPath": "./images/actors/"
         },
         {
             "name": "Test",
             "querry": "test",
-            "imageDirPath": "../images/test/"
+            "imageDirPath": "./images/test/"
         }
     ],
     "SPARQL": {
