@@ -1,6 +1,10 @@
 {
   "dependencies": {
-    "boardgame.io": "^0.50.2"
+    "boardgame.io": "^0.50.2",
+    "http": "^0.0.1-security",
+    "inspector": "^0.5.0",
+    "node-fetch": "^3.3.2",
+    "request": "^2.88.2"
   },
   "name": "boardgametest",
   "version": "1.0.0",
@@ -11,9 +15,11 @@
   },
   "scripts": {
     "start": "parcel index.html --open",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "preDownload": "node ./src/download.js"
   },
   "browserslist": "defaults and supports async-functions",
   "author": "YelloElefant",
-  "license": "ISC"
+  "license": "ISC",
+  "type": "module"
 }
