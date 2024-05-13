@@ -1,3 +1,4 @@
+
 export class SPARQLQueryDispatcher {
     constructor(endpoint) {
         this.endpoint = endpoint;

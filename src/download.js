@@ -1,28 +1,21 @@
-import fetch from 'node-fetch';
 import https from 'https';
 import http from 'http';
 import fs from 'fs';
+import { SPARQLQueryDispatcher } from './SPARQLQueryDispatcher.js';
 
 let client = http;
+let topicsJson = JSON.parse(fs.readFileSync('./data/topics.json', 'utf8'));
 
-class SPARQLQueryDispatcher {
-    constructor(endpoint) {
-        this.endpoint = endpoint;
+// create image directories for each topic
+topicsJson.topics.forEach(topic => {
+    let directoryPath = topic.imageDirPath;
+    if (!fs.existsSync(directoryPath)) {
+        fs.mkdirSync(directoryPath);
     }
-
-    query(sparqlQuery) {
-        const fullUrl = this.endpoint + '?query=' + encodeURIComponent(sparqlQuery);
-        const headers = { 'Accept': 'application/sparql-results+json' };
-
-        return fetch(fullUrl, { headers }).then(body => body.json());
-    }
-}
+});
 
 
-
-
-
-
+// function to download a specifc image from a url and save it to a filepath
 function downloadImage(url, filepath) {
     return new Promise((resolve, reject) => {
         if (url.toString().indexOf("https") === 0) {
@@ -49,34 +42,32 @@ function downloadImage(url, filepath) {
     });
 }
 
-let imagesList;
+// function to get a list of images from a SPARQL endpoint
+async function getImageList(topicObj) {
 
-async function test() {
+    console.log("Getting images for " + topicObj.name);
 
+    let list
+    const endpointUrl = topicsJson.SPARQL.url;
+    const sparqlQuery = topicObj.querry;
 
-    const endpointUrl = 'https://query.wikidata.org/sparql';
-    const sparqlQuery = `SELECT ?actorLabel ?image WHERE {
-      SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
-      ?actor wdt:P106 wd:Q33999.
-      OPTIONAL { ?actor wdt:P18 ?image. }
-    }
-    LIMIT 60`;
+    console.log("Querying " + endpointUrl + " with " + sparqlQuery)
 
     const queryDispatcher = new SPARQLQueryDispatcher(endpointUrl);
     await queryDispatcher.query(sparqlQuery)
         .then(response => {
-            imagesList = response.results.bindings;
+            list = response.results.bindings;
 
 
 
-            for (let i = 0; i < imagesList.length; i++) {
+            for (let i = 0; i < list.length; i++) {
 
 
-                while (Object.values(imagesList[i]).length < 2) {
+                while (Object.values(list[i]).length < 2) {
 
-                    console.log("Error " + [i] + ": No image found for " + imagesList[i].actorLabel.value);
-                    //imagesList[i] = { actorLabel: { value: imagesList[i].actorLabel.value }, image: { value: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNUsx1LY3dPUcMt02PYqC_VDJuHoxuRJYe7-CguhdPmA&s" } };
-                    imagesList.splice(i, 1);
+                    console.log("Error " + [i] + ": No image found for " + list[i].actorLabel.value + ", trying " + list[i + 1].actorLabel.value);
+                    //list[i] = { actorLabel: { value: list[i].actorLabel.value }, image: { value: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNUsx1LY3dPUcMt02PYqC_VDJuHoxuRJYe7-CguhdPmA&s" } };
+                    list.splice(i, 1);
 
                 }
 
@@ -84,15 +75,15 @@ async function test() {
 
             }
 
-            //console.log(imagesList);
-            imagesList.forEach(element => {
+            //console.log(list);
+            list.forEach(element => {
                 //console.log(element.image.value)
                 let stringToSplit = element.image.value;
-                let filepath = "./images/" + stringToSplit.split('/')[5]
+                let filepath = "./images/" + topicObj.name + "/" + stringToSplit.split('/')[5]
                 //add filepath to element
                 element.filepath = filepath;
             });
-            //console.log(imagesList.length)
+            //console.log(list.length)
 
 
 
@@ -100,17 +91,38 @@ async function test() {
         .catch(
             console.error
         );
+    return list;
 }
 
-test().then(() => {
-    downloadImages();
+// function to download a list of images
+async function downloadImages(imagesList) {
+    imagesList.forEach(async element => {
+        if (!checkForImage(element.filepath)) {
+            await downloadImage(element.image.value, element.filepath)
+                .then(console.log)
+                .catch(console.error);
+        }
+        else {
+            console.log("Image already exists: " + element.filepath);
+        }
+
+
+    });
+}
+
+// function to check if an image exists
+function checkForImage(imagePath) {
+    if (fs.existsSync(imagePath)) { return true; }
+    return false;
+}
+
+
+getImageList(topicsJson.topics[0]).then((list) => {
+    downloadImages(list);
 
 }).catch(console.error);
 
-async function downloadImages() {
-    imagesList.forEach(async element => {
-        await downloadImage(element.image.value, element.filepath)
-            .then(console.log)
-            .catch(console.error);
-    });
-}
+
+
+
+export { getImageList, downloadImages, downloadImage, checkForImage };
