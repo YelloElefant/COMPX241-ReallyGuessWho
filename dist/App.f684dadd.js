@@ -120413,7 +120413,6 @@ class GuessWhoClient {
       const cells = [];
       for (let j = 0; j < 6; j++) {
         const id = 6 * i + j;
-        console.log(images[id].image);
         cells.push(`<td  style="background-image: url(${images[id].image.value})" class="cell" data-id="${id}" data-tablenum="${tableNum}"></td>`);
       }
       rows.push(`<tr>${cells.join('')}</tr>`);
@@ -120491,28 +120490,30 @@ async function getImages() {
   let imagesList;
   console.log("runnig");
   const endpointUrl = 'https://query.wikidata.org/sparql';
-  const sparqlQuery = `SELECT ?actorLabel ?image WHERE {
-      SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
-      ?actor wdt:P106 wd:Q33999.
-      OPTIONAL { ?actor wdt:P18 ?image. }
-    }
-    LIMIT 60`;
+  const sparqlQuery = `SELECT ?actor ?actorLabel ?image ?height ?date_of_birth WHERE {
+            SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+            ?actor wdt:P106 wd:Q33999.
+            OPTIONAL { ?actor wdt:P18 ?image. }
+            OPTIONAL { ?actor wdt:P2048 ?height. }
+            OPTIONAL { ?actor wdt:P569 ?date_of_birth. }
+        }
+        LIMIT 60`;
   const queryDispatcher = new _SPARQLQueryDispatcher.SPARQLQueryDispatcher(endpointUrl);
   await queryDispatcher.query(sparqlQuery).then(response => {
     imagesList = response.results.bindings;
     console.log(imagesList);
     for (let i = 0; i < imagesList.length; i++) {
-      while (Object.values(imagesList[i]).length < 2) {
+      while (!("image" in imagesList[i])) {
         console.log("Error " + [i] + ": No image found for " + imagesList[i].actorLabel.value);
         //imagesList[i] = { actorLabel: { value: imagesList[i].actorLabel.value }, image: { value: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNUsx1LY3dPUcMt02PYqC_VDJuHoxuRJYe7-CguhdPmA&s" } };
         imagesList.splice(i, 1);
       }
     }
-
-    //console.log(images[1]);
+    console.log(imagesList);
     console.log("run");
   });
-  console.log(imagesList);
+
+  //console.log(imagesList);
   return imagesList;
 }
 startGame();
@@ -120541,7 +120542,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "34943" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "43047" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
