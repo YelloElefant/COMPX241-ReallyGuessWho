@@ -124,10 +124,7 @@ function checkForImage(imagePath) {
 }
 
 
-// getImageList(topicsJson.topics[0]).then((list) => {
-//     downloadImages(list);
 
-// }).catch(console.error);
 
 let port = 3000
 
@@ -135,7 +132,6 @@ let port = 3000
 const server = http.createServer();
 
 const io = new Server(server, {});
-
 
 
 
@@ -151,9 +147,12 @@ io.on('connection', (socket) => {
     console.log('Client connected.');
 
     //add private message lsitener
-    socket.on('private message', (user, msg) => {
-        console.log('I received a private message by ', user, ' saying ',
-            msg);
+    socket.on('download', (imageUrl) => {
+        console.log("downloading")
+        downloadImage(imageUrl, "./images/test.jpg")
+            .then(console.log)
+            .catch(console.error);
+
     });
 
 
