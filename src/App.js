@@ -148,12 +148,16 @@ async function getImages() {
     console.log("runnig")
 
     const endpointUrl = 'https://query.wikidata.org/sparql';
-    const sparqlQuery = `SELECT ?actorLabel ?image WHERE {
-      SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
-      ?actor wdt:P106 wd:Q33999.
-      OPTIONAL { ?actor wdt:P18 ?image. }
-    }
-    LIMIT 60`;
+    const sparqlQuery = `SELECT ?actorLabel ?image ?height ?dob WHERE {
+        SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+        ?actor wdt:P106 wd:Q33999.
+        OPTIONAL { 
+          ?actor wdt:P18 ?image.
+          ?actor wdt:P2048 ?height.
+          ?actor wdt:P569 ?dob.
+        }
+      }
+      LIMIT 60`;
 
     const queryDispatcher = new SPARQLQueryDispatcher(endpointUrl);
     await queryDispatcher.query(sparqlQuery).then(response => {
