@@ -3,7 +3,6 @@ import { GuessWho } from './Game';
 import { SPARQLQueryDispatcher } from './SPARQLQueryDispatcher';
 import request from 'request';
 
-
 class GuessWhoClient {
 
     constructor(rootElement, imagesList) {
@@ -21,7 +20,6 @@ class GuessWhoClient {
 
         this.attachListeners();
         this.client.subscribe(state => this.update(state));
-
 
 
     }

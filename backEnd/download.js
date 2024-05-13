@@ -1,10 +1,13 @@
 import https from 'https';
 import http from 'http';
 import fs from 'fs';
-import { SPARQLQueryDispatcher } from './SPARQLQueryDispatcher.js';
+import { SPARQLQueryDispatcher } from '../src/SPARQLQueryDispatcher.js';
+
+
+
 
 let client = http;
-let topicsJson = JSON.parse(fs.readFileSync('./data/topics.json', 'utf8'));
+let topicsJson = JSON.parse(fs.readFileSync('../data/topics.json', 'utf8'));
 
 // create image directories for each topic
 topicsJson.topics.forEach(topic => {
@@ -13,6 +16,7 @@ topicsJson.topics.forEach(topic => {
         fs.mkdirSync(directoryPath);
     }
 });
+
 
 
 // function to download a specifc image from a url and save it to a filepath
@@ -117,12 +121,9 @@ function checkForImage(imagePath) {
 }
 
 
-getImageList(topicsJson.topics[0]).then((list) => {
-    downloadImages(list);
+// getImageList(topicsJson.topics[0]).then((list) => {
+//     downloadImages(list);
 
-}).catch(console.error);
-
-
+// }).catch(console.error);
 
 
-export { getImageList, downloadImages, downloadImage, checkForImage };
