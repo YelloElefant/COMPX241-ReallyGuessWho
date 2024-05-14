@@ -150,10 +150,15 @@ io.on('connection', (socket) => {
     socket.on('download', (imageUrl) => {
         console.log("downloading")
         downloadImage(imageUrl, "./images/test.jpg")
-            .then(console.log)
+            .then(() => {
+                console.log;
+                socket.emit('success', imageUrl);
+            })
             .catch(console.error);
 
     });
+
+
 
 
     // Disconnect listener
