@@ -101,20 +101,26 @@ async function getImageList(topicObj) {
     return list;
 }
 
+//use Promis.all() to download all images
+
 // function to download a list of images
 async function downloadImages(imagesList) {
-    imagesList.forEach(async element => {
-        if (!checkForImage(element.filepath)) {
-            await downloadImage(element.image.value, element.filepath)
-                .then(console.log)
-                .catch(console.error);
-        }
-        else {
-            console.log("Image already exists: " + element.filepath);
-        }
+    Promise.all(
+        imagesList.forEach(async element => {
+            if (!checkForImage(element.filepath)) {
+                console.log("Downloading " + element.filepath);
+                await downloadImage(element.image.value, element.filepath)
+                    .then(console.log)
+                    .catch(console.error);
+            }
+            else {
+                console.log("Image already exists: " + element.filepath);
+            }
 
 
-    });
+        })).then(() => {
+            console.log('done');
+        });
 }
 
 // function to check if an image exists
@@ -159,8 +165,24 @@ io.on('connection', (socket) => {
                 console.log;
                 socket.emit('success', imageUrl, filePath);
             })
-            .catch(console.error);
+            .catch(() => {
+                console.error
+                socket.emit('error', imageUrl, filePath);
+            });
 
+    });
+
+    socket.on('downloadTopic', async (topic) => {
+        let topicObj = topicsJson.topics.find(element => element.name === topic);
+        let imagesList = await getImageList(topicObj);
+        await downloadImages(imagesList)
+            .then(() => {
+                socket.emit('successTopic', topic);
+            })
+            .catch(() => {
+                console.error;
+                socket.emit('errorTopic', topic);
+            });
     });
 
 
