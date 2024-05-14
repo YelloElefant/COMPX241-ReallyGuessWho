@@ -147,12 +147,17 @@ io.on('connection', (socket) => {
     console.log('Client connected.');
 
     //add private message lsitener
-    socket.on('download', (imageUrl) => {
-        console.log("downloading")
-        downloadImage(imageUrl, "./images/test.jpg")
+    socket.on('download', (imageUrl, topic) => {
+
+        console.log("downloading ", imageUrl)
+        socket.emit('recieved', imageUrl);
+
+        let filePath = "./images/" + topic + "/" + imageUrl.split('/')[5];
+
+        downloadImage(imageUrl, filePath)
             .then(() => {
                 console.log;
-                socket.emit('success', imageUrl);
+                socket.emit('success', imageUrl, filePath);
             })
             .catch(console.error);
 
@@ -165,7 +170,13 @@ io.on('connection', (socket) => {
     socket.on('disconnect', function () {
         console.log('Client disconnected.');
     });
+
+
 });
+
+
+
+
 
 
 server.listen(port, () => {
