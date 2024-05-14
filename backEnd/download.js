@@ -1,9 +1,9 @@
-import https from 'https';
-import http from 'http';
-import fs from 'fs';
-import { SPARQLQueryDispatcher } from './SPARQLQueryDispatcher.js';
-//use socket.io
-import { Server } from 'socket.io';
+const https = require('https');
+const http = require('http');
+const fs = require('fs');
+const { Server } = require('socket.io');
+const SPARQLQueryDispatcher = require('./SPARQLQueryDispatcher.js');
+
 
 
 

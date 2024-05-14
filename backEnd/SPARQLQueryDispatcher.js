@@ -1,6 +1,7 @@
-import fetch from 'node-fetch';
 
-export class SPARQLQueryDispatcher {
+// define fetch
+const fetch = require('node-fetch');
+class SPARQLQueryDispatcher {
     constructor(endpoint) {
         this.endpoint = endpoint;
     }
@@ -12,3 +13,5 @@ export class SPARQLQueryDispatcher {
         return fetch(fullUrl, { headers }).then(body => body.json());
     }
 }
+
+module.exports = SPARQLQueryDispatcher;
