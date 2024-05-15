@@ -27,6 +27,8 @@ function downloadImage(url, filepath) {
     return new Promise((resolve, reject) => {
         if (url.toString().indexOf("https") === 0) {
             client = https;
+        } else {
+            client = http;
         }
         client.get(url, (res) => {
             if (res.statusCode === 200) {
@@ -105,22 +107,38 @@ async function getImageList(topicObj) {
 
 // function to download a list of images
 async function downloadImages(imagesList) {
-    Promise.all(
-        imagesList.forEach(async element => {
-            if (!checkForImage(element.filepath)) {
-                console.log("Downloading " + element.filepath);
-                await downloadImage(element.image.value, element.filepath)
-                    .then(console.log)
-                    .catch(console.error);
-            }
-            else {
-                console.log("Image already exists: " + element.filepath);
-            }
+    let downloadedImages = 0;
+    let failedImages = 0;
+
+    for (const element of imagesList) {
+        if (!checkForImage(element.filepath)) {
+            console.log("Downloading " + element.filepath);
+            console.log(element.image.value)
+        }
+        else {
+            console.log("Image already exists: " + element.filepath);
+        }
+    }
+
+    await Promise.all(imagesList.map(element =>
+        downloadImage(element.image.value, element.filepath)
+            .then(() => {
+                downloadedImages++;
+            })
+            .catch(() => {
+                console.error("Error downloading image " + element.image.value);
+                failedImages++;
+            })
+    )).then(() => {
+        console.log("Downloaded " + downloadedImages + " images");
+        console.log("Failed to download " + failedImages + " images");
+        console.log("Total images: " + imagesList.length)
+    }).catch(() => {
+        console.error("Error downloading images");
+    });
 
 
-        })).then(() => {
-            console.log('done');
-        });
+
 }
 
 // function to check if an image exists
