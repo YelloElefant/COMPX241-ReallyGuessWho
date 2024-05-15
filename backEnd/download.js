@@ -109,6 +109,7 @@ async function getImageList(topicObj) {
 async function downloadImages(imagesList) {
     let downloadedImages = 0;
     let failedImages = 0;
+    let failedImagesList = [];
 
     for (const element of imagesList) {
         if (!checkForImage(element.filepath)) {
@@ -128,15 +129,18 @@ async function downloadImages(imagesList) {
             .catch(() => {
                 console.error("Error downloading image " + element.image.value);
                 failedImages++;
+                failedImagesList.push(element);
             })
     )).then(() => {
         console.log("Downloaded " + downloadedImages + " images");
         console.log("Failed to download " + failedImages + " images");
         console.log("Total images: " + imagesList.length)
+        return { successCount: downloadedImages, errorCount: failedImages, total: imagesList.length, failedList: failedImagesList };
     }).catch(() => {
         console.error("Error downloading images");
     });
 
+    return { successCount: downloadedImages, errorCount: failedImages, total: imagesList.length, failedList: failedImagesList };
 
 
 }
@@ -193,14 +197,11 @@ io.on('connection', (socket) => {
     socket.on('downloadTopic', async (topic) => {
         let topicObj = topicsJson.topics.find(element => element.name === topic);
         let imagesList = await getImageList(topicObj);
-        await downloadImages(imagesList)
-            .then(() => {
-                socket.emit('successTopic', topic);
-            })
-            .catch(() => {
-                console.error;
-                socket.emit('errorTopic', topic);
-            });
+        let responseData;
+        await downloadImages(imagesList).then(data => responseData = data).catch(console.error);
+        console.log(responseData);
+        socket.emit('successTopic', topic, responseData);
+
     });
 
 
