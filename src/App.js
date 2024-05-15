@@ -42,7 +42,7 @@ class GuessWhoClient {
             for (let j = 0; j < 6; j++) {
                 const id = 6 * i + j;
                 console.log(images[id].image);
-                cells.push(`<td  style="background-image: url(${images[id].image.value})" class="cell" data-id="${id}" data-tablenum="${tableNum}"></td>`);
+                cells.push(`<td  style="background-image: url(${images[id].image.value})" class="card" data-id="${id}" data-tablenum="${tableNum}"></td>`);
             }
             rows.push(`<tr>${cells.join('')}</tr>`);
 
