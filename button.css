@@ -1,0 +1,23 @@
+
+body {
+    background-color: #8e00fa; 
+    font-family: Arial, sans-serif; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Full viewport height */
+    
+}
+.button {
+    padding: 15px 30px;
+    font-size: 20px;
+    cursor: pointer;
+    border-radius: 10px;
+    background-color: #07a7ac; 
+    color: white;
+    margin: 10px; /* Space between buttons */
+    
+}
+.button:hover {
+    background-color: #000000; /* black on hover */
+}
