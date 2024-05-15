@@ -4,19 +4,29 @@
 <head>
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>Document</title>
-   <script src="./src/preSetup.js"></script>
-   <link rel="stylesheet" href="./styles/style.css">
+   <title>Guess Who? Game</title> <!-- title of the webpage -->
+   <link rel="stylesheet" href="./styles/style.css"> <!-- Links to css file -->
 </head>
 
 <body id="body">
-   <div id="app">
+   <div id="app"> <!-- Container div for the game area-->
+      <div id="boardsWrapper">
 
+         <div>
+            <h1>Player 1's Board</h1>
+            <div id="board0" class="board">
+
+            </div> <!-- Div that will hold Player 1's cards-->
+         </div>
+
+         <div>
+            <h1>Player 2's Board</h1>
+            <div id="board1" class="board"></div> <!-- Div that will hold Player 2's cards-->
+         </div>
+      </div>
+      <p class="winner"></p>
    </div>
    <script src="./src/App.js"></script>
-
-
-
 
 </body>
 
