@@ -52,7 +52,7 @@ class GuessWhoClient {
             for (let j = 0; j < 6; j++) {
                 const id = 6 * i + j;
 
-                let temp = `<td class="cellWrapper" ><img class="cell"  data-id="${id}" data-tablenum="${tableNum}" src="${images[id].image.value}"></img></td>`
+                let temp = `<td class="cellWrapper" ><div class="cell"  data-id="${id}" data-tablenum="${tableNum}" style="background-image: url(${images[id].image.value})"></div></td>`
                 cells.push(temp);
 
 
@@ -156,7 +156,7 @@ async function startGame() {
     const imageList = await getImages()
     const appElement = document.getElementById('app');
     let id = prompt("Enter your player ID: ");
-    new GuessWhoClient(appElement, imageList, { playerID: id });
+    new GuessWhoClient({ appElement }, imageList, { playerID: id });
 
 
 }
