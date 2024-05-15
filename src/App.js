@@ -43,8 +43,10 @@ class GuessWhoClient {
             const cells = [];
             for (let j = 0; j < 6; j++) {
                 const id = 6 * i + j;
+
                 let temp = `<td class="cellWrapper" ><img class="cell"  data-id="${id}" data-tablenum="${tableNum}" src="${images[id].image.value}"></img></td>`
                 cells.push(temp);
+
 
             }
             rows.push(`<tr>${cells.join('')}</tr>`);
@@ -152,12 +154,14 @@ async function getImages() {
     console.log("runnig")
 
     const endpointUrl = 'https://query.wikidata.org/sparql';
-    const sparqlQuery = `SELECT ?actorLabel ?image WHERE {
-      SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
-      ?actor wdt:P106 wd:Q33999.
-      OPTIONAL { ?actor wdt:P18 ?image. }
-    }
-    LIMIT 60`;
+    const sparqlQuery = `SELECT ?actor ?actorLabel ?image ?height ?date_of_birth WHERE {
+            SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+            ?actor wdt:P106 wd:Q33999.
+            OPTIONAL { ?actor wdt:P18 ?image. }
+            OPTIONAL { ?actor wdt:P2048 ?height. }
+            OPTIONAL { ?actor wdt:P569 ?date_of_birth. }
+        }
+        LIMIT 60`;
 
     const queryDispatcher = new SPARQLQueryDispatcher(endpointUrl);
     await queryDispatcher.query(sparqlQuery).then(response => {
@@ -169,7 +173,7 @@ async function getImages() {
         for (let i = 0; i < imagesList.length; i++) {
 
 
-            while (Object.values(imagesList[i]).length < 2) {
+            while (!("image" in imagesList[i])) {
 
                 console.log("Error " + [i] + ": No image found for " + imagesList[i].actorLabel.value);
                 //imagesList[i] = { actorLabel: { value: imagesList[i].actorLabel.value }, image: { value: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNUsx1LY3dPUcMt02PYqC_VDJuHoxuRJYe7-CguhdPmA&s" } };
@@ -181,14 +185,14 @@ async function getImages() {
 
         }
 
-        //console.log(images[1]);
+        console.log(imagesList);
         console.log("run")
 
 
 
     });
 
-    console.log(imagesList);
+    //console.log(imagesList);
     return imagesList;
 }
 
