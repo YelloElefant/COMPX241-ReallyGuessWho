@@ -2,12 +2,17 @@ import { Client } from 'boardgame.io/client';
 import { GuessWho } from './Game';
 import { SPARQLQueryDispatcher } from './SPARQLQueryDispatcher';
 import request from 'request';
+import { SocketIO } from 'boardgame.io/multiplayer'
 
 
 class GuessWhoClient {
 
-    constructor(rootElement, imagesList) {
-        this.client = Client({ game: GuessWho });
+    constructor(rootElement, imagesList, { playerID } = {}) {
+        this.client = Client({
+            game: GuessWho,
+            multiplayer: SocketIO({ server: '192.168.1.29:8000' }),
+            playerID,
+        });
         this.client.start();
 
 
@@ -89,6 +94,7 @@ class GuessWhoClient {
 
 
     update(state) {
+        if (state === null) return;
         // Get all the board cells.
         let cells = this.rootElement.querySelectorAll("[data-tablenum='0']");
         // Update cells to display the values in game state.
@@ -126,13 +132,20 @@ class GuessWhoClient {
 
 }
 
+
+
+
+
+
+
+
+
 async function startGame() {
 
     const imageList = await getImages()
 
     const appElement = document.getElementById('app');
-    const app = new GuessWhoClient(appElement, imageList
-    );
+    const app = new GuessWhoClient(appElement, imageList);
 
 
 }
