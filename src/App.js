@@ -155,8 +155,8 @@ async function startGame() {
 
     const imageList = await getImages()
     const appElement = document.getElementById('app');
-    const app = new GuessWhoClient({ appElement }, imageList
-    );
+    let id = prompt("Enter your player ID: ");
+    new GuessWhoClient(appElement, imageList, { playerID: id });
 
 
 }
