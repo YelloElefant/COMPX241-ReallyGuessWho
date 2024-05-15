@@ -35,7 +35,7 @@ function downloadImage(url, filepath) {
                 res.pipe(fs.createWriteStream(filepath))
                     .on('error', reject)
                     .once('close', () => resolve(filepath));
-            } else if (res.statusCode === 301 || res.statusCode === 302) {
+            } else if (res.statusCode === 301 || res.statusCode === 302 || res.statusCode === 303 || res.statusCode === 307 || res.statusCode === 308) {
                 //Recursively follow redirects, only a 200 status code will resolve.
                 downloadImage(res.headers.location, filepath)
                     .then(resolve)
@@ -126,7 +126,8 @@ async function downloadImages(imagesList) {
             .then(() => {
                 downloadedImages++;
             })
-            .catch(() => {
+            .catch((d) => {
+                console.error(d);
                 console.error("Error downloading image " + element.image.value);
                 failedImages++;
                 failedImagesList.push(element);
@@ -199,7 +200,7 @@ io.on('connection', (socket) => {
         let imagesList = await getImageList(topicObj);
         let responseData;
         await downloadImages(imagesList).then(data => responseData = data).catch(console.error);
-        console.log(responseData);
+        //console.log(responseData);
         socket.emit('successTopic', topic, responseData);
 
     });
