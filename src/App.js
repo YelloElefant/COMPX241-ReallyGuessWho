@@ -13,6 +13,9 @@ class GuessWhoClient {
             multiplayer: SocketIO({ server: '192.168.1.29:8000' }),
             playerID,
         });
+
+        console.log("YOUR PLAYER ID IS", playerID);
+
         this.client.start();
         this.rootElement = rootElement.appElement;
 
@@ -85,7 +88,7 @@ class GuessWhoClient {
                 return
             }
             else { passscore++; }
-
+            console.log("your passscore is", passscore)
             if (passscore == 2) { this.client.moves.clickCell(id, tableNum); }
 
         };
@@ -149,8 +152,8 @@ class GuessWhoClient {
 
 async function startGame() {
 
-    const imageList = await getImages()
 
+    const imageList = await getImages()
     const appElement = document.getElementById('app');
     const app = new GuessWhoClient({ appElement }, imageList
     );
