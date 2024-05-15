@@ -6,6 +6,7 @@ export const GuessWho = {
             if (playerID != tableNum) {
                 return;
             }
+            console.log(playerID)
             switch (playerID) {
                 case "0":
                     G.cells0[id] = playerID;
