@@ -1,0 +1,45 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>Guess Who? Game</title> <!-- title of the webpage -->
+    <link rel="stylesheet" href="style.css"> <!-- Links to css file -->
+</head>
+<body> 
+    <div id="gameArea"> <!-- Container div for the game area-->
+        <div> 
+            <h1>Player 1's Board</h1> 
+            <div id="board1" class="board"></div> <!-- Div that will hold Player 1's cards-->
+        </div>
+        
+        <div> 
+            <h1>Player 2's Board</h1> 
+            <div id="board2" class="board"></div> <!-- Div that will hold Player 2's cards-->
+        </div>
+    </div>
+
+    <script> 
+        function createBoard(boardId) { // Defines a function 'createBoard' that takes 'boardId' as a parameter
+            const board = document.getElementById(boardId); // Retrieves the board element by its ID and stores it in a variable
+            for (let i = 0; i < 30; i++) { 
+                const card = document.createElement('div'); // Creates a new div element for each card
+                card.classList.add('card'); // Adds 'card' to the class list of the newly created div
+                const placeholder = document.createElement('div'); // Creates another new div element for the placeholder inside each card
+                placeholder.classList.add('placeholder'); // Adds 'placeholder' to the class list of the div, for CSS styling
+                card.appendChild(placeholder); // Appends the placeholder div to the card div
+                board.appendChild(card); // Appends the card div to the board div
+            }
+        }
+        createBoard('board1'); // Calls the function
+        createBoard('board2'); 
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
