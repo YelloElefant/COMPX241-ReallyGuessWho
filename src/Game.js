@@ -6,6 +6,7 @@ export const GuessWho = {
             if (playerID != tableNum) {
                 return;
             }
+            console.log(playerID)
             switch (playerID) {
                 case "0":
                     G.cells0[id] = playerID;
@@ -22,3 +23,11 @@ export const GuessWho = {
         minMoves: 1,
     },
 };
+
+function askQuestion() {
+    let question = prompt("Ask a question about the character you have in mind. (e.g. Is your character")
+    console.log(question)
+
+
+}
+
