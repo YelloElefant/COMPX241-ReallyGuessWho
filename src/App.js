@@ -196,15 +196,23 @@ async function getImages() {
     return imagesList;
 }
 
+import { LobbyClient } from 'boardgame.io/client';
 
 
 
 async function startGame() {
+    const lobbyClient = new LobbyClient({ server: 'http://localhost:8081' });
 
+    const games = await lobbyClient.listGames()
+        .then(console.log) // => ['chess', 'tic-tac-toe']
+        .catch(console.error);
 
     const imageList = await getImages()
     const appElement = document.getElementById('app');
     let id = prompt("Enter your player ID: ");
+
+
+
 
     new GuessWhoClient({ appElement }, imageList, { playerID: id });
 
