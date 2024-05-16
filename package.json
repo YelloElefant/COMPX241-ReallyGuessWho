@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "boardgame.io": "^0.50.2",
+    "esm": "^3.2.25",
     "http": "^0.0.1-security",
     "inspector": "^0.5.0",
     "node-fetch": "^2.7.0",
@@ -17,7 +18,8 @@
   "scripts": {
     "start": "parcel index.html --open",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "preDownload": "node ./backEnd/download.js"
+    "preDownload": "node ./src/download.js",
+    "serve": "node -r esm src/server.js"
   },
   "browserslist": "defaults and supports async-functions",
   "author": "YelloElefant",

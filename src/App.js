@@ -2,16 +2,25 @@ import { Client } from 'boardgame.io/client';
 import { GuessWho } from './Game';
 import { SPARQLQueryDispatcher } from './SPARQLQueryDispatcher';
 import request from 'request';
+import { SocketIO } from 'boardgame.io/multiplayer'
 
 class GuessWhoClient {
 
-    constructor(rootElement, imagesList) {
-        this.client = Client({ game: GuessWho });
+    constructor(rootElement, imagesList, { playerID } = {}) {
+        this.client = Client({
+            game: GuessWho,
+            multiplayer: SocketIO({ server: '192.168.1.29:8000' }),
+            playerID,
+        });
+
+        console.log("YOUR PLAYER ID IS", playerID);
+
         this.client.start();
+        this.rootElement = rootElement.appElement;
 
+        console.log(this.rootElement)
 
-        this.rootElement = rootElement;
-        this.rootElement.innerHTML = "<h1>Guess Who</h1>";
+        this.rootElement.innerHTML += "<h1>Guess Who</h1>";
         this.rootElement.innerHTML += "<h2 id='turn'>Player Turn: </h2>";
 
         this.createBoard(0, imagesList);
@@ -30,7 +39,8 @@ class GuessWhoClient {
 
     createBoard(tableNum, images) {
         console.log('making' + tableNum)
-        this.rootElement.innerHTML += `<h2>Table ${tableNum}</h2>`;
+        let board = this.rootElement.querySelector('#board' + tableNum);
+        console.log(board)
         const rows = [];
 
 
@@ -39,15 +49,18 @@ class GuessWhoClient {
             const cells = [];
             for (let j = 0; j < 6; j++) {
                 const id = 6 * i + j;
-                console.log(images[id].image);
-                cells.push(`<td  style="background-image: url(${images[id].image.value})" class="cell" data-id="${id}" data-tablenum="${tableNum}"></td>`);
+
+                let temp = `<td class="cellWrapper" ><div class="cell"  data-id="${id}" data-tablenum="${tableNum}" style="background-image: url(${images[id].image.value})"></div></td>`
+                cells.push(temp);
+
+
             }
             rows.push(`<tr>${cells.join('')}</tr>`);
-
         }
-        this.rootElement.innerHTML += `
+        board.innerHTML += `
       <table>${rows.join('')}</table>
       <p class="winner"></p>`;
+
     }
 
 
@@ -73,7 +86,7 @@ class GuessWhoClient {
                 return
             }
             else { passscore++; }
-
+            console.log("your passscore is", passscore)
             if (passscore == 2) { this.client.moves.clickCell(id, tableNum); }
 
         };
@@ -88,6 +101,7 @@ class GuessWhoClient {
 
 
     update(state) {
+        if (state === null) return;
         // Get all the board cells.
         let cells = this.rootElement.querySelectorAll("[data-tablenum='0']");
         // Update cells to display the values in game state.
@@ -112,6 +126,7 @@ class GuessWhoClient {
 
         // Get the gameover message element.
         const messageEl = this.rootElement.querySelector('.winner');
+        console.log("messageEl is", messageEl)
         // Update the element to show a winner if any.
         if (state.ctx.gameover) {
             messageEl.textContent =
@@ -125,13 +140,21 @@ class GuessWhoClient {
 
 }
 
+
+
+
+
+
+
+
+
 async function startGame() {
 
-    const imageList = await getImages()
 
+    const imageList = await getImages()
     const appElement = document.getElementById('app');
-    const app = new GuessWhoClient(appElement, imageList
-    );
+    let id = prompt("Enter your player ID: ");
+    new GuessWhoClient({ appElement }, imageList, { playerID: id });
 
 
 }
@@ -146,12 +169,14 @@ async function getImages() {
     console.log("runnig")
 
     const endpointUrl = 'https://query.wikidata.org/sparql';
-    const sparqlQuery = `SELECT ?actorLabel ?image WHERE {
-      SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
-      ?actor wdt:P106 wd:Q33999.
-      OPTIONAL { ?actor wdt:P18 ?image. }
-    }
-    LIMIT 60`;
+    const sparqlQuery = `SELECT ?actor ?actorLabel ?image ?height ?date_of_birth WHERE {
+            SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+            ?actor wdt:P106 wd:Q33999.
+            OPTIONAL { ?actor wdt:P18 ?image. }
+            OPTIONAL { ?actor wdt:P2048 ?height. }
+            OPTIONAL { ?actor wdt:P569 ?date_of_birth. }
+        }
+        LIMIT 60`;
 
     const queryDispatcher = new SPARQLQueryDispatcher(endpointUrl);
     await queryDispatcher.query(sparqlQuery).then(response => {
@@ -163,7 +188,7 @@ async function getImages() {
         for (let i = 0; i < imagesList.length; i++) {
 
 
-            while (Object.values(imagesList[i]).length < 2) {
+            while (!("image" in imagesList[i])) {
 
                 console.log("Error " + [i] + ": No image found for " + imagesList[i].actorLabel.value);
                 //imagesList[i] = { actorLabel: { value: imagesList[i].actorLabel.value }, image: { value: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNUsx1LY3dPUcMt02PYqC_VDJuHoxuRJYe7-CguhdPmA&s" } };
@@ -175,14 +200,14 @@ async function getImages() {
 
         }
 
-        //console.log(images[1]);
+        console.log(imagesList);
         console.log("run")
 
 
 
     });
 
-    console.log(imagesList);
+    //console.log(imagesList);
     return imagesList;
 }
 

@@ -14,7 +14,6 @@ services:
       # use if it is necessary to expose the container to the host machine
       - "1234:1234"
     command: "npm start"
-
   backend:
     build: ./backEnd/.
     user: "node"
@@ -28,3 +27,17 @@ services:
     ports:
       - "3000:3000"
     command: "npm run preDownload"
+  server:
+    build: ./server/.
+    user: "node"
+    working_dir: /home/node/app
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - ../COMPX241-ReallyGuessWho-MockUp:/home/node/app
+    expose:
+      - "8000"
+    ports:
+      # use if it is necessary to expose the container to the host machine
+      - "8000:8000"
+    command: "npm run serve"
