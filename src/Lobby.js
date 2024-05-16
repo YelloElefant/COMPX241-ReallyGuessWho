@@ -45,9 +45,29 @@ async function updateList() {
 
    const gameList = document.getElementById('gameList');
    gameList.innerHTML = '';
+
    for (const match of matches) {
       const game = document.createElement('li');
-      game.appendChild(document.createTextNode(`Match ID: ${match.matchID} - Player ID: ${playerId} - Game: ${match.gameName}`));
+
+      let playersCount = 0;
+
+      let player1 = match.players[0];
+      let player2 = match.players[1];
+
+      if (player1.name !== undefined) { playersCount++; }
+      if (player2.name !== undefined) { playersCount++; }
+
+      let text = `Match ID: ${match.matchID} - Game: ${match.gameName} - `;
+      text += `Players: ${player1.name == undefined ? "xxx" : player1.name} , ${player2.name == undefined ? "xxx" : player2.name} - `;
+
+
+      if (playersCount == 2) {
+         text += `Status: Full`
+      } else {
+         text += `Status: Waiting for 1 player}`
+      }
+
+      game.appendChild(document.createTextNode(text));
       gameList.appendChild(game);
    }
 }
