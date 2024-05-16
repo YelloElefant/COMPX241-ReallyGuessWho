@@ -3,14 +3,17 @@ import { LobbyClient } from 'boardgame.io/client';
 const lobbyClient = new LobbyClient({ server: 'http://localhost:8081' });
 
 
-async function matches() {
+updateList()
 
-   lobbyClient.listGames()
-      .then(console.log) // => ['chess', 'tic-tac-toe']
-      .catch(console.error);
+document.getElementById('createGame').addEventListener('click', makeGame);
+
+async function makeGame() {
 
 
-   const gameId = 'guesswho';
+   const playerId = document.getElementById('playerId').value;
+   const name = document.getElementById('playerName').value;
+   const gameName = document.getElementById('gameName').value;
+
 
    const { matchID } = await lobbyClient.createMatch('guesswho', {
       numPlayers: 2
@@ -18,14 +21,8 @@ async function matches() {
    console.log("matchID: ", matchID); // => '123'
 
 
-   const { matches } = await lobbyClient.listMatches('guesswho');
-   console.log("matches: ", matches); // => [{ matchID: '123', players: ['0', '1'] }, ...]
-   const playerId = await prompt("Player ID: ");
-   const name = await prompt("Name: ");
-
-
    const { playerCredentials } = await lobbyClient.joinMatch(
-      gameId,
+      gameName,
       matchID,
       {
          playerID: playerId,
@@ -33,18 +30,21 @@ async function matches() {
       }
    );
 
-   console.log("playerCredentials: ", playerCredentials); // => '123-456'
+   updateList()
+
+
+}
+
+
+async function updateList() {
+   const { matches } = await lobbyClient.listMatches('guesswho');
+   console.log("matches: ", matches); // => [{ matchID: '123', players: ['0', '1'] }, ...]
 
    const gameList = document.getElementById('gameList');
-
+   gameList.innerHTML = '';
    for (const match of matches) {
       const game = document.createElement('li');
       game.appendChild(document.createTextNode(`Match ID: ${match.matchID} - Player ID: ${playerId} - Game: ${match.gameName}`));
       gameList.appendChild(game);
    }
-
 }
-
-matches();
-
-
