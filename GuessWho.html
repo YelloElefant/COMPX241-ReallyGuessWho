@@ -4,31 +4,33 @@
 <head>
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>Guess Who? Game</title> <!-- title of the webpage -->
-   <link rel="stylesheet" href="./styles/style.css"> <!-- Links to css file -->
+   <title>Guess Who? Game</title>
+   <link rel="stylesheet" href="./styles/style.css">
 </head>
 
 <body id="body">
    <a href="./lobby.html">iawhdoawihdwoihnd</a>
-   <div id="app"> <!-- Container div for the game area-->
+   <div id="app">
       <div id="boardsWrapper">
-
          <div>
             <h1>Player 1's Board</h1>
-            <div id="board0" class="board">
-
-            </div> <!-- Div that will hold Player 1's cards-->
+            <div id="board0" class="board"></div>
          </div>
-
          <div>
             <h1>Player 2's Board</h1>
-            <div id="board1" class="board"></div> <!-- Div that will hold Player 2's cards-->
+            <div id="board1" class="board"></div>
          </div>
       </div>
       <p class="winner"></p>
+
+      <!-- Chat UI -->
+      <div id="chat">
+         <div id="chat-messages"></div>
+         <input type="text" id="message-input" placeholder="Type your message...">
+         <button id="send-button">Send</button>
+      </div>
    </div>
    <script src="./src/App.js"></script>
-
 </body>
 
 </html>
