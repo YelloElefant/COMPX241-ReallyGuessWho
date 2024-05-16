@@ -236,6 +236,11 @@ class GuessWhoClient {
                 console.log(message);
             })
 
+            this.client.sendChatMessage("hello");
+            this.client.chatMessages.forEach(message => {
+                console.log(message);
+            })
+
         };
         // Attach the event listener to each of the board cells.
         const cells = this.rootElement.querySelectorAll('#playerBoard');
