@@ -7,35 +7,44 @@ console.log("temp: ", temp);
 updateList()
 
 document.getElementById('createGame').addEventListener('click', makeGame);
+document.getElementById('joinGame').addEventListener('click', joinGame);
+
+
 
 async function makeGame() {
 
 
-   const playerId = document.getElementById('playerId').value;
-   const name = document.getElementById('playerName').value;
-   const gameName = document.getElementById('gameName').value;
+
+   const gameName = document.getElementById('gameNameCreate').value;
 
 
-   const { matchID } = await lobbyClient.createMatch('guesswho', {
+   const { matchID } = await lobbyClient.createMatch(gameName, {
       numPlayers: 2
    });
    console.log("matchID: ", matchID); // => '123'
 
+   updateList()
+
+}
+
+async function joinGame() {
+   const gameName = document.getElementById('gameNameJoin').value;
+   const playerId = document.getElementById('playerId').value;
+   const matchID = document.getElementById('matchId').value;
+   const playerName = document.getElementById('playerName').value;
 
    const { playerCredentials } = await lobbyClient.joinMatch(
       gameName,
       matchID,
       {
          playerID: playerId,
-         playerName: name,
+         playerName: playerName,
       }
    );
 
-   updateList()
 
    sessionStorage.setItem('playerCredentials', playerCredentials);
-
-
+   updateList();
 }
 
 
