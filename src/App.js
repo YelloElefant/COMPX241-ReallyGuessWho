@@ -146,23 +146,6 @@ class GuessWhoClient {
 
 
 
-
-
-
-
-async function startGame() {
-
-
-    const imageList = await getImages()
-    const appElement = document.getElementById('app');
-    let id = prompt("Enter your player ID: ");
-    new GuessWhoClient({ appElement }, imageList, { playerID: id });
-
-
-}
-
-
-
 async function getImages() {
     let imagesList;
 
@@ -212,6 +195,24 @@ async function getImages() {
     //console.log(imagesList);
     return imagesList;
 }
+
+
+
+
+async function startGame() {
+
+
+    const imageList = await getImages()
+    const appElement = document.getElementById('app');
+    let id = prompt("Enter your player ID: ");
+
+    new GuessWhoClient({ appElement }, imageList, { playerID: id });
+
+
+}
+
+
+
 
 
 startGame();
