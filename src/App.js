@@ -13,7 +13,7 @@ class GuessWhoClient {
             numPlayers: 2,
             matchID: 'guesswho',
             game: GuessWho,
-            multiplayer: SocketIO({ server: '192.168.1.29:8000' }),
+            multiplayer: SocketIO({ server: '192.168.1.47:8000' }),
             playerID,
         });
 
@@ -34,12 +34,44 @@ class GuessWhoClient {
         this.attachListeners();
         this.client.subscribe(state => this.update(state));
 
-
+        this.initializeChat();
 
     }
 
+    sendChatMessage(message) {
+        this.client.sendChatMessage(message);
+    }
 
 
+    // Method to display chat messages
+    displayChatMessages() {
+        const chatContainer = document.getElementById('chat-messages');
+        chatContainer.innerHTML = ''; // Clear previous messages
+
+        this.client.chatMessages.forEach(message => {
+            const messageElement = document.createElement('div');
+            messageElement.textContent = `${message.sender}: ${message.payload}`;
+            chatContainer.appendChild(messageElement);
+        });
+    }
+
+    // Method to initialize chat UI and event listeners
+    initializeChat() {
+        const messageInput = document.getElementById('message-input');
+        const sendButton = document.getElementById('send-button');
+
+        sendButton.addEventListener('click', () => {
+            const message = messageInput.value;
+            this.sendChatMessage(message);
+            messageInput.value = ''; // Clear input field after sending
+        });
+
+        // Subscribe to chat messages updates
+        this.client.subscribe(state => {
+            this.update(state);
+            this.displayChatMessages();
+        });
+    }
 
 
     createBoard(tableNum, images) {

@@ -51,3 +51,32 @@ table {
     margin: 0 auto; /* Centers the table horizontally within the gameArea */
 }
 
+
+#chat {
+    position: fixed;
+    top: 50%; /* Adjust this value to position the chat box vertically */
+    right: 20px; /* Adjust this value to position the chat box horizontally */
+    transform: translateY(-50%);
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    width: 300px; /* Adjust this value to change the width of the chat box */
+    overflow-y: auto; /* Enable vertical scrolling when needed */
+    max-height: 300px; /* Limit the maximum height of the chat box */
+  }
+  
+  #chat-messages {
+    overflow-y: auto; /* Enable vertical scrolling for chat messages */
+  }
+  
+  #message-input {
+    width: calc(100% - 70px); /* Adjust input width based on button width */
+    margin-right: 10px;
+  }
+  
+  #send-button {
+    width: 60px;
+  }
+  
+
