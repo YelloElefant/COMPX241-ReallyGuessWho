@@ -1,4 +1,5 @@
 export const GuessWho = {
+    name: 'guesswho',
     setup: () => ({ cells0: Array(30).fill(null), cells1: Array(30).fill(null) }),
 
     moves: {

@@ -3,23 +3,26 @@ import { GuessWho } from './Game';
 import { SPARQLQueryDispatcher } from './SPARQLQueryDispatcher';
 import request from 'request';
 import { SocketIO } from 'boardgame.io/multiplayer'
+import { LobbyClient } from 'boardgame.io/client';
 
 
 class GuessWhoClient {
 
     constructor(rootElement, imagesList, { playerID } = {}) {
         this.client = Client({
+            numPlayers: 2,
+            matchID: 'guesswho',
             game: GuessWho,
             multiplayer: SocketIO({ server: '192.168.1.29:8000' }),
             playerID,
         });
 
         console.log("YOUR PLAYER ID IS", playerID);
+        console.log("YOUR MATCH ID IS", this.client.matchID);
 
         this.client.start();
         this.rootElement = rootElement.appElement;
 
-        console.log(this.rootElement)
 
         this.rootElement.innerHTML += "<h1>Guess Who</h1>";
         this.rootElement.innerHTML += "<h2 id='turn'>Player Turn: </h2>";
@@ -40,9 +43,7 @@ class GuessWhoClient {
 
 
     createBoard(tableNum, images) {
-        console.log('making' + tableNum)
         let board = this.rootElement.querySelector('#board' + tableNum);
-        console.log(board)
         const rows = [];
 
 
@@ -128,7 +129,6 @@ class GuessWhoClient {
 
         // Get the gameover message element.
         const messageEl = this.rootElement.querySelector('.winner');
-        console.log("messageEl is", messageEl)
         // Update the element to show a winner if any.
         if (state.ctx.gameover) {
             messageEl.textContent =
@@ -143,23 +143,6 @@ class GuessWhoClient {
 }
 
 
-
-
-
-
-
-
-
-async function startGame() {
-
-
-    const imageList = await getImages()
-    const appElement = document.getElementById('app');
-    let id = prompt("Enter your player ID: ");
-    new GuessWhoClient({ appElement }, imageList, { playerID: id });
-
-
-}
 
 
 
@@ -212,6 +195,33 @@ async function getImages() {
     //console.log(imagesList);
     return imagesList;
 }
+
+
+
+
+async function startGame() {
+    const playerCredentials = sessionStorage.getItem('playerCredentials');
+    console.log("playerCredentials: ", playerCredentials);
+    const lobbyClient = new LobbyClient({ server: 'http://localhost:8081' });
+
+    const games = await lobbyClient.listGames()
+        .then(console.log) // => ['chess', 'tic-tac-toe']
+        .catch(console.error);
+
+    const imageList = await getImages()
+    const appElement = document.getElementById('app');
+    let id = prompt("Enter your player ID: ");
+
+
+
+
+    new GuessWhoClient({ appElement }, imageList, { playerID: id });
+
+
+}
+
+
+
 
 
 startGame();
