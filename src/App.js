@@ -3,6 +3,7 @@ import { GuessWho } from './Game';
 import { SPARQLQueryDispatcher } from './SPARQLQueryDispatcher';
 import request from 'request';
 import { SocketIO } from 'boardgame.io/multiplayer'
+import { LobbyClient } from 'boardgame.io/client';
 
 
 class GuessWhoClient {
@@ -195,11 +196,12 @@ async function getImages() {
     return imagesList;
 }
 
-import { LobbyClient } from 'boardgame.io/client';
 
 
 
 async function startGame() {
+    const playerCredentials = sessionStorage.getItem('playerCredentials');
+    console.log("playerCredentials: ", playerCredentials);
     const lobbyClient = new LobbyClient({ server: 'http://localhost:8081' });
 
     const games = await lobbyClient.listGames()
