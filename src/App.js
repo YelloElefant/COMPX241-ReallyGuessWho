@@ -2,12 +2,20 @@ import { Client } from 'boardgame.io/client';
 import { GuessWho } from './Game';
 import { SPARQLQueryDispatcher } from './SPARQLQueryDispatcher';
 import request from 'request';
+import { SocketIO } from 'boardgame.io/multiplayer'
 
 
 class GuessWhoClient {
 
-    constructor(rootElement, imagesList) {
-        this.client = Client({ game: GuessWho });
+    constructor(rootElement, imagesList, { playerID } = {}) {
+        this.client = Client({
+            game: GuessWho,
+            multiplayer: SocketIO({ server: '192.168.1.29:8000' }),
+            playerID,
+        });
+
+        console.log("YOUR PLAYER ID IS", playerID);
+
         this.client.start();
         this.rootElement = rootElement.appElement;
 
@@ -44,7 +52,7 @@ class GuessWhoClient {
             for (let j = 0; j < 6; j++) {
                 const id = 6 * i + j;
 
-                let temp = `<td class="cellWrapper" ><img class="cell"  data-id="${id}" data-tablenum="${tableNum}" src="${images[id].image.value}"></img></td>`
+                let temp = `<td class="cellWrapper" ><div class="cell"  data-id="${id}" data-tablenum="${tableNum}" style="background-image: url(${images[id].image.value})"></div></td>`
                 cells.push(temp);
 
 
@@ -80,7 +88,7 @@ class GuessWhoClient {
                 return
             }
             else { passscore++; }
-
+            console.log("your passscore is", passscore)
             if (passscore == 2) { this.client.moves.clickCell(id, tableNum); }
 
         };
@@ -95,6 +103,7 @@ class GuessWhoClient {
 
 
     update(state) {
+        if (state === null) return;
         // Get all the board cells.
         let cells = this.rootElement.querySelectorAll("[data-tablenum='0']");
         // Update cells to display the values in game state.
@@ -133,13 +142,21 @@ class GuessWhoClient {
 
 }
 
+
+
+
+
+
+
+
+
 async function startGame() {
 
-    const imageList = await getImages()
 
+    const imageList = await getImages()
     const appElement = document.getElementById('app');
-    const app = new GuessWhoClient({ appElement }, imageList
-    );
+    let id = prompt("Enter your player ID: ");
+    new GuessWhoClient({ appElement }, imageList, { playerID: id });
 
 
 }
