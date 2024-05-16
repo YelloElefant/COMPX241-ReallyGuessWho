@@ -13,7 +13,7 @@ class GuessWhoClient {
             numPlayers: 2,
             matchID: 'guesswho',
             game: GuessWho,
-            multiplayer: SocketIO({ server: '192.168.1.47:8000' }),
+            multiplayer: SocketIO({ server: '192.168.1.29:8000' }),
             playerID,
         });
 
@@ -32,9 +32,12 @@ class GuessWhoClient {
         this.createBoard(1, imagesList);
 
         this.attachListeners();
-        this.client.subscribe(state => this.update(state));
-
         this.initializeChat();
+        this.client.subscribe(state => {
+            this.update(state)
+            this.displayChatMessages();
+        });
+
 
     }
 
@@ -50,6 +53,7 @@ class GuessWhoClient {
 
         this.client.chatMessages.forEach(message => {
             const messageElement = document.createElement('div');
+            console.log(message)
             messageElement.textContent = `${message.sender}: ${message.payload}`;
             chatContainer.appendChild(messageElement);
         });
@@ -66,11 +70,8 @@ class GuessWhoClient {
             messageInput.value = ''; // Clear input field after sending
         });
 
-        // Subscribe to chat messages updates
-        this.client.subscribe(state => {
-            this.update(state);
-            this.displayChatMessages();
-        });
+
+
     }
 
 
@@ -196,33 +197,52 @@ async function getImages() {
         LIMIT 60`;
 
     const queryDispatcher = new SPARQLQueryDispatcher(endpointUrl);
-    await queryDispatcher.query(sparqlQuery).then(response => {
-        imagesList = response.results.bindings;
-
-        console.log(imagesList);
 
 
-        for (let i = 0; i < imagesList.length; i++) {
+    // await queryDispatcher.query(sparqlQuery).then(response => {
+    //     imagesList = response.results.bindings;
+
+    //     console.log(imagesList);
 
 
-            while (!("image" in imagesList[i])) {
-
-                console.log("Error " + [i] + ": No image found for " + imagesList[i].actorLabel.value);
-                //imagesList[i] = { actorLabel: { value: imagesList[i].actorLabel.value }, image: { value: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNUsx1LY3dPUcMt02PYqC_VDJuHoxuRJYe7-CguhdPmA&s" } };
-                imagesList.splice(i, 1);
-
-            }
+    //     for (let i = 0; i < imagesList.length; i++) {
 
 
+    //         while (!("image" in imagesList[i])) {
 
+    //             console.log(i);
+    //             console.log("Error " + [i] + ": No image found for " + imagesList[i].actorLabel.value);
+    //             //imagesList[i] = { actorLabel: { value: imagesList[i].actorLabel.value }, image: { value: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNUsx1LY3dPUcMt02PYqC_VDJuHoxuRJYe7-CguhdPmA&s" } };
+    //             imagesList.splice(i, 1);
+
+    //         }
+
+
+
+    //     }
+
+    //     console.log(imagesList);
+    //     console.log("run")
+
+
+
+    // });
+    try {
+        const response = await queryDispatcher.query(sparqlQuery);
+        if (response && response.results && response.results.bindings) {
+            let imagesList = response.results.bindings.filter(item => "image" in item);
+            console.log(imagesList);
+            return imagesList;
+        } else {
+            console.error("Invalid response format:", response);
+            return [];
         }
+    } catch (error) {
+        console.error("Error fetching images:", error);
+        return [];
+    }
 
-        console.log(imagesList);
-        console.log("run")
 
-
-
-    });
 
     //console.log(imagesList);
     return imagesList;
@@ -230,10 +250,12 @@ async function getImages() {
 
 
 
-
 async function startGame() {
     const playerCredentials = sessionStorage.getItem('playerCredentials');
+    const playerName = sessionStorage.getItem('playerName');
     console.log("playerCredentials: ", playerCredentials);
+    console.log("playerName: ", playerName);
+
     const lobbyClient = new LobbyClient({ server: 'http://localhost:8081' });
 
     const games = await lobbyClient.listGames()
@@ -242,12 +264,11 @@ async function startGame() {
 
     const imageList = await getImages()
     const appElement = document.getElementById('app');
-    let id = prompt("Enter your player ID: ");
 
 
 
 
-    new GuessWhoClient({ appElement }, imageList, { playerID: id });
+    new GuessWhoClient({ appElement }, imageList, { playerID: playerName });
 
 
 }
