@@ -2,7 +2,8 @@ import { LobbyClient } from 'boardgame.io/client';
 
 const lobbyClient = new LobbyClient({ server: 'http://localhost:8081' });
 
-
+let temp = sessionStorage.getItem('playerCredentials');
+console.log("temp: ", temp);
 updateList()
 
 document.getElementById('createGame').addEventListener('click', makeGame);
@@ -31,6 +32,8 @@ async function makeGame() {
    );
 
    updateList()
+
+   sessionStorage.setItem('playerCredentials', playerCredentials);
 
 
 }
