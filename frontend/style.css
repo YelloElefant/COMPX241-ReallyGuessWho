@@ -1,0 +1,171 @@
+body {
+    background: linear-gradient(to right, #ff7e5f, #feb47b); 
+    font-family: 'Arial', sans-serif; /* Sets the font family for the page */
+    margin: 0; /* Removes default margin */
+    padding: 0; /* Removes default padding */
+    display: flex; /* Uses flexbox to center the content */
+    justify-content: center; /* Centers content horizontally */
+    align-items: center; /* Centers content vertically */
+    height: 100vh; 
+}
+#gameArea {
+    display: flex; /* Uses flexbox to layout slots  in a row */
+    justify-content: center; /* Centers slots horizontally within the gameArea */
+    align-items: flex-start; /* Aligns slots at the start (top) of the gameArea */
+    gap: 20px; 
+}
+#opponentArea {
+    position: absolute; /* makes sure opponent area is fixed and doesnt move */
+    top: 5px; /* Positions the opponent area 5px from the top */
+    left: 10px; /* Positions the opponent area 10px from the left */
+    display: flex; /* Uses flexbox to layout elements horizontally */
+    flex-direction: column; /* Stacks elements vertically */
+    align-items: center; /* Centers elements horizontally */
+}
+#opponentArea h1 {
+    font-size: 16px; 
+    margin: 0; 
+    color: #ffffff; 
+}
+#playerArea {
+    display: flex; /* Uses flexbox to layout slots inside the player area */
+    flex-direction: column; /* Stacks slots vertically */
+    align-items: center; /* Centers slots horizontally inside the player area */
+}
+#playerArea h1 {
+    margin-bottom: 5px; /* Adds space below the title */
+    color: #ffffff; 
+}
+.board {
+    display: grid; 
+    grid-template-columns: repeat(6, 1fr); /* Creates 6 columns of equal width */
+    gap: 5px;
+    padding: 15px; /* Adds padding around the content of each board */
+    background-color: #ffffff; 
+    border-radius: 10px; 
+    
+}
+.small-board {
+    width: 150px; 
+    height: 150px; 
+}
+.large-board {
+    width: 420px; 
+    height: 450px;
+    padding: 15px; /* Adds extra padding around the content of the large board */
+}
+.card {
+    display: flex; /* Uses flexbox to layout elements inside the card */
+    justify-content: center; /* Centers elements horizontally inside the card */
+    align-items: center; /* Centers elements vertically inside the card */
+    border-radius: 5px; 
+    background-color: #ffddc1; 
+    
+}
+.small-board .card {
+    width: 20px; /* width of each card in the small board */
+    height: 20px; /* height of each card in the small board */
+}
+.large-board .card {
+    width: 60px; /* width of each card in the large board */
+    height: 80px; /*  height of each card in the large board */
+}
+.card img {
+    width: 100%; /* Sets the width of images inside the cards to fill the card */
+    height: auto; /* Maintains the aspect ratio of the images */
+    border-radius: 5px; 
+}
+.placeholder {
+    width: 100%; /* Sets the width of the placeholder to fill the card */
+    height: 100%; /* Sets the height of the placeholder to fill the card */
+    background-color: #ffab91; 
+    border-radius: 5px; 
+    display: flex; /* Uses flexbox to layout elements inside the placeholder */
+    justify-content: center; /* Centers text horizontally inside the placeholder */
+    align-items: center; /* Centers text vertically inside the placeholder */
+}
+#dataSection {
+    position: absolute; /* make sure it doesnt move */
+    top: 20px; /* Positions the data section 20px from the top */
+    right: 20px; /* Positions the data section 20px from the right */
+    bottom: 180px; /* Positions the bottom of the data section 180px above the bottom */
+    width: 250px; /* Sets a fixed width for the section */
+    background-color: #ffffff; 
+    border: 2px solid #ffab91; 
+    padding: 10px; /* padding around the content of the section */
+    border-radius: 10px; 
+    display: flex; /* Uses flexbox to layout elements inside the section */
+    flex-direction: column; /* Stacks elements vertically */
+ 
+}
+#dataSection h2 {
+    margin-top: 0; /* Removes the top margin */
+    margin-bottom: 10px; /* space below the heading */
+    font-size: 16px; 
+    color: #ff7e5f; /* Sets the heading color */
+}
+#dataSection label {
+    font-size: 11px; /*  font size of labels */
+    margin-top: 2px; /*  space above each label */
+    color: #ff7e5f; 
+}
+#dataSection input {
+    font-size: 11px; 
+    padding: 4px; /* padding inside the input fields */
+    margin-top: 2px; /* space above the input fields */
+    margin-bottom: 4px; /* space below the input fields */
+    border: 1px solid #ffab91; /* Sets a border color for the input fields */
+    border-radius: 5px; 
+}
+#questionBox {
+    position: absolute; /* makes it fixed */
+    bottom: 20px; /* Positions the question box 20px from the bottom */
+    right: 20px; /* Positions the question box 20px from the right */
+    width: 250px; 
+    height: 120px; 
+    background-color: #ffffff; 
+    border: 2px solid #ffab91; 
+    padding: 10px; /* padding around the content of the section */
+    border-radius: 10px; 
+    display: flex; /* Uses flexbox to layout elements inside the section */
+    flex-direction: column; /* Stacks elements vertically */
+    
+}
+#questionBox h2 {
+    margin-top: 0; /* Removes the top margin */
+    margin-bottom: 10px; /* space below the heading */
+    font-size: 16px; 
+    color: #ff7e5f; 
+}
+#questionBox label {
+    margin-top: 3px; /* space above each label */
+    font-size: 12px; 
+    color: #ff7e5f; 
+}
+#questionBox input {
+    font-size: 12px; 
+    padding: 5px; /* padding inside the input fields */
+    margin-top: 3px; /* space above the input fields */
+    margin-bottom: 5px; /* space below the input fields */
+    border: 1px solid #ffab91; 
+    border-radius: 5px; 
+}
+#questionBox button {
+    padding: 8px 10px; /* padding inside the button */
+    background-color: #4CAF50; 
+    color: white; 
+    border-radius: 5px; 
+    cursor: pointer; /* cursor to pointer on hover */
+    margin-top: 5px; /* space above the button */
+}
+#guessButton {
+    position: absolute; /* makes button fixed */
+    bottom: 20px; /* Positions the guess button 20px from the bottom */
+    left: 20px; /* Positions the guess button 20px from the left */
+    background-color: #4CAF50; 
+    color: white; 
+    padding: 15px 30px; /* padding around the content of the guess button */
+    border-radius: 10px; 
+    font-size: 16px;
+    cursor: pointer; /* pointer instead of cursor when hovering */
+}
