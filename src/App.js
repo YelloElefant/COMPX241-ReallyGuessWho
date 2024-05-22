@@ -8,16 +8,17 @@ import { LobbyClient } from 'boardgame.io/client';
 
 class GuessWhoClient {
 
-    constructor(rootElement, imagesList, { playerID } = {}) {
+    constructor(rootElement, imagesList, matchID, playerName, playerCredentials, { playerID } = {}) {
         this.client = Client({
             numPlayers: 2,
-            matchID: 'guesswho',
+            matchID: matchID,
             game: GuessWho,
             multiplayer: SocketIO({ server: '192.168.1.29:8000' }),
-            playerID,
+            playerID: playerID,
+            credentials: playerCredentials,
         });
 
-        console.log("YOUR PLAYER ID IS", playerID);
+        console.log("YOUR PLAYER ID IS", this.client.playerID);
         console.log("YOUR MATCH ID IS", this.client.matchID);
 
         this.client.start();
@@ -42,12 +43,15 @@ class GuessWhoClient {
     }
 
     sendChatMessage(message) {
+        console.log("sending message:", message)
         this.client.sendChatMessage(message);
+        this.displayChatMessages();
     }
 
 
     // Method to display chat messages
     displayChatMessages() {
+        console.log("displaying chat")
         const chatContainer = document.getElementById('chat-messages');
         chatContainer.innerHTML = ''; // Clear previous messages
 
@@ -61,6 +65,7 @@ class GuessWhoClient {
 
     // Method to initialize chat UI and event listeners
     initializeChat() {
+        console.log("making chat")
         const messageInput = document.getElementById('message-input');
         const sendButton = document.getElementById('send-button');
         sendButton.addEventListener('click', () => {
@@ -252,14 +257,15 @@ async function getImages() {
 async function startGame() {
     const playerCredentials = sessionStorage.getItem('playerCredentials');
     const playerName = sessionStorage.getItem('playerName');
+    const playerId = sessionStorage.getItem('playerID');
+    const matchId = sessionStorage.getItem('matchID');
+
+
     console.log("playerCredentials: ", playerCredentials);
     console.log("playerName: ", playerName);
 
     const lobbyClient = new LobbyClient({ server: 'http://192.168.1.29:8081' });
 
-    const games = await lobbyClient.listGames()
-        .then(console.log) // => ['chess', 'tic-tac-toe']
-        .catch(console.error);
 
     const imageList = await getImages()
     const appElement = document.getElementById('app');
@@ -267,7 +273,7 @@ async function startGame() {
 
 
 
-    new GuessWhoClient({ appElement }, imageList, { playerID: playerName });
+    new GuessWhoClient({ appElement }, imageList, matchId.toString(), playerName, playerCredentials, { playerID: playerId });
 
 
 }

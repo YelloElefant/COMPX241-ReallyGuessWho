@@ -48,6 +48,9 @@ async function joinGame() {
 
    sessionStorage.setItem('playerCredentials', playerCredentials);
    sessionStorage.setItem('playerName', playerName);
+   sessionStorage.setItem('playerID', playerId);
+   sessionStorage.setItem('matchID', matchID);
+
    window.location.href = "http://localhost:1234/GuessWho.html";
    updateList();
 }
