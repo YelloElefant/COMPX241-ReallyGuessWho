@@ -9,26 +9,32 @@
 </head>
 
 <body id="body">
-   <a href="./lobby.html">iawhdoawihdwoihnd</a>
    <div id="app">
       <div id="boardsWrapper">
-         <div>
+         <div id="playerArea">
             <h1>Player 1's Board</h1>
-            <div id="board0" class="board"></div>
+            <div id="board0" class="board large-board"></div>
          </div>
-         <div>
+         <div id="opponentArea">
             <h1>Player 2's Board</h1>
-            <div id="board1" class="board"></div>
+            <div id="board1" class="board small-board"></div>
          </div>
       </div>
       <p class="winner"></p>
 
       <!-- Chat UI -->
-      <div id="chat">
+      <!-- <div id="chat">
          <div id="chat-messages"></div>
          <input type="text" id="message-input" placeholder="Type your message...">
          <button id="send-button">Send</button>
-         
+
+      </div> -->
+      <div id="questionBox"> <!-- Container for the question box -->
+         <h2>Ask a Question</h2>
+         <label for="questionInput">Question:</label>
+         <div id="chat-messages"></div>
+         <input type="text" id="message-input" placeholder="type ur message...">
+         <button type="button" id="send-button">Submit</button>
       </div>
    </div>
    <script src="./src/App.js"></script>
