@@ -256,7 +256,7 @@ async function startGame() {
     console.log("playerCredentials: ", playerCredentials);
     console.log("playerName: ", playerName);
 
-    const lobbyClient = new LobbyClient({ server: 'http://localhost:8081' });
+    const lobbyClient = new LobbyClient({ server: 'http://192.168.1.29:8081' });
 
     const games = await lobbyClient.listGames()
         .then(console.log) // => ['chess', 'tic-tac-toe']
@@ -272,6 +272,7 @@ async function startGame() {
 
 
 }
+
 
 
 

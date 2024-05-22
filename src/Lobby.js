@@ -1,6 +1,6 @@
 import { LobbyClient } from 'boardgame.io/client';
 
-const lobbyClient = new LobbyClient({ server: 'http://localhost:8081' });
+const lobbyClient = new LobbyClient({ server: 'http://192.168.1.29:8081' });
 
 let temp = sessionStorage.getItem('playerCredentials');
 
