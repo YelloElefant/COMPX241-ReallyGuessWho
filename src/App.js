@@ -18,10 +18,14 @@ class GuessWhoClient {
             credentials: playerCredentials,
         });
 
+
         console.log("YOUR PLAYER ID IS", this.client.playerID);
         console.log("YOUR MATCH ID IS", this.client.matchID);
 
         this.client.start();
+
+        console.log("playerNames: ", this.getPlayerNames());
+
         this.rootElement = rootElement.appElement;
 
 
@@ -31,6 +35,7 @@ class GuessWhoClient {
         this.createBoard(0, imagesList);
         this.rootElement.innerHTML += "<br>"
         this.createBoard(1, imagesList);
+
 
         this.attachListeners();
         this.initializeChat();
@@ -42,16 +47,17 @@ class GuessWhoClient {
 
     }
 
+    getPlayerNames() {
+        return this.client.matchData;
+    }
+
     sendChatMessage(message) {
-        console.log("sending message:", message)
         this.client.sendChatMessage(message);
-        this.displayChatMessages();
     }
 
 
     // Method to display chat messages
     displayChatMessages() {
-        console.log("displaying chat")
         const chatContainer = document.getElementById('chat-messages');
         chatContainer.innerHTML = ''; // Clear previous messages
 
@@ -271,8 +277,12 @@ async function startGame() {
     const appElement = document.getElementById('app');
 
 
-
-
+    const playersList = (await lobbyClient.getMatch("guesswho", matchId)).players;
+    const playersNames = {
+        0: playersList[0].name,
+        1: playersList[1].name
+    }
+    console.log("players: ", playersList);
     new GuessWhoClient({ appElement }, imageList, matchId.toString(), playerName, playerCredentials, { playerID: playerId });
 
 
