@@ -25,10 +25,3 @@ export const GuessWho = {
     },
 };
 
-function askQuestion() {
-    let question = prompt("Ask a question about the character you have in mind. (e.g. Is your character")
-    console.log(question)
-
-
-}
-
