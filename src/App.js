@@ -37,7 +37,7 @@ class GuessWhoClient {
         this.rootElement.innerHTML += "<h1>Guess Who</h1>";
         this.rootElement.innerHTML += "<h2 id='turn'>Player Turn: </h2>";
 
-        this.createBoard(0, imagesList);
+        this.createBoard(playerID, imagesList);
         this.rootElement.innerHTML += "<br>"
         this.createBoard(1, imagesList);
 
@@ -81,7 +81,6 @@ class GuessWhoClient {
     sendChatMessage(message) {
         this.client.sendChatMessage(message);
     }
-
 
     // Method to display chat messages
     displayChatMessages() {
