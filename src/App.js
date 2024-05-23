@@ -34,8 +34,8 @@ class GuessWhoClient {
 
 
 
-        this.rootElement.innerHTML += "<h1>Guess Who</h1>";
-        this.rootElement.innerHTML += "<h2 id='turn'>Player Turn: </h2>";
+        // this.rootElement.innerHTML += "<h1>Guess Who</h1>";
+        // this.rootElement.innerHTML += "<h2 id='turn'>Player Turn: </h2>";
 
         this.createBoard(playerID, imagesList);
         this.rootElement.innerHTML += "<br>"
