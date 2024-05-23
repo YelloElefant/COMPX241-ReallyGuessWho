@@ -1,6 +1,10 @@
 export const GuessWho = {
     name: 'guesswho',
-    setup: () => ({ cells0: Array(30).fill(null), cells1: Array(30).fill(null) }),
+    setup: () => ({ 
+        cells0: Array(30).fill(null), 
+        cells1: Array(30).fill(null),
+        selectedCells: { "0": [], "1": [] }
+    }),
 
     moves: {
         clickCell: ({ G, playerID }, id, tableNum) => {
@@ -20,8 +24,15 @@ export const GuessWho = {
         },
     },
     turn: {
-        maxMoves: 1,
+        maxMoves: 30,
         minMoves: 1,
     },
 };
+
+function askQuestion() {
+    let question = prompt("Ask a question about the character you have in mind. (e.g. Is your character")
+    console.log(question)
+
+
+}
 

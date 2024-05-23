@@ -5,7 +5,7 @@ import request from 'request';
 import { SocketIO } from 'boardgame.io/multiplayer'
 import { LobbyClient } from 'boardgame.io/client';
 
-const lobbyClient = new LobbyClient({ server: 'http://192.168.1.29:8081' });
+const lobbyClient = new LobbyClient({ server: 'http://192.168.1.47:8081' });
 
 
 
@@ -16,7 +16,7 @@ class GuessWhoClient {
             numPlayers: 2,
             matchID: matchID,
             game: GuessWho,
-            multiplayer: SocketIO({ server: '192.168.1.29:8000' }),
+            multiplayer: SocketIO({ server: '192.168.1.47:8000' }),
             playerID: playerID,
             credentials: playerCredentials,
         });
@@ -167,6 +167,13 @@ class GuessWhoClient {
         const cells = this.rootElement.querySelectorAll('.cell');
         cells.forEach(cell => {
             cell.onclick = handleCellClick;
+        });
+
+        // Add event listener to the "Finish Turn" button
+        const finishTurnButton = document.getElementById('finish-turn-button');
+        finishTurnButton.addEventListener('click', () => {
+            // Call the endTurn function when the button is clicked
+            this.client.events.endTurn();
         });
     }
 
