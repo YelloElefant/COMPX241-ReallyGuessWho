@@ -3,7 +3,16 @@ const { GuessWho } = require('./Game');
 
 const server = Server({
    games: [GuessWho],
-   origins: [Origins.LOCALHOST],
+   origins: [
+      'https://yelloelefant.com',
+      Origins.LOCALHOST,
+      Origins.SAME_IP,
+      Origins.LOCALHOST_IN_DEVELOPMENT,
+      'https://guesswho.yelloelefant.com',
+      'https://guesswhoserver.yelloelefant.com',
+      'https://guesswholobby.yelloelefant.com',
+      'http://localhost'
+   ],
 });
 
 const lobbyConfig = {
