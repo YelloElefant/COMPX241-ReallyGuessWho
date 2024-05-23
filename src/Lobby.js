@@ -16,12 +16,7 @@ document.getElementById('joinGame').addEventListener('click', joinGame);
 
 async function makeGame() {
 
-
-
-   const gameName = document.getElementById('gameNameCreate').value;
-
-
-   const { matchID } = await lobbyClient.createMatch(gameName, {
+   const { matchID } = await lobbyClient.createMatch("guesswho", {
       numPlayers: 2
    });
    console.log("matchID: ", matchID); // => '123'
