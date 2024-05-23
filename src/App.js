@@ -91,7 +91,8 @@ class GuessWhoClient {
         this.client.chatMessages.forEach(message => {
             const messageElement = document.createElement('div');
             console.log(message)
-            messageElement.textContent = `${message.sender}: ${message.payload}`;
+            let playerName = this.playersNames[message.sender].name == undefined ? "No name" : this.playersNames[message.sender].name;
+            messageElement.textContent = `${playerName}: ${message.payload}`;
             chatContainer.appendChild(messageElement);
         });
     }
