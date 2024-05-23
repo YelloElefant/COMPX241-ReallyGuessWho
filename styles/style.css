@@ -272,3 +272,18 @@ table {
     cursor: pointer;
     /* pointer instead of cursor when hovering */
 }
+
+
+
+.conectedCircle {
+    background-color: rgb(0, 255, 0);
+    /* Sets the background color of the connected circle */
+    border-radius: 50%;
+    /* Makes the circle round */
+    width: 10px;
+    /* Sets the width of the circle */
+    height: 10px;
+    /* Sets the height of the circle */
+    margin-right: 5px;
+    /* Adds space to the right of the circle */
+}

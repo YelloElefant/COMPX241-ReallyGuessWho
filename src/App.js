@@ -5,10 +5,13 @@ import request from 'request';
 import { SocketIO } from 'boardgame.io/multiplayer'
 import { LobbyClient } from 'boardgame.io/client';
 
+const lobbyClient = new LobbyClient({ server: 'http://192.168.1.29:8081' });
+
+
 
 class GuessWhoClient {
 
-    constructor(rootElement, imagesList, matchID, playerName, playerCredentials, { playerID } = {}) {
+    constructor(rootElement, imagesList, matchID, playersNames, playerCredentials, { playerID } = {}) {
         this.client = Client({
             numPlayers: 2,
             matchID: matchID,
@@ -18,15 +21,17 @@ class GuessWhoClient {
             credentials: playerCredentials,
         });
 
+        this.playersNames = playersNames;
+
 
         console.log("YOUR PLAYER ID IS", this.client.playerID);
         console.log("YOUR MATCH ID IS", this.client.matchID);
 
         this.client.start();
 
-        console.log("playerNames: ", this.getPlayerNames());
 
         this.rootElement = rootElement.appElement;
+
 
 
         this.rootElement.innerHTML += "<h1>Guess Who</h1>";
@@ -42,13 +47,35 @@ class GuessWhoClient {
         this.client.subscribe(state => {
             this.update(state)
             this.displayChatMessages();
+            this.updatePlayerNames();
         });
 
 
     }
 
-    getPlayerNames() {
-        return this.client.matchData;
+    async updatePlayerNames() {
+        let temp = await lobbyClient.getMatch("guesswho", this.client.matchID);
+
+        this.playersNames = temp.players;
+
+        let player0 = this.playersNames[0].name == undefined ? "No name" : this.playersNames[0].name;
+        let player1 = this.playersNames[1].name == undefined ? "No name" : this.playersNames[1].name;
+
+        let playerListElement = document.getElementById("playerList");
+        playerListElement.innerHTML = `<h2>Players</h2>
+        <svg class="conectedCircle" height="100" width="100" xmlns="http://www.w3.org/2000/svg">
+        <circle r="45" cx="50" cy="50" fill="red" />
+      </svg>${player0}<br>
+        <svg class="conectedCircle" height="100" width="100" xmlns="http://www.w3.org/2000/svg">
+        <circle r="45" cx="50" cy="50" fill="red" />
+      </svg>${player1}
+        
+        
+        
+        
+        `;
+
+
     }
 
     sendChatMessage(message) {
@@ -270,7 +297,6 @@ async function startGame() {
     console.log("playerCredentials: ", playerCredentials);
     console.log("playerName: ", playerName);
 
-    const lobbyClient = new LobbyClient({ server: 'http://192.168.1.29:8081' });
 
 
     const imageList = await getImages()
@@ -283,7 +309,7 @@ async function startGame() {
         1: playersList[1].name
     }
     console.log("players: ", playersList);
-    new GuessWhoClient({ appElement }, imageList, matchId.toString(), playerName, playerCredentials, { playerID: playerId });
+    new GuessWhoClient({ appElement }, imageList, matchId, playersNames, playerCredentials, { playerID: playerId });
 
 
 }

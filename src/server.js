@@ -23,7 +23,7 @@ const server = Server({
 
 const lobbyConfig = {
    apiPort: 8081,
-   apiCallback: () => console.log('Running Lobby API on port 8080...'),
+   apiCallback: () => console.log('Running Lobby API on port 8081...'),
 };
 
 server.run({ port: 8000, lobbyConfig });
