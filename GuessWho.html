@@ -8,45 +8,57 @@
    <link rel="stylesheet" href="./styles/style.css">
 </head>
 
-<body id="body">
+<body>
    <div id="app">
-      <div id="boardsWrapper">
-         <div id="playerArea">
-            <h1>Player 1's Board</h1>
-            <div id="board0" class="board large-board"></div>
-         </div>
+      <div id="left">
          <div id="opponentArea">
             <h1>Player 2's Board</h1>
             <div id="board1" class="board small-board"></div>
          </div>
-      </div>
-      <p class="winner"></p>
+         <div id="playerList">
 
-      <div id="playerList">
+         </div>
+      </div>
+      <div id="middle">
+         <div id="playerArea">
+            <h1>Player 1's Board</h1>
+            <div id="board0" class="board large-board"></div>
+         </div>
+         <p class="winner"></p>
 
       </div>
+      <div id="right">
+         <div id="questionBox"> <!-- Container for the question box -->
+            <h2>Ask a Question</h2>
+            <label for="questionInput">Question:</label>
+            <div id="chat-messages"></div>
+            <input type="text" id="message-input" placeholder="type ur message...">
+            <button type="button" id="send-button">Submit</button>
+         </div>
 
-      <div id="questionBox"> <!-- Container for the question box -->
-         <h2>Ask a Question</h2>
-         <label for="questionInput">Question:</label>
-         <div id="chat-messages"></div>
-         <input type="text" id="message-input" placeholder="type ur message...">
-         <button type="button" id="send-button">Submit</button>
+         <div id="dataSection"> <!-- Container for the data section -->
+            <h2>Details</h2>
+            <label for="nameInput">Name:</label>
+            <input type="text" id="nameInput" name="nameInput"><br>
+            <label for="ageInput">Age:</label>
+            <input type="text" id="ageInput" name="ageInput"><br>
+            <label for="heightInput">Height:</label>
+            <input type="text" id="heightInput" name="heightInput"><br>
+            <label for="maritalStatusInput">Marital Status:</label>
+            <input type="text" id="maritalStatusInput" name="maritalStatusInput"><br>
+            <label for="eyeColorInput">Eye Color:</label>
+            <input type="text" id="eyeColorInput" name="eyeColorInput"><br>
+         </div>
       </div>
 
-      <div id="dataSection"> <!-- Container for the data section -->
-         <h2>Details</h2>
-         <label for="nameInput">Name:</label>
-         <input type="text" id="nameInput" name="nameInput"><br>
-         <label for="ageInput">Age:</label>
-         <input type="text" id="ageInput" name="ageInput"><br>
-         <label for="heightInput">Height:</label>
-         <input type="text" id="heightInput" name="heightInput"><br>
-         <label for="maritalStatusInput">Marital Status:</label>
-         <input type="text" id="maritalStatusInput" name="maritalStatusInput"><br>
-         <label for="eyeColorInput">Eye Color:</label>
-         <input type="text" id="eyeColorInput" name="eyeColorInput"><br>
-      </div>
+
+
+
+
+
+
+
+
    </div>
    <script src="./src/App.js"></script>
 </body>
