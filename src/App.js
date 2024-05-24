@@ -184,14 +184,14 @@ class GuessWhoClient {
         // This event handler will read the cell id from a cell’s
         // `data-id` attribute and make the `clickCell` move.
         const handleCellClick = event => {
+            console.log("clicked ", event.target.dataset.id)
             if (!this.canDrop) {
                 let cellId = event.target.dataset.id;
                 let tableNum = event.target.dataset.tablenum;
                 let data = this.cardData[cellId];
                 const dataSection = document.getElementById("dataSection");
 
-                delete data.image;
-                delete data.actor;
+                console.log(data, this.cardData[cellId])
 
                 const nameEle = dataSection.querySelector("#name");
                 const heightEle = dataSection.querySelector("#height");
@@ -273,6 +273,8 @@ class GuessWhoClient {
                 cell.style.backgroundImage = "";
                 cell.style.backgroundColor = (cellValue !== null ? 'red' : "");
             } else {
+                console.log("the cell id is", cellId)
+                console.log(this.cardData[cellId].image.value)
                 cell.style.backgroundImage = `url(${this.cardData[cellId].image.value})`;
                 cell.style.backgroundColor = "";
             }
