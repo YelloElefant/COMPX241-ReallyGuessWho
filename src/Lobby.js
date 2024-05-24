@@ -11,6 +11,9 @@ updateList()
 
 document.getElementById('createGame').addEventListener('click', makeGame);
 
+let storedName = sessionStorage.getItem('playerName');
+storedName = storedName == undefined ? "" : storedName;
+document.getElementById('playerName').value = storedName;
 
 
 async function makeGame() {
