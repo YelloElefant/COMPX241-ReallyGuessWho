@@ -184,7 +184,7 @@ class GuessWhoClient {
         // This event handler will read the cell id from a cell’s
         // `data-id` attribute and make the `clickCell` move.
         const handleCellClick = event => {
-            if (!this.canDrop) {
+            if (true) {
                 let cellId = event.target.dataset.id;
                 let tableNum = event.target.dataset.tablenum;
                 let data = this.cardData[cellId];
@@ -209,7 +209,6 @@ class GuessWhoClient {
                 }
 
                 this.lastChecked = event.target;
-                return
 
 
             };
