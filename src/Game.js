@@ -9,12 +9,14 @@ export const GuessWho = {
     }),
 
     moves: {
-        clickCell: ({ G, playerID }, id, tableNum) => {
+        clickCell: ({ G, playerID }, id, tableNum, undo) => {
             if (playerID != tableNum) {
                 return;
             }
             console.log(playerID)
-            G.boards[playerID][id] = playerID;
+            if (undo == true) {
+                G.boards[playerID][id] = null;
+            } else { G.boards[playerID][id] = playerID; }
 
         },
     },
