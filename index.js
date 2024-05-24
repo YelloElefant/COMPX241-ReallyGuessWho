@@ -1,1 +1,1 @@
-console.log("hello world")
+let x = { test: [], "1": [] }

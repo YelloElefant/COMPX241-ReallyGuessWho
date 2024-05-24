@@ -34,10 +34,10 @@ class GuessWhoClient {
 
 
 
-        this.rootElement.innerHTML += "<h1>Guess Who</h1>";
-        this.rootElement.innerHTML += "<h2 id='turn'>Player Turn: </h2>";
+        this.rootElement.querySelector("#left").innerHTML += "<h1>Guess Who</h1>";
+        this.rootElement.querySelector("#left").innerHTML += "<h2 id='turn'>Player Turn: </h2>";
 
-        this.createBoard(0, imagesList);
+        this.createBoard(playerID, imagesList);
         this.rootElement.innerHTML += "<br>"
         this.createBoard(1, imagesList);
 
@@ -57,16 +57,27 @@ class GuessWhoClient {
         let temp = await lobbyClient.getMatch("guesswho", this.client.matchID);
 
         this.playersNames = temp.players;
+        console.log(this.playersNames);
+        let player0 = this.playersNames[0].name == undefined ? "Player 1" : this.playersNames[0].name;
+        let player1 = this.playersNames[1].name == undefined ? "Player 2" : this.playersNames[1].name;
 
-        let player0 = this.playersNames[0].name == undefined ? "No name" : this.playersNames[0].name;
-        let player1 = this.playersNames[1].name == undefined ? "No name" : this.playersNames[1].name;
+        let isConected0 = this.playersNames[0].isConnected;
+        if (isConected0 == false || isConected0 == undefined) {
+            isConected0 = "rgb(255, 0, 0)";
+        } else { isConected0 = "rgb(0, 255, 0)"; }
+
+        let isConected1 = this.playersNames[1].isConnected;
+        if (isConected1 == false || isConected0 == undefined) {
+            isConected1 = "rgb(255, 0, 0)";
+        } else { isConected1 = "rgb(0, 255, 0)"; }
+
 
         let playerListElement = document.getElementById("playerList");
         playerListElement.innerHTML = `<h2>Players</h2>
-        <svg class="conectedCircle" height="100" width="100" xmlns="http://www.w3.org/2000/svg">
+        <svg class="conectedCircle" height="100" width="100" xmlns="http://www.w3.org/2000/svg" style="background-color: ${isConected0};">
         <circle r="45" cx="50" cy="50" fill="red" />
       </svg>${player0}<br>
-        <svg class="conectedCircle" height="100" width="100" xmlns="http://www.w3.org/2000/svg">
+        <svg class="conectedCircle" height="100" width="100" xmlns="http://www.w3.org/2000/svg" style="background-color: ${isConected1};">
         <circle r="45" cx="50" cy="50" fill="red" />
       </svg>${player1}
         
@@ -82,7 +93,6 @@ class GuessWhoClient {
         this.client.sendChatMessage(message);
     }
 
-
     // Method to display chat messages
     displayChatMessages() {
         const chatContainer = document.getElementById('chat-messages');
@@ -91,7 +101,8 @@ class GuessWhoClient {
         this.client.chatMessages.forEach(message => {
             const messageElement = document.createElement('div');
             console.log(message)
-            messageElement.textContent = `${message.sender}: ${message.payload}`;
+            let playerName = this.playersNames[message.sender].name == undefined ? "No name" : this.playersNames[message.sender].name;
+            messageElement.textContent = `${playerName}: ${message.payload}`;
             chatContainer.appendChild(messageElement);
         });
     }
@@ -187,14 +198,14 @@ class GuessWhoClient {
         // Update cells to display the values in game state.
         cells.forEach(cell => {
             const cellId = parseInt(cell.dataset.id);
-            const cellValue = state.G.cells0[cellId];
+            const cellValue = state.G.boards["0"][cellId];
             cell.textContent = cellValue !== null ? cellValue : '';
         });
 
         cells = this.rootElement.querySelectorAll("[data-tablenum='1']");
         cells.forEach(cell => {
             const cellId = parseInt(cell.dataset.id);
-            const cellValue = state.G.cells1[cellId];
+            const cellValue = state.G.boards["1"][cellId];
             cell.textContent = cellValue !== null ? cellValue : '';
         });
 

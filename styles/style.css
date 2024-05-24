@@ -1,38 +1,30 @@
+
 body {
     background: linear-gradient(to right, #ff7e5f, #feb47b);
+
+}
+
+#app {
+    display: flex;
+    flex-direction: row;
+
     font-family: 'Arial', sans-serif;
     /* Sets the font family for the page */
     margin: 0;
     /* Removes default margin */
     padding: 0;
     /* Removes default padding */
-    display: flex;
     /* Uses flexbox to center the content */
-    justify-content: center;
+    justify-content:space-between;
     /* Centers content horizontally */
-    align-items: center;
     /* Centers content vertically */
-    height: 100vh;
 
     box-sizing: border-box;
 }
 
-#gameArea {
-    display: flex;
-    /* Uses flexbox to layout slots  in a row */
-    justify-content: center;
-    /* Centers slots horizontally within the gameArea */
-    align-items: flex-start;
-    /* Aligns slots at the start (top) of the gameArea */
-    gap: 20px;
-}
 
 #opponentArea {
-    position: absolute;
-    /* makes sure opponent area is fixed and doesnt move */
-    top: 5px;
-    /* Positions the opponent area 5px from the top */
-    left: 10px;
+    
     /* Positions the opponent area 10px from the left */
     display: flex;
     /* Uses flexbox to layout elements horizontally */
@@ -276,7 +268,6 @@ table {
 
 
 .conectedCircle {
-    background-color: rgb(0, 255, 0);
     /* Sets the background color of the connected circle */
     border-radius: 50%;
     /* Makes the circle round */
@@ -287,3 +278,5 @@ table {
     margin-right: 5px;
     /* Adds space to the right of the circle */
 }
+
+
