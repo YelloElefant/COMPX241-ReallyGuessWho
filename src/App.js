@@ -62,7 +62,6 @@ class GuessWhoClient {
         let temp = await lobbyClient.getMatch("guesswho", this.client.matchID);
 
         this.playersNames = temp.players;
-        console.log(this.playersNames);
         let player0 = this.playersNames[0].name == undefined ? "Player 1" : this.playersNames[0].name;
         let player1 = this.playersNames[1].name == undefined ? "Player 2" : this.playersNames[1].name;
 
@@ -184,7 +183,28 @@ class GuessWhoClient {
         // This event handler will read the cell id from a cell’s
         // `data-id` attribute and make the `clickCell` move.
         const handleCellClick = event => {
-            if (!this.canDrop) { return };
+            if (!this.canDrop) {
+                let cellId = event.target.dataset.id;
+                let tableNum = event.target.dataset.tablenum;
+                let data = this.cardData[cellId];
+                const dataSection = document.getElementById("dataSection");
+
+                delete data.image;
+                delete data.actor;
+
+                const nameEle = dataSection.querySelector("#name");
+                const heightEle = dataSection.querySelector("#height");
+                const dobEle = dataSection.querySelector("#dob");
+
+                nameEle.innerHTML = (data.actorLabel.value == undefined ? "Unknown" : data.actorLabel.value);
+                heightEle.innerHTML = (data.height.value == undefined ? "Unknown" : data.height.value);
+                dobEle.innerHTML = (data.date_of_birth.value == undefined ? "Unknown" : data.date_of_birth.value.split('-')[0]);
+
+
+                return
+
+
+            };
             const id = parseInt(event.target.dataset.id);
             const tableNum = parseInt(event.target.dataset.tablenum);
             const playerTurn = this.client.getState().ctx.currentPlayer;
