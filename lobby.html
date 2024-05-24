@@ -4,25 +4,33 @@
 <head>
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="./styles/style.css">
    <title>Document</title>
+
 </head>
 
 <body>
    <div id="wrapper">
-      <div id="inputs">
-         <button id="createGame">Create Game</button>
-         <br><br>
-         <input type="text" id="gameNameJoin" placeholder="Game Name">
-         <input type="text" id="matchId" placeholder="Match ID">
-         <input type="text" id="playerName" placeholder="Player Name">
-         <input type="text" id="playerId" placeholder="Player ID">
-
-         <button id="joinGame">Join Game</button>
-
+      <h1 id="titleName">Guess Who?</h1>
+      <div id="playerData">
+         <input type="text" id="playerName" class="playerInput" placeholder="Player Name">
       </div>
-      <ul id="gameList">
+      <div id="inputs">
+         <div id="inputHead">
+            <button id="createGame" class="lobbyButton">Create Game</button>
+         </div>
+         <div id="matchList">
+            <div id="titleMatchList">Matches:</div>
+         </div>
 
-      </ul>
+
+
+
+         <!-- <button id="joinGame" class="lobbyButton">Join Game</button> -->
+
+         <div id="gameList">
+         </div>
+      </div>
    </div>
    <script src="./src/Lobby.js"></script>
 </body>
