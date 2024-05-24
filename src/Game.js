@@ -1,9 +1,12 @@
 export const GuessWho = {
     name: 'guesswho',
-    setup: () => ({ 
-        cells0: Array(30).fill(null), 
-        cells1: Array(30).fill(null),
+    setup: () => ({
+        boards: {
+            "0": Array(30).fill(null),
+            "1": Array(30).fill(null)
+        },
         selectedCells: { "0": [], "1": [] }
+
     }),
 
     moves: {
@@ -12,14 +15,7 @@ export const GuessWho = {
                 return;
             }
             console.log(playerID)
-            switch (playerID) {
-                case "0":
-                    G.cells0[id] = playerID;
-                    break;
-                case "1":
-                    G.cells1[id] = playerID;
-                    break;
-            }
+            G.boards[playerID][id] = playerID;
 
         },
     },
