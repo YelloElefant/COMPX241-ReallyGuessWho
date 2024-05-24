@@ -110,13 +110,7 @@ table {
     /*  height of each card in the large board */
 }
 
-.card img {
-    width: 100%;
-    /* Sets the width of images inside the cards to fill the card */
-    height: auto;
-    /* Maintains the aspect ratio of the images */
-    border-radius: 5px;
-}
+
 
 .placeholder {
     width: 100%;

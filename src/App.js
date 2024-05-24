@@ -5,7 +5,7 @@ import request from 'request';
 import { SocketIO } from 'boardgame.io/multiplayer'
 import { LobbyClient } from 'boardgame.io/client';
 
-const lobbyClient = new LobbyClient({ server: 'http://192.168.1.47:8081' });
+const lobbyClient = new LobbyClient({ server: 'http://192.168.1.29:8081' });
 
 
 
@@ -16,7 +16,7 @@ class GuessWhoClient {
             numPlayers: 2,
             matchID: matchID,
             game: GuessWho,
-            multiplayer: SocketIO({ server: '192.168.1.47:8000' }),
+            multiplayer: SocketIO({ server: '192.168.1.29:8000' }),
             playerID: playerID,
             credentials: playerCredentials,
         });
@@ -37,9 +37,8 @@ class GuessWhoClient {
         this.rootElement.querySelector("#left").innerHTML += "<h1>Guess Who</h1>";
         this.rootElement.querySelector("#left").innerHTML += "<h2 id='turn'>Player Turn: </h2>";
 
-        this.createBoard(playerID, imagesList);
-        this.rootElement.innerHTML += "<br>"
-        this.createBoard(1, imagesList);
+        this.createYourBoard(playerID, imagesList);
+        this.createOpBoard();
 
 
         this.attachListeners();
@@ -123,10 +122,10 @@ class GuessWhoClient {
     }
 
 
-    createBoard(tableNum, images) {
-        let board = this.rootElement.querySelector('#board' + tableNum);
+    createYourBoard(tableNum, images) {
+        let board = this.rootElement.querySelector("#playerBoard");
         const rows = [];
-
+        console.log(board);
 
 
         for (let i = 0; i < 5; i++) {
@@ -146,6 +145,32 @@ class GuessWhoClient {
       <p class="winner"></p>`;
 
     }
+
+    createOpBoard() {
+        let board = this.rootElement.querySelector("#opponentBoard");
+        const rows = [];
+        console.log(board);
+
+
+        for (let i = 0; i < 5; i++) {
+            const cells = [];
+            for (let j = 0; j < 6; j++) {
+                const id = 6 * i + j;
+
+                let temp = `<td class="cellWrapper" ><div class="cell"  data-id="${id}" style="background-color: rgb(204,204,204)"></div></td>`
+                cells.push(temp);
+
+
+            }
+            rows.push(`<tr>${cells.join('')}</tr>`);
+        }
+        board.innerHTML += `
+      <table>${rows.join('')}</table>
+      <p class="winner"></p>`;
+
+    }
+
+
 
 
 
@@ -175,7 +200,7 @@ class GuessWhoClient {
 
         };
         // Attach the event listener to each of the board cells.
-        const cells = this.rootElement.querySelectorAll('.cell');
+        const cells = this.rootElement.querySelectorAll('#playerBoard');
         cells.forEach(cell => {
             cell.onclick = handleCellClick;
         });
@@ -194,19 +219,20 @@ class GuessWhoClient {
     update(state) {
         if (state === null) return;
         // Get all the board cells.
-        let cells = this.rootElement.querySelectorAll("[data-tablenum='0']");
+        let cells = document.getElementById("playerBoard").querySelectorAll(".cell");
         // Update cells to display the values in game state.
         cells.forEach(cell => {
             const cellId = parseInt(cell.dataset.id);
-            const cellValue = state.G.boards["0"][cellId];
+            const cellValue = state.G.boards[this.client.playerID == 0 ? "0" : "1"][cellId];
             cell.textContent = cellValue !== null ? cellValue : '';
         });
 
-        cells = this.rootElement.querySelectorAll("[data-tablenum='1']");
+        cells = document.getElementById("opponentBoard").querySelectorAll(".cell");
         cells.forEach(cell => {
             const cellId = parseInt(cell.dataset.id);
-            const cellValue = state.G.boards["1"][cellId];
-            cell.textContent = cellValue !== null ? cellValue : '';
+            const cellValue = state.G.boards[this.client.playerID == 0 ? "1" : "0"][cellId];
+            console.log(cellValue);
+            cell.style.backgroundColor = (cellValue == null ? 'rgb(204,204,204)' : 'red');
         });
 
         let currentPlayer = state.ctx.currentPlayer;
