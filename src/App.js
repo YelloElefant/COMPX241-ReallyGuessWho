@@ -22,7 +22,7 @@ class GuessWhoClient {
         });
 
         this.playersNames = playersNames;
-
+        this.cardData = imagesList;
 
         console.log("YOUR PLAYER ID IS", this.client.playerID);
         console.log("YOUR MATCH ID IS", this.client.matchID);
@@ -71,7 +71,7 @@ class GuessWhoClient {
         } else { isConected0 = "rgb(0, 255, 0)"; }
 
         let isConected1 = this.playersNames[1].isConnected;
-        if (isConected1 == false || isConected0 == undefined) {
+        if (isConected1 == false || isConected1 == undefined) {
             isConected1 = "rgb(255, 0, 0)";
         } else { isConected1 = "rgb(0, 255, 0)"; }
 
@@ -229,14 +229,16 @@ class GuessWhoClient {
         cells.forEach(cell => {
             const cellId = parseInt(cell.dataset.id);
             const cellValue = state.G.boards[this.client.playerID == 0 ? "0" : "1"][cellId];
-            cell.textContent = cellValue !== null ? cellValue : '';
+            if (cellValue !== null) {
+                cell.style.backgroundImage = "";
+                cell.style.backgroundColor = (cellValue !== null ? 'red' : "");
+            }
         });
 
         cells = document.getElementById("opponentBoard").querySelectorAll(".cell");
         cells.forEach(cell => {
             const cellId = parseInt(cell.dataset.id);
             const cellValue = state.G.boards[this.client.playerID == 0 ? "1" : "0"][cellId];
-            console.log(cellValue);
             cell.style.backgroundColor = (cellValue == null ? 'rgb(204,204,204)' : 'red');
         });
 
@@ -257,6 +259,10 @@ class GuessWhoClient {
         } else {
             messageEl.textContent = '';
         }
+
+
+
+
     }
 
 }
@@ -284,38 +290,10 @@ async function getImages() {
 
     const queryDispatcher = new SPARQLQueryDispatcher(endpointUrl);
 
-
-    // await queryDispatcher.query(sparqlQuery).then(response => {
-    //     imagesList = response.results.bindings;
-
-    //     console.log(imagesList);
-
-
-    //     for (let i = 0; i < imagesList.length; i++) {
-
-
-    //         while (!("image" in imagesList[i])) {
-
-    //             console.log(i);
-    //             console.log("Error " + [i] + ": No image found for " + imagesList[i].actorLabel.value);
-    //             //imagesList[i] = { actorLabel: { value: imagesList[i].actorLabel.value }, image: { value: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNUsx1LY3dPUcMt02PYqC_VDJuHoxuRJYe7-CguhdPmA&s" } };
-    //             imagesList.splice(i, 1);
-
-    //         }
-
-
-
-    //     }
-
-    //     console.log(imagesList);
-    //     console.log("run")
-
-
-
-    // });
     try {
         const response = await queryDispatcher.query(sparqlQuery);
         if (response && response.results && response.results.bindings) {
+            console.log(response.results.bindings)
             let imagesList = response.results.bindings.filter(item => "image" in item);
             console.log(imagesList);
             return imagesList;

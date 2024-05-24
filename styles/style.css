@@ -69,8 +69,8 @@ table {
 }
 
 .large-board {
-    width: 420px;
-    height: 450px;
+    width: 840px;
+    height: 900px;
     padding: 15px;
     /* Adds extra padding around the content of the large board */
 }
@@ -103,10 +103,10 @@ table {
     /* height of each card in the small board */
 }
 
-.large-board td {
-    width: 60px;
+.large-board .cellWrapper {
+    width: 120px;
     /* width of each card in the large board */
-    height: 80px;
+    height: 160px;
     /*  height of each card in the large board */
 }
 
