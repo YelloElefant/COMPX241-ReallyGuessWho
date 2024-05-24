@@ -19,8 +19,9 @@ class GuessWhoClient {
             multiplayer: SocketIO({ server: '192.168.1.47:8000' }),
             playerID: playerID,
             credentials: playerCredentials,
+            
         });
-
+        
         this.playersNames = playersNames;
 
 
@@ -174,6 +175,12 @@ class GuessWhoClient {
         finishTurnButton.addEventListener('click', () => {
             // Call the endTurn function when the button is clicked
             this.client.events.endTurn();
+        });
+
+        // Make guess
+        const makeGuessButton = document.getElementById('make-guess-button');
+        makeGuessButton.addEventListener('click', () => {
+            console.log("guess");
         });
     }
 
