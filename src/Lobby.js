@@ -76,6 +76,8 @@ async function updateList() {
       let playerId = await lobbyClient.getMatch("guesswho", matchID);
       if (playerId.players[0].name == undefined) {
          playerId = "0";
+      } else {
+         playerId = "1";
       }
       console.log("playerId: ", playerId);
 
