@@ -14,14 +14,7 @@ export const GuessWho = {
                 return;
             }
             console.log(playerID)
-            switch (playerID) {
-                case "0":
-                    G.cells0[id] = playerID;
-                    break;
-                case "1":
-                    G.cells1[id] = playerID;
-                    break;
-            }
+            G.boards[playerID][id] = playerID;
 
         },
     },
