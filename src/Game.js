@@ -1,8 +1,10 @@
 export const GuessWho = {
     name: 'guesswho',
-    setup: () => ({ 
-        cells0: Array(30).fill(null), 
-        cells1: Array(30).fill(null),
+    setup: () => ({
+        boards: {
+            "0": Array(30).fill(null),
+            "1": Array(30).fill(null)
+        },
         selectedCells: { "0": [], "1": [] }
     }),
 
