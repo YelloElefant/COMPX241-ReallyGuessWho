@@ -23,6 +23,7 @@ class GuessWhoClient {
 
         this.playersNames = playersNames;
         this.cardData = imagesList;
+        this.canDrop = false;
 
         console.log("YOUR PLAYER ID IS", this.client.playerID);
         console.log("YOUR MATCH ID IS", this.client.matchID);
@@ -183,6 +184,7 @@ class GuessWhoClient {
         // This event handler will read the cell id from a cell’s
         // `data-id` attribute and make the `clickCell` move.
         const handleCellClick = event => {
+            if (!this.canDrop) { return };
             const id = parseInt(event.target.dataset.id);
             const tableNum = parseInt(event.target.dataset.tablenum);
             const playerTurn = this.client.getState().ctx.currentPlayer;
@@ -215,6 +217,13 @@ class GuessWhoClient {
         finishTurnButton.addEventListener('click', () => {
             // Call the endTurn function when the button is clicked
             this.client.events.endTurn();
+        });
+
+        const makeGuessButton = document.getElementById('make-guess-button');
+        makeGuessButton.addEventListener('click', () => {
+            console.log("guess");
+            this.canDrop = (this.canDrop == false ? true : false);
+            console.log(this.canDrop);
         });
     }
 
