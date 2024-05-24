@@ -16,7 +16,6 @@ export const GuessWho = {
             console.log(playerID)
             if (undo == true) {
                 G.boards[playerID][id] = null;
-                console.log("undo")
             } else { G.boards[playerID][id] = playerID; }
 
         },
