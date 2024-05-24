@@ -24,6 +24,7 @@ class GuessWhoClient {
         this.playersNames = playersNames;
         this.cardData = imagesList;
         this.canDrop = false;
+        this.lastChecked = null;
 
         console.log("YOUR PLAYER ID IS", this.client.playerID);
         console.log("YOUR MATCH ID IS", this.client.matchID);
@@ -200,8 +201,16 @@ class GuessWhoClient {
                 heightEle.innerHTML = (data.height == undefined ? "Unknown" : data.height.value + "m");
                 dobEle.innerHTML = (data.date_of_birth == undefined ? "Unknown" : data.date_of_birth.value.split('-')[0]);
 
-                event.target.style.border = "2px solid green";
 
+
+                if (this.lastChecked != event.target && this.lastChecked !== null) {
+                    this.lastChecked.style.border = "";
+                    event.target.style.border = "2px solid green";
+                } else {
+                    event.target.style.border = "2px solid green";
+                }
+
+                this.lastChecked = event.target;
                 return
 
 
