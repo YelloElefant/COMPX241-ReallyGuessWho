@@ -197,13 +197,12 @@ class GuessWhoClient {
                 return
             }
             else { passscore++; }
-            if (event.target.innerHTML == playerTurn) {
-                alert("Already clicked!");
-                return
+            if (event.target.style.backgroundColor == "red") {
+                this.client.moves.clickCell(id, tableNum, true);
             }
             else { passscore++; }
             console.log("your passscore is", passscore)
-            if (passscore == 2) { this.client.moves.clickCell(id, tableNum); }
+            if (passscore == 2) { this.client.moves.clickCell(id, tableNum, false); }
 
         };
         // Attach the event listener to each of the board cells.
@@ -243,6 +242,9 @@ class GuessWhoClient {
             if (cellValue !== null) {
                 cell.style.backgroundImage = "";
                 cell.style.backgroundColor = (cellValue !== null ? 'red' : "");
+            } else {
+                cell.style.backgroundImage = `url(${this.cardData[cellId].image.value})`;
+                cell.style.backgroundColor = "";
             }
         });
 
