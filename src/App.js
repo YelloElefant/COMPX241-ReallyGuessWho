@@ -196,10 +196,11 @@ class GuessWhoClient {
                 const heightEle = dataSection.querySelector("#height");
                 const dobEle = dataSection.querySelector("#dob");
 
-                nameEle.innerHTML = (data.actorLabel.value == undefined ? "Unknown" : data.actorLabel.value);
-                heightEle.innerHTML = (data.height.value == undefined ? "Unknown" : data.height.value);
-                dobEle.innerHTML = (data.date_of_birth.value == undefined ? "Unknown" : data.date_of_birth.value.split('-')[0]);
+                nameEle.innerHTML = (data.actorLabel == undefined ? "Unknown" : data.actorLabel.value);
+                heightEle.innerHTML = (data.height == undefined ? "Unknown" : data.height.value + "m");
+                dobEle.innerHTML = (data.date_of_birth == undefined ? "Unknown" : data.date_of_birth.value.split('-')[0]);
 
+                event.target.style.border = "2px solid green";
 
                 return
 
