@@ -338,7 +338,8 @@ table {
 }
 
 #inputs {
-    background-color: #ffffff; 
+    /* background-color: #ffffff;  */
+    background-color: transparent; 
     display: flex; /* Uses flexbox to layout buttons */
     flex-direction: column; /* Stacks buttons vertically */
     border-radius: 10px;

@@ -212,6 +212,9 @@ class GuessWhoClient {
 
 
             };
+            if (this.canDrop == false) {
+                return;
+            }
             const id = parseInt(event.target.dataset.id);
             const tableNum = parseInt(event.target.dataset.tablenum);
             const playerTurn = this.client.getState().ctx.currentPlayer;
