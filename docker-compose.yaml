@@ -40,4 +40,5 @@ services:
     ports:
       # use if it is necessary to expose the container to the host machine
       - "8000:8000"
+      - "8081:8081"
     command: "npm run serve"

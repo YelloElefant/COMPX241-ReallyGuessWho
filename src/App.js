@@ -3,46 +3,133 @@ import { GuessWho } from './Game';
 import { SPARQLQueryDispatcher } from './SPARQLQueryDispatcher';
 import request from 'request';
 import { SocketIO } from 'boardgame.io/multiplayer'
+import { LobbyClient } from 'boardgame.io/client';
+
+const lobbyClient = new LobbyClient({ server: 'http://192.168.1.29:8081' });
+
 
 class GuessWhoClient {
 
-    constructor(rootElement, imagesList, { playerID } = {}) {
+    constructor(rootElement, imagesList, matchID, playersNames, playerCredentials, { playerID } = {}) {
         this.client = Client({
+            numPlayers: 2,
+            matchID: matchID,
             game: GuessWho,
             multiplayer: SocketIO({ server: '192.168.1.29:8000' }),
-            playerID,
+            playerID: playerID,
+            credentials: playerCredentials,
         });
 
-        console.log("YOUR PLAYER ID IS", playerID);
+        this.playersNames = playersNames;
+        this.cardData = imagesList;
+        this.canDrop = false;
+        this.lastChecked = null;
+
+        console.log("YOUR PLAYER ID IS", this.client.playerID);
+        console.log("YOUR MATCH ID IS", this.client.matchID);
 
         this.client.start();
+        this.opID = this.client.playerID == "0" ? "1" : "0";
+
         this.rootElement = rootElement.appElement;
 
-        console.log(this.rootElement)
+        let boardHeads = this.rootElement.querySelectorAll(".boardHead")
+        for (let i = 0; i < boardHeads.length; i++) {
+            boardHeads[i].innerHTML = "Player " + (i == 1 ? playerID : this.opID) + " Board";
+        }
 
-        this.rootElement.innerHTML += "<h1>Guess Who</h1>";
-        this.rootElement.innerHTML += "<h2 id='turn'>Player Turn: </h2>";
 
-        this.createBoard(0, imagesList);
-        this.rootElement.innerHTML += "<br>"
-        this.createBoard(1, imagesList);
+
+        this.rootElement.querySelector("#left").innerHTML += "<h1>Guess Who</h1>";
+        this.rootElement.querySelector("#left").innerHTML += "<h2 id='turn'>Player Turn: </h2>";
+
+        this.createYourBoard(playerID, imagesList);
+        this.createOpBoard();
+
 
         this.attachListeners();
-        this.client.subscribe(state => this.update(state));
+        this.initializeChat();
+        this.client.subscribe(state => {
+            this.update(state)
+            this.displayChatMessages();
+            this.updatePlayerNames();
+        });
+
+
+    }
+
+    async updatePlayerNames() {
+        let temp = await lobbyClient.getMatch("guesswho", this.client.matchID);
+
+        this.playersNames = temp.players;
+        let player0 = this.playersNames[0].name == undefined ? "Player 1" : this.playersNames[0].name;
+        let player1 = this.playersNames[1].name == undefined ? "Player 2" : this.playersNames[1].name;
+
+        let isConected0 = this.playersNames[0].isConnected;
+        if (isConected0 == false || isConected0 == undefined) {
+            isConected0 = "rgb(255, 0, 0)";
+        } else { isConected0 = "rgb(0, 255, 0)"; }
+
+        let isConected1 = this.playersNames[1].isConnected;
+        if (isConected1 == false || isConected1 == undefined) {
+            isConected1 = "rgb(255, 0, 0)";
+        } else { isConected1 = "rgb(0, 255, 0)"; }
+
+
+        let playerListElement = document.getElementById("playerList");
+        playerListElement.innerHTML = `<h2>Players</h2>
+        <svg class="conectedCircle" height="100" width="100" xmlns="http://www.w3.org/2000/svg" style="background-color: ${isConected0};">
+        <circle r="45" cx="50" cy="50" fill="red" />
+      </svg>${player0}<br>
+        <svg class="conectedCircle" height="100" width="100" xmlns="http://www.w3.org/2000/svg" style="background-color: ${isConected1};">
+        <circle r="45" cx="50" cy="50" fill="red" />
+      </svg>${player1}
+        
+        
+        
+        
+        `;
+
+
+    }
+
+    sendChatMessage(message) {
+        this.client.sendChatMessage(message);
+    }
+
+    // Method to display chat messages
+    displayChatMessages() {
+        const chatContainer = document.getElementById('chat-messages');
+        chatContainer.innerHTML = ''; // Clear previous messages
+
+        this.client.chatMessages.forEach(message => {
+            const messageElement = document.createElement('div');
+            console.log(message)
+            let playerName = this.playersNames[message.sender].name == undefined ? "No name" : this.playersNames[message.sender].name;
+            messageElement.textContent = `${playerName}: ${message.payload}`;
+            chatContainer.appendChild(messageElement);
+        });
+    }
+
+    // Method to initialize chat UI and event listeners
+    initializeChat() {
+        console.log("making chat")
+        const messageInput = document.getElementById('message-input');
+        const sendButton = document.getElementById('send-button');
+        sendButton.addEventListener('click', () => {
+            const message = messageInput.value;
+            this.sendChatMessage(message);
+            messageInput.value = ''; // Clear input field after sending
+        });
 
 
     }
 
 
-
-
-
-    createBoard(tableNum, images) {
-        console.log('making' + tableNum)
-        let board = this.rootElement.querySelector('#board' + tableNum);
-        console.log(board)
+    createYourBoard(tableNum, images) {
+        let board = this.rootElement.querySelector("#playerBoard");
         const rows = [];
-
+        console.log(board);
 
 
         for (let i = 0; i < 5; i++) {
@@ -63,12 +150,66 @@ class GuessWhoClient {
 
     }
 
+    createOpBoard() {
+        let board = this.rootElement.querySelector("#opponentBoard");
+        const rows = [];
+        console.log(board);
+
+
+        for (let i = 0; i < 5; i++) {
+            const cells = [];
+            for (let j = 0; j < 6; j++) {
+                const id = 6 * i + j;
+
+                let temp = `<td class="cellWrapper" ><div class="cell"  data-id="${id}" style="background-color: rgb(204,204,204)"></div></td>`
+                cells.push(temp);
+
+
+            }
+            rows.push(`<tr>${cells.join('')}</tr>`);
+        }
+        board.innerHTML += `
+      <table>${rows.join('')}</table>
+      <p class="winner"></p>`;
+
+    }
+
+
+
 
 
     attachListeners() {
         // This event handler will read the cell id from a cell’s
         // `data-id` attribute and make the `clickCell` move.
         const handleCellClick = event => {
+            if (true) {
+                let cellId = event.target.dataset.id;
+                let tableNum = event.target.dataset.tablenum;
+                let data = this.cardData[cellId];
+                const dataSection = document.getElementById("dataSection");
+
+
+                const nameEle = dataSection.querySelector("#name");
+                const heightEle = dataSection.querySelector("#height");
+                const dobEle = dataSection.querySelector("#dob");
+
+                nameEle.innerHTML = (data.actorLabel == undefined ? "Unknown" : data.actorLabel.value);
+                heightEle.innerHTML = (data.height == undefined ? "Unknown" : data.height.value + "m");
+                dobEle.innerHTML = (data.date_of_birth == undefined ? "Unknown" : data.date_of_birth.value.split('-')[0]);
+
+
+
+                if (this.lastChecked != event.target && this.lastChecked !== null) {
+                    this.lastChecked.style.border = "";
+                    event.target.style.border = "2px solid green";
+                } else {
+                    event.target.style.border = "2px solid green";
+                }
+
+                this.lastChecked = event.target;
+
+
+            };
             const id = parseInt(event.target.dataset.id);
             const tableNum = parseInt(event.target.dataset.tablenum);
             const playerTurn = this.client.getState().ctx.currentPlayer;
@@ -81,19 +222,34 @@ class GuessWhoClient {
                 return
             }
             else { passscore++; }
-            if (event.target.innerHTML == playerTurn) {
-                alert("Already clicked!");
-                return
+            if (event.target.style.backgroundColor == "red") {
+                this.client.moves.clickCell(id, tableNum, true);
             }
             else { passscore++; }
             console.log("your passscore is", passscore)
-            if (passscore == 2) { this.client.moves.clickCell(id, tableNum); }
+            if (passscore == 2) { this.client.moves.clickCell(id, tableNum, false); }
 
         };
         // Attach the event listener to each of the board cells.
-        const cells = this.rootElement.querySelectorAll('.cell');
+        const cells = this.rootElement.querySelectorAll('#playerBoard');
         cells.forEach(cell => {
             cell.onclick = handleCellClick;
+        });
+
+        // Add event listener to the "Finish Turn" button
+        const finishTurnButton = document.getElementById('finish-turn-button');
+        finishTurnButton.addEventListener('click', () => {
+            // Call the endTurn function when the button is clicked
+            this.client.events.endTurn();
+        });
+
+        const makeGuessButton = document.getElementById('flip-button');
+        makeGuessButton.style.color = this.canDrop == true ? "green" : "red";
+        makeGuessButton.addEventListener('click', () => {
+            console.log("guess");
+            this.canDrop = (this.canDrop == false ? true : false);
+            makeGuessButton.style.color = this.canDrop == true ? "green" : "red";
+            console.log(this.canDrop);
         });
     }
 
@@ -103,19 +259,27 @@ class GuessWhoClient {
     update(state) {
         if (state === null) return;
         // Get all the board cells.
-        let cells = this.rootElement.querySelectorAll("[data-tablenum='0']");
+        let cells = document.getElementById("playerBoard").querySelectorAll(".cell");
         // Update cells to display the values in game state.
         cells.forEach(cell => {
             const cellId = parseInt(cell.dataset.id);
-            const cellValue = state.G.cells0[cellId];
-            cell.textContent = cellValue !== null ? cellValue : '';
+            const cellValue = state.G.boards[this.client.playerID == 0 ? "0" : "1"][cellId];
+            if (cellValue !== null) {
+                cell.style.backgroundImage = "";
+                cell.style.backgroundColor = (cellValue !== null ? 'red' : "");
+            } else {
+                console.log("the cell id is", cellId)
+                console.log(this.cardData[cellId].image.value)
+                cell.style.backgroundImage = `url(${this.cardData[cellId].image.value})`;
+                cell.style.backgroundColor = "";
+            }
         });
 
-        cells = this.rootElement.querySelectorAll("[data-tablenum='1']");
+        cells = document.getElementById("opponentBoard").querySelectorAll(".cell");
         cells.forEach(cell => {
             const cellId = parseInt(cell.dataset.id);
-            const cellValue = state.G.cells1[cellId];
-            cell.textContent = cellValue !== null ? cellValue : '';
+            const cellValue = state.G.boards[this.client.playerID == 0 ? "1" : "0"][cellId];
+            cell.style.backgroundColor = (cellValue == null ? 'rgb(204,204,204)' : 'red');
         });
 
         let currentPlayer = state.ctx.currentPlayer;
@@ -126,7 +290,6 @@ class GuessWhoClient {
 
         // Get the gameover message element.
         const messageEl = this.rootElement.querySelector('.winner');
-        console.log("messageEl is", messageEl)
         // Update the element to show a winner if any.
         if (state.ctx.gameover) {
             messageEl.textContent =
@@ -136,28 +299,15 @@ class GuessWhoClient {
         } else {
             messageEl.textContent = '';
         }
+
+
+
+
     }
 
 }
 
 
-
-
-
-
-
-
-
-async function startGame() {
-
-
-    const imageList = await getImages()
-    const appElement = document.getElementById('app');
-    let id = prompt("Enter your player ID: ");
-    new GuessWhoClient({ appElement }, imageList, { playerID: id });
-
-
-}
 
 
 
@@ -179,37 +329,61 @@ async function getImages() {
         LIMIT 60`;
 
     const queryDispatcher = new SPARQLQueryDispatcher(endpointUrl);
-    await queryDispatcher.query(sparqlQuery).then(response => {
-        imagesList = response.results.bindings;
 
-        console.log(imagesList);
-
-
-        for (let i = 0; i < imagesList.length; i++) {
-
-
-            while (!("image" in imagesList[i])) {
-
-                console.log("Error " + [i] + ": No image found for " + imagesList[i].actorLabel.value);
-                //imagesList[i] = { actorLabel: { value: imagesList[i].actorLabel.value }, image: { value: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNUsx1LY3dPUcMt02PYqC_VDJuHoxuRJYe7-CguhdPmA&s" } };
-                imagesList.splice(i, 1);
-
-            }
-
-
-
+    try {
+        const response = await queryDispatcher.query(sparqlQuery);
+        if (response && response.results && response.results.bindings) {
+            console.log(response.results.bindings)
+            let imagesList = response.results.bindings.filter(item => "image" in item);
+            console.log(imagesList);
+            return imagesList;
+        } else {
+            console.error("Invalid response format:", response);
+            return [];
         }
+    } catch (error) {
+        console.error("Error fetching images:", error);
+        return [];
+    }
 
-        console.log(imagesList);
-        console.log("run")
 
-
-
-    });
 
     //console.log(imagesList);
     return imagesList;
 }
+
+
+
+async function startGame() {
+    const playerCredentials = sessionStorage.getItem('playerCredentials');
+    const playerName = sessionStorage.getItem('playerName');
+    const playerId = sessionStorage.getItem('playerID');
+    const matchId = sessionStorage.getItem('matchID');
+
+
+    console.log("playerCredentials: ", playerCredentials);
+    console.log("playerName: ", playerName);
+
+
+
+    const imageList = await getImages()
+    const appElement = document.getElementById('app');
+
+
+    const playersList = (await lobbyClient.getMatch("guesswho", matchId)).players;
+    const playersNames = {
+        0: playersList[0].name,
+        1: playersList[1].name
+    }
+    console.log("players: ", playersList);
+    new GuessWhoClient({ appElement }, imageList, matchId, playersNames, playerCredentials, { playerID: playerId });
+
+
+}
+
+
+
+
 
 
 startGame();

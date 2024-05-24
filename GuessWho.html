@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Guess Who? Game</title>
+   <link rel="stylesheet" href="./styles/style.css">
+</head>
+
+<body>
+   <div id="app">
+      <div id="left">
+         <div id="opponentArea">
+            <h1 class="boardHead"></h1>
+            <div id="opponentBoard" class="board small-board">
+
+            </div>
+         </div>
+         <div id="playerList">
+
+         </div>
+      </div>
+      <div id="middle">
+         <div id="playerArea">
+            <h1 class="boardHead"></h1>
+            <div id="playerBoard" class="board large-board"></div>
+         </div>
+         <p class="winner"></p>
+
+      </div>
+      <div id="right">
+         <div id="questionBox"> <!-- Container for the question box -->
+            <h2>Ask a Question</h2>
+            <label for="questionInput">Question:</label>
+            <div id="chat-messages"></div>
+            <input type="text" id="message-input" placeholder="type ur message...">
+            <button type="button" id="send-button">Submit</button>
+         </div>
+
+
+         <div id="dataSection"> <!-- Container for the data section -->
+            <div id="nameWrapper" class="dataStuffWrapper">
+               <span>Name:</span>
+               <div id="name"></div>
+            </div>
+            <div id="dobWrapper" class="dataStuffWrapper">
+               <span>Date of Birth:</span>
+               <div id="dob"></div>
+            </div>
+            <div id="heightWrapper" class="dataStuffWrapper">
+               <span>Height:</span>
+               <div id="height"></div>
+            </div>
+
+
+         </div>
+      </div>
+
+   </div>
+   <button id="finish-turn-button">Finish Turn</button>
+   <button id="flip-button">Toggle Flip mode</button>
+   <script src="./src/App.js"></script>
+</body>
+
+</html>
