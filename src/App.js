@@ -28,9 +28,14 @@ class GuessWhoClient {
         console.log("YOUR MATCH ID IS", this.client.matchID);
 
         this.client.start();
-
+        this.opID = this.client.playerID == "0" ? "1" : "0";
 
         this.rootElement = rootElement.appElement;
+
+        let boardHeads = this.rootElement.querySelectorAll(".boardHead")
+        for (let i = 0; i < boardHeads.length; i++) {
+            boardHeads[i].innerHTML = "Player " + (i == 1 ? playerID : this.opID) + " Board";
+        }
 
 
 
