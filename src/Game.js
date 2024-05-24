@@ -4,7 +4,8 @@ export const GuessWho = {
         boards: {
             "0": Array(30).fill(null),
             "1": Array(30).fill(null)
-        }
+        },
+        selectedCells: { "0": [], "1": [] }
     }),
 
     moves: {
