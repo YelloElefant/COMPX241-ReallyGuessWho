@@ -219,10 +219,12 @@ class GuessWhoClient {
             this.client.events.endTurn();
         });
 
-        const makeGuessButton = document.getElementById('make-guess-button');
+        const makeGuessButton = document.getElementById('flip-button');
+        makeGuessButton.style.color = this.canDrop == true ? "green" : "red";
         makeGuessButton.addEventListener('click', () => {
             console.log("guess");
             this.canDrop = (this.canDrop == false ? true : false);
+            makeGuessButton.style.color = this.canDrop == true ? "green" : "red";
             console.log(this.canDrop);
         });
     }
