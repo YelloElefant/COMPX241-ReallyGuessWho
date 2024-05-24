@@ -373,7 +373,7 @@ table {
 }
 
 .joinButton {
-    width: 50px;
+    width: auto;
     height: auto;
     font-size: 18px;
     padding: 2px;

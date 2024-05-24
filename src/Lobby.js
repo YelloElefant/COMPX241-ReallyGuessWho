@@ -9,6 +9,8 @@ console.log("playerCredentials: ", sessionStorage.getItem('playerCredentials'));
 
 updateList()
 
+setInterval(updateList, 1000);
+
 document.getElementById('createGame').addEventListener('click', makeGame);
 
 let storedName = sessionStorage.getItem('playerName');
@@ -27,12 +29,12 @@ async function makeGame() {
 
 }
 
-async function joinGame(element) {
 
-}
 
 
 async function updateList() {
+   const playerName = document.getElementById('playerName').value.trim();
+
    const { matches } = await lobbyClient.listMatches('guesswho');
    console.log("matches: ", matches); // => [{ matchID: '123', players: ['0', '1'] }, ...]
 
@@ -61,13 +63,21 @@ async function updateList() {
          text += `Status: Waiting for 2 players`
       }
       text += `</div>`;
-      text += `<button class="joinButton lobbyButton"  data-matchID="${match.matchID}">Join</button></div>`;
+
+      if ((player1.name == playerName && !player1.isConnected) || (player2.name == playerName && !player2.isConnected)) {
+         text += `<button class="joinButton lobbyButton"  data-matchID="${match.matchID}">Rejoin</button></div>`;
+      } else {
+         text += `<button class="joinButton lobbyButton"  data-matchID="${match.matchID}">Join</button></div>`;
+      }
+
+
 
       gameList.innerHTML += text;
       i++;
    }
 
    const handleJoin = async event => {
+      if (event.target.innerHTML == "Rejoin") { window.location.href = "http://localhost:1234/GuessWho.html"; }
       const playerName = document.getElementById('playerName').value.trim();
       console.log(event.target.getAttribute('data-matchID'));
       const matchID = event.target.getAttribute('data-matchID');
@@ -108,4 +118,7 @@ async function updateList() {
    for (let i = 0; i < joinButtons.length; i++) {
       joinButtons[i].addEventListener('click', handleJoin);
    }
+
+
+
 }
