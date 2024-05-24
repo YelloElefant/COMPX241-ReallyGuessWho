@@ -231,16 +231,6 @@ class GuessWhoClient {
             console.log("your passscore is", passscore)
             if (passscore == 2) { this.client.moves.clickCell(id, tableNum, false); }
 
-            this.client.sendChatMessage("hello");
-            this.client.chatMessages.forEach(message => {
-                console.log(message);
-            })
-
-            this.client.sendChatMessage("hello");
-            this.client.chatMessages.forEach(message => {
-                console.log(message);
-            })
-
         };
         // Attach the event listener to each of the board cells.
         const cells = this.rootElement.querySelectorAll('#playerBoard');
@@ -399,5 +389,3 @@ async function startGame() {
 
 
 startGame();
-
-
