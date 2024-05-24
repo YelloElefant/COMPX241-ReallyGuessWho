@@ -198,14 +198,14 @@ class GuessWhoClient {
         // Update cells to display the values in game state.
         cells.forEach(cell => {
             const cellId = parseInt(cell.dataset.id);
-            const cellValue = state.G.cells0[cellId];
+            const cellValue = state.G.boards["0"][cellId];
             cell.textContent = cellValue !== null ? cellValue : '';
         });
 
         cells = this.rootElement.querySelectorAll("[data-tablenum='1']");
         cells.forEach(cell => {
             const cellId = parseInt(cell.dataset.id);
-            const cellValue = state.G.cells1[cellId];
+            const cellValue = state.G.boards["1"][cellId];
             cell.textContent = cellValue !== null ? cellValue : '';
         });
 
