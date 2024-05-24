@@ -270,8 +270,6 @@ class GuessWhoClient {
                 cell.style.backgroundImage = "";
                 cell.style.backgroundColor = (cellValue !== null ? 'red' : "");
             } else {
-                console.log("the cell id is", cellId)
-                console.log(this.cardData[cellId].image.value)
                 cell.style.backgroundImage = `url(${this.cardData[cellId].image.value})`;
                 cell.style.backgroundColor = "";
             }
