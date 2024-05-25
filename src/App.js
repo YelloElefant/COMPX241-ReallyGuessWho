@@ -34,6 +34,9 @@ class GuessWhoClient {
             value: ""
         };
 
+        this.yourCard = [];
+
+
         console.log("question is ", this.question)
         this.questionResponse;
         this.cardsToDrop = [];
