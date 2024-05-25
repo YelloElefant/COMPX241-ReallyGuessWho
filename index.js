@@ -1,18 +1,16 @@
-let x = "is height greater than 5"
-console.log(x)
-let splitX = x.split(" ")
-console.log(splitX)
-
-if (splitX[0] === "height") {
-   console.log("checking for height")
+function getOporatorFunction(oporator) {
+   switch (oporator) {
+      case ">":
+         return (a, b) => a > b;
+      case "<":
+         return (a, b) => a < b;
+      case "=":
+         return (a, b) => a == b;
+      default:
+         return (a, b) => a == b;
+   }
 }
 
-if (splitX[1] === ">") {
-   console.log("checking for >")
-} else {
-   console.log("checking for <")
-}
 
-if (splitX[2] === "5") {
-   console.log("checking for 5")
-}
+let opfunc = getOporatorFunction(">");
+console.log(opfunc(5, 3));

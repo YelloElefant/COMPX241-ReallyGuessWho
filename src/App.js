@@ -406,9 +406,17 @@ class GuessWhoClient {
                 let cellAtribute = this.cardData[cellId][this.question.atribute];
                 let cellAtributeValue = cellAtribute == undefined ? "Unknown" : cellAtribute.value;
 
-                if (this.question.value > cellAtributeValue) {
+                let oporatorFunction = getOporatorFunction(this.question.operator);
+                console.log(cellAtributeValue, this.question.value, oporatorFunction(cellAtributeValue, this.question.value))
+                console.log(cellAtributeValue < this.question.value)
+
+                if (oporatorFunction(cellAtributeValue, this.question.value)) {
                     cell.style.border = "2px solid yellow";
+                    cell.style.setProperty('--background-color', 'rgba(0, 0, 255, 0.199)');
+
+
                 } else {
+                    cell.style.setProperty('--background-color', 'rgba(0, 0, 0, 0)');
                     cell.style.border = " ";
                 }
 
@@ -508,3 +516,17 @@ async function startGame() {
 
 
 startGame();
+
+
+function getOporatorFunction(oporator) {
+    switch (oporator) {
+        case "<":
+            return (a, b) => a > b;
+        case ">":
+            return (a, b) => a < b;
+        case "=":
+            return (a, b) => a == b;
+        default:
+            return (a, b) => a == b;
+    }
+}
