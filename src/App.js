@@ -32,6 +32,7 @@ class GuessWhoClient {
         this.client.start();
         this.opID = this.client.playerID == "0" ? "1" : "0";
 
+
         this.rootElement = rootElement.appElement;
 
         let boardHeads = this.rootElement.querySelectorAll(".boardHead")
@@ -119,8 +120,11 @@ class GuessWhoClient {
         const sendButton = document.getElementById('send-button');
         sendButton.addEventListener('click', () => {
             const message = messageInput.value;
-            this.sendChatMessage(message);
+
             messageInput.value = ''; // Clear input field after sending
+            console.log(this.client.moves)
+            this.client.moves.askQuestion();
+
         });
 
 
@@ -223,7 +227,6 @@ class GuessWhoClient {
             let passscore = 0;
 
             if (playerTurn != tableNum) {
-                alert("Wrong Board!");
                 return
             }
             else { passscore++; }
@@ -255,6 +258,11 @@ class GuessWhoClient {
             this.canDrop = (this.canDrop == false ? true : false);
             makeGuessButton.style.color = this.canDrop == true ? "green" : "red";
             console.log(this.canDrop);
+        });
+
+        const startButton = document.getElementById('startButton');
+        startButton.addEventListener('click', () => {
+            this.client.moves.startGame();
         });
     }
 
