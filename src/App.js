@@ -140,9 +140,9 @@ class GuessWhoClient {
 
                 if (res.includes("yes")) {
                     console.log(this.question)
-
+                } else if (res.includes("no")) {
+                    this.question = {}
                 }
-
 
                 this.displayChatMessages()
                 this.client.events.endStage();
@@ -402,16 +402,11 @@ class GuessWhoClient {
                 const cellId = parseInt(cell.dataset.id);
                 const cellValue = state.G.boards[this.client.playerID == 0 ? "0" : "1"][cellId];
 
-                console.log(this.question.atribute);
 
                 let cellAtribute = this.cardData[cellId][this.question.atribute];
                 let cellAtributeValue = cellAtribute == undefined ? "Unknown" : cellAtribute.value;
-                console.log(this.cardData[cellId])
-                console.log("cell atribute is ", cellAtribute);
-                console.log("cell atribute value is ", cellAtributeValue)
 
                 if (this.question.value > cellAtributeValue) {
-                    console.log("changing to yellow")
                     cell.style.border = "2px solid yellow";
                 } else {
                     cell.style.border = " ";
