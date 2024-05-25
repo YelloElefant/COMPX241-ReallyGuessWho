@@ -33,6 +33,8 @@ class GuessWhoClient {
             operator: "",
             value: ""
         };
+
+        console.log("question is ", this.question)
         this.questionResponse;
         this.cardsToDrop = [];
 
@@ -357,8 +359,10 @@ class GuessWhoClient {
             }
         });
 
-        cells = document.getElementById("opponentBoard").querySelectorAll(".cell");
-        cells.forEach(cell => {
+
+
+        let opCells = document.getElementById("opponentBoard").querySelectorAll(".cell");
+        opCells.forEach(cell => {
             const cellId = parseInt(cell.dataset.id);
             const cellValue = state.G.boards[this.client.playerID == 0 ? "1" : "0"][cellId];
             cell.style.backgroundColor = (cellValue == null ? 'rgb(204,204,204)' : 'red');
@@ -394,7 +398,28 @@ class GuessWhoClient {
         if (state.ctx.activePlayers[this.client.playerID] == "dropCardStage") {
             this.canDrop = true;
 
+            cells.forEach(cell => {
+                const cellId = parseInt(cell.dataset.id);
+                const cellValue = state.G.boards[this.client.playerID == 0 ? "0" : "1"][cellId];
 
+                console.log(this.question.atribute);
+
+                let cellAtribute = this.cardData[cellId][this.question.atribute];
+                let cellAtributeValue = cellAtribute == undefined ? "Unknown" : cellAtribute.value;
+                console.log(this.cardData[cellId])
+                console.log("cell atribute is ", cellAtribute);
+                console.log("cell atribute value is ", cellAtributeValue)
+
+                if (this.question.value > cellAtributeValue) {
+                    console.log("changing to yellow")
+                    cell.style.border = "2px solid yellow";
+                } else {
+                    cell.style.border = " ";
+                }
+
+
+
+            })
 
 
         } else { this.canDrop = false; }
