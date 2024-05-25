@@ -425,7 +425,13 @@ class GuessWhoClient {
             })
 
 
-        } else { this.canDrop = false; }
+        } else {
+            this.canDrop = false;
+            cells.forEach(cell => {
+                cell.style.setProperty('--background-color', 'rgba(0, 0, 0, 0)');
+                cell.style.border = " ";
+            })
+        }
 
         if (state.ctx.activePlayers[this.client.playerID] == "answerQuestionStage") {
             this.answer = true;
