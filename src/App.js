@@ -28,6 +28,11 @@ class GuessWhoClient {
         this.answer = false;
         this.answeredQuestions = [];
         this.turnNumber = { number: 0 };
+        this.question = {
+            atribute: "",
+            operator: "",
+            value: ""
+        };
         this.questionResponse;
         this.cardsToDrop = [];
 
@@ -101,16 +106,18 @@ class GuessWhoClient {
 
     }
 
-    sendChatMessage(message) {
-        this.client.sendChatMessage(message);
-    }
+
 
     // Method to display chat messages
     displayChatMessages(state) {
+
         const chatContainer = document.getElementById('chat-messages');
         chatContainer.innerHTML = ''; // Clear previous messages
 
         this.client.chatMessages.forEach(message => {
+            // if (message.payload.includes("atrQuest")) {
+            //     this.question = message.payload.split(" ")[1];
+            // }
             const messageElement = document.createElement('div');
             //console.log(message)
             let playerName = this.playersNames[message.sender].name == undefined ? "No name" : this.playersNames[message.sender].name;
@@ -120,15 +127,21 @@ class GuessWhoClient {
             if ((this.answer && message.sender !== this.client.playerID) && !this.answeredQuestions.includes(message.id)) {
                 let response = prompt(message.payload);
                 this.answeredQuestions.push(message.id);
-                this.client.moves.answerQuestion(response, message.id, this.client.sendChatMessage);
+                this.client.moves.answerQuestion("res" + response, message.id, this.client.sendChatMessage);
             }
 
             if (message.payload.includes("res")) {
                 this.client.chatMessages = [];
                 let res = message.payload.split(" ");
-                res.splice(0, 1)
                 console.log(res);
                 this.questionResponse = res;
+
+                if (res.includes("yes")) {
+                    console.log(this.question)
+
+                }
+
+
                 this.displayChatMessages()
                 this.client.events.endStage();
                 console.log(state.ctx.activePlayers)
@@ -145,9 +158,16 @@ class GuessWhoClient {
         const sendButton = document.getElementById('send-button');
         sendButton.addEventListener('click', () => {
             const message = messageInput.value;
+            let splitMsg = message.split(" ");
 
             messageInput.value = ''; // Clear input field after sending
-            console.log(this.client.moves)
+            this.question = {
+                atribute: splitMsg[0],
+                operator: splitMsg[1],
+                value: splitMsg[2]
+
+            };
+            console.log(this.question)
             this.client.moves.askQuestion(message, this.client.sendChatMessage);
 
         });
