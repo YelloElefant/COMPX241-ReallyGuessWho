@@ -36,7 +36,6 @@ async function updateList() {
    const playerName = document.getElementById('playerName').value.trim();
 
    const { matches } = await lobbyClient.listMatches('guesswho');
-   console.log("matches: ", matches); // => [{ matchID: '123', players: ['0', '1'] }, ...]
 
    const gameList = document.getElementById('gameList');
    gameList.innerHTML = '';
@@ -64,7 +63,7 @@ async function updateList() {
       }
       text += `</div>`;
 
-      if ((player1.name == playerName && !player1.isConnected) || (player2.name == playerName && !player2.isConnected)) {
+      if (((player1.name == playerName && !player1.isConnected) || (player2.name == playerName && !player2.isConnected)) && match.matchID == sessionStorage.getItem('matchID')) {
          text += `<button class="joinButton lobbyButton"  data-matchID="${match.matchID}">Rejoin</button></div>`;
       } else {
          text += `<button class="joinButton lobbyButton"  data-matchID="${match.matchID}">Join</button></div>`;
