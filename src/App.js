@@ -335,9 +335,31 @@ class GuessWhoClient {
             if (state.ctx.gameover.winner == this.client.playerID) {
                 document.getElementById("guess").innerHTML = "<h1>You Win!</h1>";
                 this.rootElement.innerHTML = ""
+                let temp = document.createElement("button")
+                temp.addEventListener('click', async () => {
+                    await lobbyClient.leaveMatch('guesswho', this.client.matchID, {
+                        playerID: this.client.playerID,
+                        credentials: this.client.credentials,
+                    });
+                    window.location.href = "http://localhost:1234/lobby.html";
+                });
+                console.log(temp)
+                this.rootElement.appendChild(temp)
+                temp.innerHTML = "Leave Game";
             } else if (state.ctx.gameover.winner == this.opID) {
                 document.getElementById("guess").innerHTML = "<h1>You Lose!</h1>";
                 this.rootElement.innerHTML = ""
+                let temp = document.createElement("button")
+                temp.addEventListener('click', async () => {
+                    await lobbyClient.leaveMatch('guesswho', this.client.matchID, {
+                        playerID: this.client.playerID,
+                        credentials: this.client.credentials,
+                    });
+                    window.location.href = "http://localhost:1234/lobby.html";
+                });
+                console.log(temp)
+                this.rootElement.appendChild(temp)
+                temp.innerHTML = "Leave Game";
             }
             return;
         }
