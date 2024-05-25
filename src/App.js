@@ -322,6 +322,16 @@ class GuessWhoClient {
             console.log(this.client.getState().ctx.activePlayers);
         });
 
+        //leave game button 
+        const leaveGameButton = document.getElementById('leave-game-button');
+        leaveGameButton.addEventListener('click', async () => {
+            await lobbyClient.leaveMatch('guesswho', this.client.matchID, {
+                playerID: this.client.playerID,
+                credentials: this.client.credentials,
+            });
+            window.location.href = "http://localhost:1234/lobby.html";
+        });
+
 
 
     }
