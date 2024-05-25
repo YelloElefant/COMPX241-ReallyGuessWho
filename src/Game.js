@@ -47,9 +47,10 @@ export const GuessWho = {
     },
 };
 
-function askQuestion({ G, playerID }) {
+function askQuestion({ G, ctx, playerID }, message) {
+    console.log(ctx)
 
-    console.log(playerID, "asked a question")
+    console.log(playerID, "asked a question: ", message)
 
 
 }

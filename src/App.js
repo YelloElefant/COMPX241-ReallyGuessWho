@@ -123,7 +123,7 @@ class GuessWhoClient {
 
             messageInput.value = ''; // Clear input field after sending
             console.log(this.client.moves)
-            this.client.moves.askQuestion();
+            this.client.moves.askQuestion(message);
 
         });
 
@@ -260,10 +260,7 @@ class GuessWhoClient {
             console.log(this.canDrop);
         });
 
-        const startButton = document.getElementById('startButton');
-        startButton.addEventListener('click', () => {
-            this.client.moves.startGame();
-        });
+
     }
 
 
@@ -311,7 +308,14 @@ class GuessWhoClient {
             messageEl.textContent = '';
         }
 
-
+        //update chat element to hide if not in askQuestionStage
+        const chatElement = document.getElementById('questionBox');
+        console.log(state.ctx.activePlayers)
+        if (state.ctx.activePlayers[this.client.playerID] == "askQuestionStage") {
+            chatElement.style.display = "block";
+        } else {
+            chatElement.style.display = "none";
+        }
 
 
     }
