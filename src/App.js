@@ -390,7 +390,13 @@ class GuessWhoClient {
         const chatElement = document.getElementById('questionBox');
         console.log(state.ctx.activePlayers)
         if (state.ctx.activePlayers[this.client.playerID] == "askQuestionStage") {
-            chatElement.style.display = "block";
+            if (state.ctx.activePlayers[this.opID] == "answerQuestionStage") {
+                chatElement.style.display = "block";
+            } else {
+                chatElement.style.display = "none";
+            }
+
+
         } else {
             chatElement.style.display = "none";
         }
