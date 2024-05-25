@@ -13,7 +13,10 @@ export const GuessWho = {
     turn: {
         onBegin: ({ G, events, playerID }) => {
             console.log("Turn begins for ", playerID)
-            events.setActivePlayers({ currentPlayer: 'askQuestionStage' })
+            events.setActivePlayers({
+                currentPlayer: 'askQuestionStage',
+                others: 'answerQuestionStage'
+            })
         },
         onEnd: ({ G, ctx, playerID }) => {
             console.log("Turn ends for ", playerID)
@@ -22,36 +25,38 @@ export const GuessWho = {
             currentPlayer: "askQuestionStage",
             others: "answerQuestionStage",
         },
-
-
+        maxMoves: 30,
+        minMoves: 1,
         stages: {
             askQuestionStage: {
                 moves: {
                     askQuestion,
-                }
+                },
+                next: 'dropCardStage',
 
             },
 
             dropCardStage: {
                 moves: {
-                    dropCard,
+                    clickCell,
                 },
+                next: 'answerQuestionStage',
             },
 
             answerQuestionStage: {
                 moves: {
                     answerQuestion,
                 },
+                next: 'askQuestionStage',
             },
         },
     },
 };
 
-function askQuestion({ G, ctx, playerID }, message) {
-    console.log(ctx)
-
+function askQuestion({ G, ctx, playerID, events }, message, sendChatMessage) {
+    sendChatMessage(message)
     console.log(playerID, "asked a question: ", message)
-
+    events.setStage("dropCardStage");
 
 }
 
@@ -70,7 +75,9 @@ function dropCard({ G, playerID }) {
     console.log(playerID, "dropped a card")
 }
 
-function answerQuestion({ G, playerID }) {
+function answerQuestion({ G, playerID }, response, messageID, sendChatMessage) {
     console.log(playerID, "answered a question")
+    sendChatMessage(response)
+
 }
 

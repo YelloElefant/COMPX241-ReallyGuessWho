@@ -25,6 +25,11 @@ class GuessWhoClient {
         this.cardData = imagesList;
         this.canDrop = false;
         this.lastChecked = null;
+        this.answer = false;
+        this.answeredQuestions = [];
+        this.turnNumber = { number: 0 };
+        this.questionResponse;
+
 
         console.log("YOUR PLAYER ID IS", this.client.playerID);
         console.log("YOUR MATCH ID IS", this.client.matchID);
@@ -53,7 +58,7 @@ class GuessWhoClient {
         this.initializeChat();
         this.client.subscribe(state => {
             this.update(state)
-            this.displayChatMessages();
+            this.displayChatMessages(state);
             this.updatePlayerNames();
         });
 
@@ -100,16 +105,35 @@ class GuessWhoClient {
     }
 
     // Method to display chat messages
-    displayChatMessages() {
+    displayChatMessages(state) {
         const chatContainer = document.getElementById('chat-messages');
         chatContainer.innerHTML = ''; // Clear previous messages
 
         this.client.chatMessages.forEach(message => {
             const messageElement = document.createElement('div');
-            console.log(message)
+            //console.log(message)
             let playerName = this.playersNames[message.sender].name == undefined ? "No name" : this.playersNames[message.sender].name;
             messageElement.textContent = `${playerName}: ${message.payload}`;
             chatContainer.appendChild(messageElement);
+
+            if ((this.answer && message.sender !== this.client.playerID) && !this.answeredQuestions.includes(message.id)) {
+                let response = prompt(message.payload);
+                this.answeredQuestions.push(message.id);
+                this.client.moves.answerQuestion(response, message.id, this.client.sendChatMessage);
+            }
+
+            if (message.payload.includes("res")) {
+                this.client.chatMessages = [];
+                let res = message.payload.split(" ");
+                res.splice(0, 1)
+                console.log(res);
+                this.questionResponse = res;
+                this.displayChatMessages()
+                this.client.events.endStage();
+                console.log(state.ctx.activePlayers)
+
+            }
+
         });
     }
 
@@ -123,7 +147,7 @@ class GuessWhoClient {
 
             messageInput.value = ''; // Clear input field after sending
             console.log(this.client.moves)
-            this.client.moves.askQuestion(message);
+            this.client.moves.askQuestion(message, this.client.sendChatMessage);
 
         });
 
@@ -316,6 +340,15 @@ class GuessWhoClient {
         } else {
             chatElement.style.display = "none";
         }
+
+        if (state.ctx.activePlayers[this.client.playerID] == "dropCardStage") {
+            this.canDrop = true;
+
+        } else { this.canDrop = false; }
+
+        if (state.ctx.activePlayers[this.client.playerID] == "answerQuestionStage") {
+            this.answer = true;
+        } else { this.answer = false; }
 
 
     }
