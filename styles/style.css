@@ -1,3 +1,7 @@
+* {
+    font-family: 'Arial', sans-serif;
+
+}
 
 body {
     background: linear-gradient(to right, #ff7e5f, #feb47b);
@@ -271,3 +275,132 @@ table {
 }
 
 
+
+
+
+
+
+
+
+
+#wrapper {
+    text-align: center; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+}
+
+#titleName {
+    font-size: 50px; 
+    margin: 100px 0 50px 0; 
+
+}
+
+#playerData {
+    margin-bottom: 50px;
+}
+
+.playerInput {
+    font-size: 18px; 
+    margin-bottom: 20px; 
+    border: solid black 1px;
+    border-radius: 30px;
+    background: transparent;
+    padding: 20px;
+    display: flex;
+    justify-content: flex-start;
+    color: black;
+    outline: none;
+    
+
+}
+.playerInput::placeholder {
+    transition: color 0.3s ease-in-out;
+    color: rgba(0, 0, 0, 0.74);
+}
+
+.playerInput:focus::placeholder {
+    transition: color 0.3s ease-in-out;
+    color: transparent;
+}
+
+#titleMatchList {
+    font-size: 28px; 
+    margin: 0;
+    text-align: center;
+    padding-left: 20px;
+    margin-bottom: 20px; 
+    width: 200px;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+#inputs {
+    /* background-color: #ffffff;  */
+    background-color: transparent; 
+    display: flex; /* Uses flexbox to layout buttons */
+    flex-direction: column; /* Stacks buttons vertically */
+    border-radius: 10px;
+    width: 65%;
+}
+
+#inputHead {
+    font-size: 24px; 
+    margin-bottom: 20px; 
+    border-bottom: solid thin black;
+    padding: 20px;
+    display: flex;
+    justify-content: flex-start;
+    
+}
+
+.lobbyButton {
+    background-color: #4CAF50; 
+    color: white; 
+    padding: 15px 30px; /* Adds padding to the buttons */
+    border-radius: 10px; 
+    font-size: 16px; 
+    font-weight: bold;
+    cursor: pointer; /* Changes the cursor to a pointer when hovering over the button */
+    width: 200px;
+    height: 60px;
+}
+
+.lobbyButton:hover {
+    background-color: #14931d; /* Changes the background color on hover */
+}
+
+.joinButton {
+    width: auto;
+    height: auto;
+    font-size: 18px;
+    padding: 2px;
+    margin-left: 10px;
+}
+
+#gameList {
+    display: flex; /* Uses flexbox to layout buttons */
+    flex-direction: column; /* Stacks buttons vertically */
+    border-radius: 10px;
+    justify-content: center;
+    margin: 0 20px 20px 20px;
+    
+}
+
+.matchWrapper {
+    display: flex; /* Uses flexbox to layout buttons */
+    flex-direction: row; /* Stacks buttons horizontally */
+    justify-content: start; /* Centers buttons horizontally */
+    padding: 10px 0 10px 0;
+
+}
+
+.match {
+    display: flex; /* Uses flexbox to layout buttons */
+    flex-direction: row; /* Stacks buttons horizontally */
+    justify-content: space-between; /* Centers buttons horizontally */
+    padding: 10px 0 10px 0;
+    font-size: larger;
+}

@@ -9,31 +9,3 @@ body {
     height: 100vh; /* Sets the height to 100% of the viewport height */
     color: white; 
 }
-#lobbyContainer {
-    text-align: center; 
-    background-color: #ffffff; 
-    border-radius: 10px;
-    padding: 20px; 
-}
-h1 {
-    margin-bottom: 40px; /* Adds space below the title */
-    color: #ff7e5f; /* title color to match the game page */
-}
-.buttonContainer {
-    display: flex; /* Uses flexbox to layout buttons */
-    flex-direction: column; /* Stacks buttons vertically */
-    gap: 20px; 
-}
-.lobbyButton {
-    background-color: #4CAF50; 
-    color: white; 
-    padding: 15px 30px; /* Adds padding to the buttons */
-    border-radius: 10px; 
-    font-size: 16px; 
-    cursor: pointer; /* Changes the cursor to a pointer when hovering over the button */
-    width: 200px;
-    margin: 0 auto; /* Centers the buttons */
-}
-.lobbyButton:hover {
-    background-color: #14931d; /* Changes the background color on hover */
-}

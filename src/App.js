@@ -212,6 +212,9 @@ class GuessWhoClient {
 
 
             };
+            if (this.canDrop == false) {
+                return;
+            }
             const id = parseInt(event.target.dataset.id);
             const tableNum = parseInt(event.target.dataset.tablenum);
             const playerTurn = this.client.getState().ctx.currentPlayer;
@@ -270,8 +273,6 @@ class GuessWhoClient {
                 cell.style.backgroundImage = "";
                 cell.style.backgroundColor = (cellValue !== null ? 'red' : "");
             } else {
-                console.log("the cell id is", cellId)
-                console.log(this.cardData[cellId].image.value)
                 cell.style.backgroundImage = `url(${this.cardData[cellId].image.value})`;
                 cell.style.backgroundColor = "";
             }
@@ -389,5 +390,3 @@ async function startGame() {
 
 
 startGame();
-
-
