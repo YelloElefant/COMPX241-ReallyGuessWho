@@ -29,6 +29,7 @@ class GuessWhoClient {
         this.answeredQuestions = [];
         this.turnNumber = { number: 0 };
         this.questionResponse;
+        this.cardsToDrop = [];
 
 
         console.log("YOUR PLAYER ID IS", this.client.playerID);
@@ -372,6 +373,9 @@ class GuessWhoClient {
 
         if (state.ctx.activePlayers[this.client.playerID] == "dropCardStage") {
             this.canDrop = true;
+
+
+
 
         } else { this.canDrop = false; }
 
