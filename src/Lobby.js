@@ -9,7 +9,7 @@ console.log("playerCredentials: ", sessionStorage.getItem('playerCredentials'));
 
 updateList()
 
-setInterval(updateList, 1000);
+setInterval(updateList, 500);
 
 document.getElementById('createGame').addEventListener('click', makeGame);
 

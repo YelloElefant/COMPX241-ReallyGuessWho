@@ -25,12 +25,29 @@ class GuessWhoClient {
         this.cardData = imagesList;
         this.canDrop = false;
         this.lastChecked = null;
+        this.answer = false;
+        this.answeredQuestions = [];
+        this.turnNumber = { number: 0 };
+        this.question = {
+            atribute: "",
+            operator: "",
+            value: ""
+        };
+
+        this.yourCard = [];
+
+
+        console.log("question is ", this.question)
+        this.questionResponse;
+        this.cardsToDrop = [];
+
 
         console.log("YOUR PLAYER ID IS", this.client.playerID);
         console.log("YOUR MATCH ID IS", this.client.matchID);
 
         this.client.start();
         this.opID = this.client.playerID == "0" ? "1" : "0";
+
 
         this.rootElement = rootElement.appElement;
 
@@ -52,7 +69,7 @@ class GuessWhoClient {
         this.initializeChat();
         this.client.subscribe(state => {
             this.update(state)
-            this.displayChatMessages();
+            this.displayChatMessages(state);
             this.updatePlayerNames();
         });
 
@@ -94,21 +111,48 @@ class GuessWhoClient {
 
     }
 
-    sendChatMessage(message) {
-        this.client.sendChatMessage(message);
-    }
+
 
     // Method to display chat messages
-    displayChatMessages() {
+    displayChatMessages(state) {
+
         const chatContainer = document.getElementById('chat-messages');
         chatContainer.innerHTML = ''; // Clear previous messages
 
         this.client.chatMessages.forEach(message => {
+            // if (message.payload.includes("atrQuest")) {
+            //     this.question = message.payload.split(" ")[1];
+            // }
             const messageElement = document.createElement('div');
-            console.log(message)
+            //console.log(message)
             let playerName = this.playersNames[message.sender].name == undefined ? "No name" : this.playersNames[message.sender].name;
             messageElement.textContent = `${playerName}: ${message.payload}`;
             chatContainer.appendChild(messageElement);
+
+            if ((this.answer && message.sender !== this.client.playerID) && !this.answeredQuestions.includes(message.id)) {
+                let response = prompt(message.payload);
+                this.answeredQuestions.push(message.id);
+                this.client.moves.answerQuestion("res" + response, message.id, this.client.sendChatMessage);
+            }
+
+            if (message.payload.includes("res")) {
+                this.client.chatMessages = [];
+                let res = message.payload.split(" ");
+                console.log(res);
+                this.questionResponse = res;
+
+                if (res.includes("yes")) {
+                    console.log(this.question)
+                } else if (res.includes("no")) {
+                    this.question = {}
+                }
+
+                this.displayChatMessages()
+                this.client.events.endStage();
+                console.log(state.ctx.activePlayers)
+
+            }
+
         });
     }
 
@@ -119,8 +163,18 @@ class GuessWhoClient {
         const sendButton = document.getElementById('send-button');
         sendButton.addEventListener('click', () => {
             const message = messageInput.value;
-            this.sendChatMessage(message);
+            let splitMsg = message.split(" ");
+
             messageInput.value = ''; // Clear input field after sending
+            this.question = {
+                atribute: splitMsg[0],
+                operator: splitMsg[1],
+                value: splitMsg[2]
+
+            };
+            console.log(this.question)
+            this.client.moves.askQuestion(message, this.client.sendChatMessage);
+
         });
 
 
@@ -223,7 +277,6 @@ class GuessWhoClient {
             let passscore = 0;
 
             if (playerTurn != tableNum) {
-                alert("Wrong Board!");
                 return
             }
             else { passscore++; }
@@ -256,6 +309,34 @@ class GuessWhoClient {
             makeGuessButton.style.color = this.canDrop == true ? "green" : "red";
             console.log(this.canDrop);
         });
+
+        const guessWhoButton = document.getElementById('guesswho-button');
+        guessWhoButton.addEventListener('click', async () => {
+            console.log("GUESSWHO");
+
+            this.client.moves.guessWho();
+            console.log
+            if (this.client.getState().G.guess[this.client.playerID] == false) {
+                console.log("this is happening")
+                this.client.events.setStage('answerQuestionStage');
+            } else {
+                // this.client.events.endGame();
+            }
+            console.log(this.client.getState().ctx.activePlayers);
+        });
+
+        //leave game button 
+        const leaveGameButton = document.getElementById('leave-game-button');
+        leaveGameButton.addEventListener('click', async () => {
+            await lobbyClient.leaveMatch('guesswho', this.client.matchID, {
+                playerID: this.client.playerID,
+                credentials: this.client.credentials,
+            });
+            window.location.href = "http://localhost:1234/lobby.html";
+        });
+
+
+
     }
 
 
@@ -263,6 +344,41 @@ class GuessWhoClient {
 
     update(state) {
         if (state === null) return;
+        if (("gameover" in state.ctx)) {
+            if (state.ctx.gameover.winner == this.client.playerID) {
+                document.getElementById("guess").innerHTML = "<h1>You Win!</h1>";
+                this.rootElement.innerHTML = ""
+                let temp = document.createElement("button")
+                temp.addEventListener('click', async () => {
+                    await lobbyClient.leaveMatch('guesswho', this.client.matchID, {
+                        playerID: this.client.playerID,
+                        credentials: this.client.credentials,
+                    });
+                    window.location.href = "http://localhost:1234/lobby.html";
+                });
+                console.log(temp)
+                this.rootElement.appendChild(temp)
+                temp.innerHTML = "Leave Game";
+            } else if (state.ctx.gameover.winner == this.opID) {
+                document.getElementById("guess").innerHTML = "<h1>You Lose!</h1>";
+                this.rootElement.innerHTML = ""
+                let temp = document.createElement("button")
+                temp.addEventListener('click', async () => {
+                    await lobbyClient.leaveMatch('guesswho', this.client.matchID, {
+                        playerID: this.client.playerID,
+                        credentials: this.client.credentials,
+                    });
+                    window.location.href = "http://localhost:1234/lobby.html";
+                });
+                console.log(temp)
+                this.rootElement.appendChild(temp)
+                temp.innerHTML = "Leave Game";
+            }
+            return;
+        }
+
+
+
         // Get all the board cells.
         let cells = document.getElementById("playerBoard").querySelectorAll(".cell");
         // Update cells to display the values in game state.
@@ -278,8 +394,10 @@ class GuessWhoClient {
             }
         });
 
-        cells = document.getElementById("opponentBoard").querySelectorAll(".cell");
-        cells.forEach(cell => {
+
+
+        let opCells = document.getElementById("opponentBoard").querySelectorAll(".cell");
+        opCells.forEach(cell => {
             const cellId = parseInt(cell.dataset.id);
             const cellValue = state.G.boards[this.client.playerID == 0 ? "1" : "0"][cellId];
             cell.style.backgroundColor = (cellValue == null ? 'rgb(204,204,204)' : 'red');
@@ -303,7 +421,62 @@ class GuessWhoClient {
             messageEl.textContent = '';
         }
 
+        //update chat element to hide if not in askQuestionStage
+        const chatElement = document.getElementById('questionBox');
+        console.log(state.ctx.activePlayers)
+        if (state.ctx.activePlayers[this.client.playerID] == "askQuestionStage") {
+            if (state.ctx.activePlayers[this.opID] == "answerQuestionStage") {
+                chatElement.style.display = "block";
+            } else {
+                chatElement.style.display = "none";
+            }
 
+
+        } else {
+            chatElement.style.display = "none";
+        }
+
+        if (state.ctx.activePlayers[this.client.playerID] == "dropCardStage") {
+            this.canDrop = true;
+
+            cells.forEach(cell => {
+                const cellId = parseInt(cell.dataset.id);
+                const cellValue = state.G.boards[this.client.playerID == 0 ? "0" : "1"][cellId];
+
+
+                let cellAtribute = this.cardData[cellId][this.question.atribute];
+                let cellAtributeValue = cellAtribute == undefined ? "Unknown" : cellAtribute.value;
+
+                let oporatorFunction = getOporatorFunction(this.question.operator);
+                console.log(cellAtributeValue, this.question.value, oporatorFunction(cellAtributeValue, this.question.value))
+                console.log(cellAtributeValue < this.question.value)
+
+                if (oporatorFunction(cellAtributeValue, this.question.value)) {
+                    cell.style.border = "2px solid yellow";
+                    cell.style.setProperty('--background-color', 'rgba(0, 0, 255, 0.199)');
+
+
+                } else {
+                    cell.style.setProperty('--background-color', 'rgba(0, 0, 0, 0)');
+                    cell.style.border = " ";
+                }
+
+
+
+            })
+
+
+        } else {
+            this.canDrop = false;
+            cells.forEach(cell => {
+                cell.style.setProperty('--background-color', 'rgba(0, 0, 0, 0)');
+                cell.style.border = " ";
+            })
+        }
+
+        if (state.ctx.activePlayers[this.client.playerID] == "answerQuestionStage") {
+            this.answer = true;
+        } else { this.answer = false; }
 
 
     }
@@ -390,3 +563,17 @@ async function startGame() {
 
 
 startGame();
+
+
+function getOporatorFunction(oporator) {
+    switch (oporator) {
+        case "<":
+            return (a, b) => a > b;
+        case ">":
+            return (a, b) => a < b;
+        case "=":
+            return (a, b) => a == b;
+        default:
+            return (a, b) => a == b;
+    }
+}
