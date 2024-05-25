@@ -284,6 +284,22 @@ class GuessWhoClient {
             console.log(this.canDrop);
         });
 
+        const guessWhoButton = document.getElementById('guesswho-button');
+        guessWhoButton.addEventListener('click', async () => {
+            console.log("GUESSWHO");
+
+            this.client.moves.guessWho();
+            console.log
+            if (this.client.getState().G.guess[this.client.playerID] == false) {
+                console.log("this is happening")
+                this.client.events.setStage('answerQuestionStage');
+            } else {
+                // this.client.events.endGame();
+            }
+            console.log(this.client.getState().ctx.activePlayers);
+        });
+
+
 
     }
 
@@ -292,6 +308,19 @@ class GuessWhoClient {
 
     update(state) {
         if (state === null) return;
+        if (("gameover" in state.ctx)) {
+            if (state.ctx.gameover.winner == this.client.playerID) {
+                document.getElementById("guess").innerHTML = "<h1>You Win!</h1>";
+                this.rootElement.innerHTML = ""
+            } else if (state.ctx.gameover.winner == this.opID) {
+                document.getElementById("guess").innerHTML = "<h1>You Lose!</h1>";
+                this.rootElement.innerHTML = ""
+            }
+            return;
+        }
+
+
+
         // Get all the board cells.
         let cells = document.getElementById("playerBoard").querySelectorAll(".cell");
         // Update cells to display the values in game state.

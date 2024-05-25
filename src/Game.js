@@ -5,8 +5,28 @@ export const GuessWho = {
             "0": Array(30).fill(null),
             "1": Array(30).fill(null)
         },
-        selectedCells: { "0": [], "1": [] }
+        selectedCells: {
+            "0": [],
+            "1": []
+        },
+        guess: {
+            "0": false,
+            "1": false
+        }
     }),
+
+    endIf: ({ G, ctx, events }) => {
+        console.log("Checking for end")
+
+        if (G.guess["0"]) {
+            return { winner: "0" }
+        } else if (G.guess["1"]) {
+            return { winner: "1" }
+        }
+
+
+    },
+
 
 
 
@@ -28,9 +48,12 @@ export const GuessWho = {
         maxMoves: 30,
         minMoves: 1,
         stages: {
+
+
             askQuestionStage: {
                 moves: {
                     askQuestion,
+                    guessWho,
                 },
                 next: 'dropCardStage',
 
@@ -80,4 +103,20 @@ function answerQuestion({ G, playerID }, response, messageID, sendChatMessage) {
     sendChatMessage(response)
 
 }
+
+
+
+function guessWho({ G, events, playerID }) {
+    console.log(playerID, "made a guess")
+    let guess;
+    try {
+        guess = prompt("Make a guess")
+
+    } catch (error) {
+        console.log("Error in guessWho")
+    }
+    console.log(guess)
+    G.guess[playerID] = true;
+}
+
 
