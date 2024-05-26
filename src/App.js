@@ -63,7 +63,7 @@ class GuessWhoClient {
         this.rootElement.querySelector("#left").innerHTML += "<h1>Guess Who</h1>";
         this.rootElement.querySelector("#left").innerHTML += "<h2 id='turn'>Player Turn: </h2>";
 
-        this.createYourBoard(playerID, imagesList);
+        this.createYourBoard(playerID, imagesList, this.yourCard);
         this.createOpBoard();
 
 
@@ -189,7 +189,7 @@ class GuessWhoClient {
     }
 
 
-    createYourBoard(tableNum, images) {
+    createYourBoard(tableNum, images, assignedCard) {
         let board = this.rootElement.querySelector("#playerBoard");
         const rows = [];
         console.log(board);
@@ -210,7 +210,10 @@ class GuessWhoClient {
         board.innerHTML += `
       <table>${rows.join('')}</table>
       <p class="winner"></p>`;
-
+        
+      let assignedCardContainer = this.rootElement.querySelector("#assignedCard");
+      console.log("Assigned Card Image URL:", assignedCard.image.value); // Log the image URL
+      assignedCardContainer.style.backgroundImage = `url(${assignedCard.image.value})`;
     }
 
     createOpBoard() {
