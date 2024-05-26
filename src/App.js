@@ -5,7 +5,7 @@ import request from 'request';
 import { SocketIO } from 'boardgame.io/multiplayer'
 import { LobbyClient } from 'boardgame.io/client';
 
-const lobbyClient = new LobbyClient({ server: 'http://192.168.1.29:8081' });
+const lobbyClient = new LobbyClient({ server: 'http://192.168.1.47:8081' });
 
 
 
@@ -16,7 +16,7 @@ class GuessWhoClient {
             numPlayers: 2,
             matchID: matchID,
             game: GuessWho,
-            multiplayer: SocketIO({ server: '192.168.1.29:8000' }),
+            multiplayer: SocketIO({ server: '192.168.1.47:8000' }),
             playerID: playerID,
             credentials: playerCredentials,
         });
@@ -34,8 +34,10 @@ class GuessWhoClient {
             value: ""
         };
 
-        this.yourCard = [];
+        
+        this.yourCard = this.assignRandomCard(imagesList);
 
+        console.log("Assigned card for player:", this.yourCard);
 
         console.log("question is ", this.question)
         this.questionResponse;
@@ -74,6 +76,11 @@ class GuessWhoClient {
         });
 
 
+    }
+
+    assignRandomCard(imagesList) {
+        const randomIndex = Math.floor(Math.random() * imagesList.length);
+        return imagesList[randomIndex];
     }
 
     async updatePlayerNames() {
