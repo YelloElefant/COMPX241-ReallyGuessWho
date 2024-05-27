@@ -1,25 +1,27 @@
 export const GuessWho = {
-    setup: () => ({ cells0: Array(30).fill(null), cells1: Array(30).fill(null) }),
+    name: 'guesswho',
+    setup: () => ({
+        boards: {
+            "0": Array(30).fill(null),
+            "1": Array(30).fill(null)
+        },
+        selectedCells: { "0": [], "1": [] }
+    }),
 
     moves: {
-        clickCell: ({ G, playerID }, id, tableNum) => {
+        clickCell: ({ G, playerID }, id, tableNum, undo) => {
             if (playerID != tableNum) {
                 return;
             }
             console.log(playerID)
-            switch (playerID) {
-                case "0":
-                    G.cells0[id] = playerID;
-                    break;
-                case "1":
-                    G.cells1[id] = playerID;
-                    break;
-            }
+            if (undo == true) {
+                G.boards[playerID][id] = null;
+            } else { G.boards[playerID][id] = playerID; }
 
         },
     },
     turn: {
-        maxMoves: 1,
+        maxMoves: 30,
         minMoves: 1,
     },
 };
