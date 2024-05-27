@@ -158,14 +158,55 @@ body {
     cursor: pointer; /* cursor to pointer on hover */
     margin-top: 5px; /* space above the button */
 }
-#guessButton {
-    position: absolute; /* makes button fixed */
-    bottom: 20px; /* Positions the guess button 20px from the bottom */
-    left: 20px; /* Positions the guess button 20px from the left */
+
+#playersList {
+    position: absolute; 
+    bottom: 80px; 
+    left: 20px; 
+    width: 250px; 
+    background-color: #ffffff; 
+    border: 2px solid #ffab91; 
+    padding: 10px; 
+    border-radius: 10px; 
+    display: flex; 
+    flex-direction: column; 
+}
+#playersList h2 {
+    margin-top: 0; 
+    margin-bottom: 10px; 
+    font-size: 16px; 
+    color: #ff7e5f; 
+}
+.player {
+    font-size: 14px; 
+    color: #4CAF50; 
+    margin-bottom: 5px; 
+    display: flex; 
+    align-items: center; 
+}
+.status {
+    width: 10px; 
+    height: 10px; 
+    border-radius: 50%; 
+    margin-right: 10px; 
+}
+.online {
+    background-color: #4CAF50; 
+}
+#buttonContainer {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    display: flex;
+    gap: 10px; 
+}
+#guessButton, #flipCardButton, #finishTurnButton {
     background-color: #4CAF50; 
     color: white; 
-    padding: 15px 30px; /* padding around the content of the guess button */
+    padding: 10px 15px; 
     border-radius: 10px; 
-    font-size: 16px;
-    cursor: pointer; /* pointer instead of cursor when hovering */
+    font-size: 12px; 
+    cursor: pointer; 
 }
+
+
