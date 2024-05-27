@@ -169,3 +169,38 @@ body {
     font-size: 16px;
     cursor: pointer; /* pointer instead of cursor when hovering */
 }
+
+#playersList {
+    position: absolute; 
+    bottom: 80px; 
+    left: 20px; 
+    width: 250px; 
+    background-color: #ffffff; 
+    border: 2px solid #ffab91; 
+    padding: 10px; 
+    border-radius: 10px; 
+    display: flex; 
+    flex-direction: column; 
+}
+#playersList h2 {
+    margin-top: 0; 
+    margin-bottom: 10px; 
+    font-size: 16px; 
+    color: #ff7e5f; 
+}
+.player {
+    font-size: 14px; 
+    color: #4CAF50; 
+    margin-bottom: 5px; 
+    display: flex; 
+    align-items: center; 
+}
+.status {
+    width: 10px; 
+    height: 10px; 
+    border-radius: 50%; 
+    margin-right: 10px; 
+}
+.online {
+    background-color: #4CAF50; 
+}
