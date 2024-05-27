@@ -7,23 +7,20 @@ body {
     justify-content: center; /* Centers content horizontally */
     align-items: center; /* Centers content vertically */
     height: 100vh; /* Sets the height to 100% of the viewport height */
-    color: white; 
+
 }
 #lobbyContainer {
     text-align: center; 
-    background-color: #ffffff; 
     border-radius: 10px;
     padding: 20px; 
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 h1 {
-    margin-bottom: 40px; /* Adds space below the title */
-    color: #ff7e5f; /* title color to match the game page */
+    margin-bottom: 20px; /* Adds space below the title */
+    color: white; /* title color to match the game page */
+    font-size: 3em;
 }
-.buttonContainer {
-    display: flex; /* Uses flexbox to layout buttons */
-    flex-direction: column; /* Stacks buttons vertically */
-    gap: 20px; 
-}
+
 .lobbyButton {
     background-color: #4CAF50; 
     color: white; 
@@ -37,3 +34,21 @@ h1 {
 .lobbyButton:hover {
     background-color: #14931d; /* Changes the background color on hover */
 }
+
+.lobbyInput {
+    padding: 10px;
+    margin: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    width: 80%; 
+    max-width: 300px; 
+}
+
+.formContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
