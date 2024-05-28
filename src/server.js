@@ -17,7 +17,8 @@ const server = Server({
       'https://guesswho.yelloelefant.com',
       'https://guesswhoserver.yelloelefant.com',
       'https://guesswholobby.yelloelefant.com',
-      'http://localhost'
+      'http://localhost',
+      'http://192.168.1.29'
    ],
 });
 

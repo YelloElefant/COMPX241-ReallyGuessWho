@@ -160,9 +160,7 @@ body {
 }
 
 #playersList {
-    position: absolute; 
-    bottom: 80px; 
-    left: 20px; 
+    
     width: 250px; 
     background-color: #ffffff; 
     border: 2px solid #ffab91; 

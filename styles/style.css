@@ -19,7 +19,7 @@ body {
     padding: 0;
     /* Removes default padding */
     /* Uses flexbox to center the content */
-    justify-content:space-between;
+    justify-content: space-between;
     /* Centers content horizontally */
     /* Centers content vertically */
 
@@ -28,7 +28,7 @@ body {
 
 
 #opponentArea {
-    
+
     /* Positions the opponent area 10px from the left */
     display: flex;
     /* Uses flexbox to layout elements horizontally */
@@ -154,7 +154,7 @@ table {
     /* Uses flexbox to layout elements inside the section */
     flex-direction: column;
     /* Stacks elements vertically */
-    
+
 }
 
 .dataStuffWrapper * {
@@ -294,7 +294,7 @@ table {
 
 
 #wrapper {
-    text-align: center; 
+    text-align: center;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -303,8 +303,8 @@ table {
 }
 
 #titleName {
-    font-size: 50px; 
-    margin: 100px 0 50px 0; 
+    font-size: 50px;
+    margin: 100px 0 50px 0;
 
 }
 
@@ -313,8 +313,8 @@ table {
 }
 
 .playerInput {
-    font-size: 18px; 
-    margin-bottom: 20px; 
+    font-size: 18px;
+    margin-bottom: 20px;
     border: solid black 1px;
     border-radius: 30px;
     background: transparent;
@@ -323,9 +323,10 @@ table {
     justify-content: flex-start;
     color: black;
     outline: none;
-    
+
 
 }
+
 .playerInput::placeholder {
     transition: color 0.3s ease-in-out;
     color: rgba(0, 0, 0, 0.74);
@@ -337,11 +338,11 @@ table {
 }
 
 #titleMatchList {
-    font-size: 28px; 
+    font-size: 28px;
     margin: 0;
     text-align: center;
     padding-left: 20px;
-    margin-bottom: 20px; 
+    margin-bottom: 20px;
     width: 200px;
     font-weight: bold;
     text-decoration: underline;
@@ -349,37 +350,44 @@ table {
 
 #inputs {
     /* background-color: #ffffff;  */
-    background-color: transparent; 
-    display: flex; /* Uses flexbox to layout buttons */
-    flex-direction: column; /* Stacks buttons vertically */
+    background-color: transparent;
+    display: flex;
+    /* Uses flexbox to layout buttons */
+    flex-direction: column;
+    /* Stacks buttons vertically */
     border-radius: 10px;
     width: 65%;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
 }
 
 #inputHead {
-    font-size: 24px; 
-    margin-bottom: 20px; 
+    font-size: 24px;
+    margin-bottom: 20px;
     border-bottom: solid thin black;
     padding: 20px;
     display: flex;
     justify-content: flex-start;
-    
+
 }
 
 .lobbyButton {
-    background-color: #4CAF50; 
-    color: white; 
-    padding: 15px 30px; /* Adds padding to the buttons */
-    border-radius: 10px; 
-    font-size: 16px; 
+    background-color: #4CAF50;
+    color: white;
+    padding: 15px 30px;
+    /* Adds padding to the buttons */
+    border-radius: 10px;
+    font-size: 16px;
     font-weight: bold;
-    cursor: pointer; /* Changes the cursor to a pointer when hovering over the button */
+    cursor: pointer;
+    /* Changes the cursor to a pointer when hovering over the button */
     width: 200px;
     height: 60px;
 }
 
 .lobbyButton:hover {
-    background-color: #14931d; /* Changes the background color on hover */
+    background-color: #14931d;
+    /* Changes the background color on hover */
 }
 
 .joinButton {
@@ -391,26 +399,34 @@ table {
 }
 
 #gameList {
-    display: flex; /* Uses flexbox to layout buttons */
-    flex-direction: column; /* Stacks buttons vertically */
+    display: flex;
+    /* Uses flexbox to layout buttons */
+    flex-direction: column;
+    /* Stacks buttons vertically */
     border-radius: 10px;
     justify-content: center;
     margin: 0 20px 20px 20px;
-    
+
 }
 
 .matchWrapper {
-    display: flex; /* Uses flexbox to layout buttons */
-    flex-direction: row; /* Stacks buttons horizontally */
-    justify-content: start; /* Centers buttons horizontally */
+    display: flex;
+    /* Uses flexbox to layout buttons */
+    flex-direction: row;
+    /* Stacks buttons horizontally */
+    justify-content: start;
+    /* Centers buttons horizontally */
     padding: 10px 0 10px 0;
 
 }
 
 .match {
-    display: flex; /* Uses flexbox to layout buttons */
-    flex-direction: row; /* Stacks buttons horizontally */
-    justify-content: space-between; /* Centers buttons horizontally */
+    display: flex;
+    /* Uses flexbox to layout buttons */
+    flex-direction: row;
+    /* Stacks buttons horizontally */
+    justify-content: space-between;
+    /* Centers buttons horizontally */
     padding: 10px 0 10px 0;
     font-size: larger;
 }
@@ -419,4 +435,22 @@ table {
 
 #playerList {
     margin-bottom: 10px;
+    width: 250px; 
+    background-color: #ffffff; 
+    border: 2px solid #ffab91; 
+    padding: 10px; 
+    border-radius: 10px; 
+
+    font-size: 14px;
+    font-weight: bold; 
+    margin-bottom: 5px; 
+    align-items: center; 
 }
+
+#playerList h2 {
+    margin-top: 0; 
+    margin-bottom: 10px; 
+    font-size: 16px; 
+    color: #ff7e5f; 
+}
+
