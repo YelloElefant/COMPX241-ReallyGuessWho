@@ -193,28 +193,37 @@ class GuessWhoClient {
         let board = this.rootElement.querySelector("#playerBoard");
         const rows = [];
         console.log(board);
-
-
+    
         for (let i = 0; i < 5; i++) {
             const cells = [];
             for (let j = 0; j < 6; j++) {
                 const id = 6 * i + j;
-
-                let temp = `<td class="cellWrapper" ><div class="cell"  data-id="${id}" data-tablenum="${tableNum}" style="background-image: url(${images[id].image.value})"></div></td>`
+    
+                let temp = `<td class="cellWrapper"><div class="cell" data-id="${id}" data-tablenum="${tableNum}" style="background-image: url(${images[id].image.value})"></div></td>`;
                 cells.push(temp);
-
-
             }
             rows.push(`<tr>${cells.join('')}</tr>`);
         }
-        board.innerHTML += `
-      <table>${rows.join('')}</table>
-      <p class="winner"></p>`;
+        board.innerHTML = `
+          <table>${rows.join('')}</table>
+          <p class="winner"></p>`;
+    
+        let assignedCardContainer = this.rootElement.querySelector("#assignedCard");
+        console.log("Assigned Card Image URL:", assignedCard.image.value); // Log the image URL
+        assignedCardContainer.style.backgroundImage = `url(${assignedCard.image.value})`;
+        assignedCardContainer.style.width = '120px'; // Ensure this matches your cell size
+        assignedCardContainer.style.height = '160px'; // Ensure this matches your cell size
+
+        const nameEl = assignedCardData.querySelector("#name");
+        const heightEl = assignedCardData.querySelector("#height");
+        const dobEl = assignedCardData.querySelector("#dob");
+
+        nameEl.innerHTML = (assignedCard.actorLabel == undefined ? "Unknown" : assignedCard.actorLabel.value);
+        heightEl.innerHTML = (assignedCard.height == undefined ? "Unknown" : assignedCard.height.value + "m");
+        dobEl.innerHTML = (assignedCard.date_of_birth == undefined ? "Unknown" : assignedCard.date_of_birth.value.split('-')[0]);
         
-      let assignedCardContainer = this.rootElement.querySelector("#assignedCard");
-      console.log("Assigned Card Image URL:", assignedCard.image.value); // Log the image URL
-      assignedCardContainer.style.backgroundImage = `url(${assignedCard.image.value})`;
     }
+    
 
     createOpBoard() {
         let board = this.rootElement.querySelector("#opponentBoard");

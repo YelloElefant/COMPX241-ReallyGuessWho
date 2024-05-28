@@ -14,39 +14,28 @@
       <div id="left">
          <div id="opponentArea">
             <h1 class="boardHead"></h1>
-            <div id="opponentBoard" class="board small-board">
-
-            </div>
+            <div id="opponentBoard" class="board small-board"></div>
          </div>
-         <div id="playerList">
-
-         </div>
-
+         <div id="playerList"></div>
          <button class="lobbyButton" id="leave-game-button">Leave Game</button>
       </div>
       <div id="middle">
          <div id="playerArea">
             <h1 class="boardHead"></h1>
             <div id="playerBoard" class="board large-board"></div>
+            
          </div>
          <p class="winner"></p>
-         <div id="assignedCardContainer">
-            <h2>Assigned Card:</h2>
-            <div id="assignedCard" class="cell"></div>
-         </div>
-
       </div>
       <div id="right">
-         <div id="questionBox"> <!-- Container for the question box -->
+         <div id="questionBox">
             <h2>Ask a Question</h2>
             <label for="questionInput">Question:</label>
             <div id="chat-messages"></div>
             <input type="text" id="message-input" placeholder="type ur message...">
             <button type="button" id="send-button">Submit</button>
          </div>
-
-
-         <div id="dataSection"> <!-- Container for the data section -->
+         <div id="dataSection">
             <div id="nameWrapper" class="dataStuffWrapper">
                <span>Name:</span>
                <div id="name"></div>
@@ -59,11 +48,26 @@
                <span>Height:</span>
                <div id="height"></div>
             </div>
-
-
+         </div>
+         <div id="assignedCardContainer">
+            <h2>Assigned Card:</h2>
+            <div id="assignedCard" class="cell"></div>
+         </div>
+         <div id="assignedCardData">
+            <div id="AssignedNameWrapper" class="AssignedWrapper">
+               <span>Name:</span>
+               <div id="name"></div>
+            </div>
+            <div id="AssignedDobWrapper" class="AssignedWrapper">
+               <span>Date of Birth:</span>
+               <div id="dob"></div>
+            </div>
+            <div id="AssignedHeightWrapper" class="AssignedWrapper">
+               <span>Height:</span>
+               <div id="height"></div>
+            </div>
          </div>
       </div>
-
    </div>
    <button id="finish-turn-button">Finish Turn</button>
    <button id="flip-button">Toggle Flip mode</button>

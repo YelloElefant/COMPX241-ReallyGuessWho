@@ -420,3 +420,62 @@ table {
 #playerList {
     margin-bottom: 10px;
 }
+
+.assignedCard {
+    height: 100%;
+    width: 100%;
+    background-size: cover;
+    border-radius: 5px;
+    background-color: #CCC;
+}
+
+#assignedCardData {
+    width: 250px;
+    background-color: #ffffff;
+    border: 2px solid #ffab91;
+    padding: 10px;
+    /* padding around the content of the section */
+    border-radius: 10px;
+
+
+    display: flex;
+    /* Uses flexbox to layout elements inside the section */
+    flex-direction: column;
+    /* Stacks elements vertically */
+    
+}
+
+.AssignedWrapper * {
+    display: inline;
+}
+
+#assignedCardData h2 {
+    margin-top: 0;
+    /* Removes the top margin */
+    margin-bottom: 10px;
+    /* space below the heading */
+    font-size: 16px;
+    color: #ff7e5f;
+    /* Sets the heading color */
+}
+
+#assignedCardData label {
+    font-size: 11px;
+    /*  font size of labels */
+    margin-top: 2px;
+    /*  space above each label */
+    color: #ff7e5f;
+}
+
+#assignedCardData input {
+    font-size: 11px;
+    padding: 4px;
+    /* padding inside the input fields */
+    margin-top: 2px;
+    /* space above the input fields */
+    margin-bottom: 4px;
+    /* space below the input fields */
+    border: 1px solid #ffab91;
+    /* Sets a border color for the input fields */
+    border-radius: 5px;
+}
