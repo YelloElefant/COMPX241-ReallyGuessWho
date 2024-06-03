@@ -1,26 +1,26 @@
 body {
     background: linear-gradient(to right, #ff7e5f, #feb47b); 
-    font-family: 'Arial', sans-serif; /* Sets the font family for the page */
-    margin: 0; /* Removes default margin */
-    padding: 0; /* Removes default padding */
-    display: flex; /* Uses flexbox to center the content */
-    justify-content: center; /* Centers content horizontally */
-    align-items: center; /* Centers content vertically */
+    font-family: 'Arial', sans-serif; 
+    margin: 0; 
+    padding: 0; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
     height: 100vh; 
 }
 #gameArea {
-    display: flex; /* Uses flexbox to layout slots  in a row */
-    justify-content: center; /* Centers slots horizontally within the gameArea */
-    align-items: flex-start; /* Aligns slots at the start (top) of the gameArea */
+    display: flex; 
+    justify-content: center; 
+    align-items: flex-start; 
     gap: 20px; 
 }
 #opponentArea {
-    position: absolute; /* makes sure opponent area is fixed and doesnt move */
-    top: 5px; /* Positions the opponent area 5px from the top */
-    left: 10px; /* Positions the opponent area 10px from the left */
-    display: flex; /* Uses flexbox to layout elements horizontally */
-    flex-direction: column; /* Stacks elements vertically */
-    align-items: center; /* Centers elements horizontally */
+    position: absolute; 
+    top: 5px; 
+    left: 10px; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
 }
 #opponentArea h1 {
     font-size: 16px; 
@@ -28,19 +28,19 @@ body {
     color: #ffffff; 
 }
 #playerArea {
-    display: flex; /* Uses flexbox to layout slots inside the player area */
-    flex-direction: column; /* Stacks slots vertically */
-    align-items: center; /* Centers slots horizontally inside the player area */
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
 }
 #playerArea h1 {
-    margin-bottom: 5px; /* Adds space below the title */
+    margin-bottom: 5px; 
     color: #ffffff; 
 }
 .board {
     display: grid; 
-    grid-template-columns: repeat(6, 1fr); /* Creates 6 columns of equal width */
+    grid-template-columns: repeat(6, 1fr); 
     gap: 5px;
-    padding: 15px; /* Adds padding around the content of each board */
+    padding: 15px; 
     background-color: #ffffff; 
     border-radius: 10px; 
     
@@ -52,111 +52,111 @@ body {
 .large-board {
     width: 420px; 
     height: 450px;
-    padding: 15px; /* Adds extra padding around the content of the large board */
+    padding: 15px; 
 }
 .card {
-    display: flex; /* Uses flexbox to layout elements inside the card */
-    justify-content: center; /* Centers elements horizontally inside the card */
-    align-items: center; /* Centers elements vertically inside the card */
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
     border-radius: 5px; 
     background-color: #ffddc1; 
     
 }
 .small-board .card {
-    width: 20px; /* width of each card in the small board */
-    height: 20px; /* height of each card in the small board */
+    width: 20px; 
+    height: 20px; 
 }
 .large-board .card {
-    width: 60px; /* width of each card in the large board */
-    height: 80px; /*  height of each card in the large board */
+    width: 60px; 
+    height: 80px; 
 }
 .card img {
-    width: 100%; /* Sets the width of images inside the cards to fill the card */
-    height: auto; /* Maintains the aspect ratio of the images */
+    width: 100%; 
+    height: auto;
     border-radius: 5px; 
 }
 .placeholder {
-    width: 100%; /* Sets the width of the placeholder to fill the card */
-    height: 100%; /* Sets the height of the placeholder to fill the card */
+    width: 100%; 
+    height: 100%; 
     background-color: #ffab91; 
     border-radius: 5px; 
-    display: flex; /* Uses flexbox to layout elements inside the placeholder */
-    justify-content: center; /* Centers text horizontally inside the placeholder */
-    align-items: center; /* Centers text vertically inside the placeholder */
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
 }
 #dataSection {
-    position: absolute; /* make sure it doesnt move */
-    top: 20px; /* Positions the data section 20px from the top */
-    right: 20px; /* Positions the data section 20px from the right */
-    bottom: 180px; /* Positions the bottom of the data section 180px above the bottom */
-    width: 250px; /* Sets a fixed width for the section */
+    position: absolute; 
+    top: 20px; 
+    right: 20px; 
+    bottom: 180px; 
+    width: 250px; 
     background-color: #ffffff; 
     border: 2px solid #ffab91; 
-    padding: 10px; /* padding around the content of the section */
+    padding: 10px; 
     border-radius: 10px; 
-    display: flex; /* Uses flexbox to layout elements inside the section */
-    flex-direction: column; /* Stacks elements vertically */
+    display: flex; 
+    flex-direction: column; 
  
 }
 #dataSection h2 {
-    margin-top: 0; /* Removes the top margin */
-    margin-bottom: 10px; /* space below the heading */
+    margin-top: 0; 
+    margin-bottom: 10px; 
     font-size: 16px; 
-    color: #ff7e5f; /* Sets the heading color */
+    color: #ff7e5f; 
 }
 #dataSection label {
-    font-size: 11px; /*  font size of labels */
-    margin-top: 2px; /*  space above each label */
+    font-size: 11px; 
+    margin-top: 2px; 
     color: #ff7e5f; 
 }
 #dataSection input {
     font-size: 11px; 
-    padding: 4px; /* padding inside the input fields */
-    margin-top: 2px; /* space above the input fields */
-    margin-bottom: 4px; /* space below the input fields */
-    border: 1px solid #ffab91; /* Sets a border color for the input fields */
+    padding: 4px; 
+    margin-top: 2px; 
+    margin-bottom: 4px; 
+    border: 1px solid #ffab91; 
     border-radius: 5px; 
 }
 #questionBox {
-    position: absolute; /* makes it fixed */
-    bottom: 20px; /* Positions the question box 20px from the bottom */
-    right: 20px; /* Positions the question box 20px from the right */
+    position: absolute; 
+    bottom: 20px; 
+    right: 20px; 
     width: 250px; 
     height: 120px; 
     background-color: #ffffff; 
     border: 2px solid #ffab91; 
-    padding: 10px; /* padding around the content of the section */
+    padding: 10px; 
     border-radius: 10px; 
-    display: flex; /* Uses flexbox to layout elements inside the section */
-    flex-direction: column; /* Stacks elements vertically */
+    display: flex; 
+    flex-direction: column; 
     
 }
 #questionBox h2 {
-    margin-top: 0; /* Removes the top margin */
-    margin-bottom: 10px; /* space below the heading */
+    margin-top: 0;
+    margin-bottom: 10px; 
     font-size: 16px; 
     color: #ff7e5f; 
 }
 #questionBox label {
-    margin-top: 3px; /* space above each label */
+    margin-top: 3px; 
     font-size: 12px; 
     color: #ff7e5f; 
 }
 #questionBox input {
     font-size: 12px; 
-    padding: 5px; /* padding inside the input fields */
-    margin-top: 3px; /* space above the input fields */
-    margin-bottom: 5px; /* space below the input fields */
+    padding: 5px; 
+    margin-top: 3px; 
+    margin-bottom: 5px; 
     border: 1px solid #ffab91; 
     border-radius: 5px; 
 }
 #questionBox button {
-    padding: 8px 10px; /* padding inside the button */
+    padding: 8px 10px; 
     background-color: #4CAF50; 
     color: white; 
     border-radius: 5px; 
-    cursor: pointer; /* cursor to pointer on hover */
-    margin-top: 5px; /* space above the button */
+    cursor: pointer; 
+    margin-top: 5px; 
 }
 
 #playersList {
