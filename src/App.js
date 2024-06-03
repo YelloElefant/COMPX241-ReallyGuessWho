@@ -5,7 +5,7 @@ import request from 'request';
 import { SocketIO } from 'boardgame.io/multiplayer'
 import { LobbyClient } from 'boardgame.io/client';
 
-const lobbyClient = new LobbyClient({ server: 'http://192.168.1.47:8081' });
+const lobbyClient = new LobbyClient({ server: 'http://192.168.1.29:8081' });
 
 
 
@@ -16,7 +16,7 @@ class GuessWhoClient {
             numPlayers: 2,
             matchID: matchID,
             game: GuessWho,
-            multiplayer: SocketIO({ server: '192.168.1.47:8000' }),
+            multiplayer: SocketIO({ server: '192.168.1.29:8000' }),
             playerID: playerID,
             credentials: playerCredentials,
         });
@@ -34,20 +34,27 @@ class GuessWhoClient {
             value: ""
         };
 
-        
-        this.yourCard = this.assignRandomCard(imagesList);
 
-        console.log("Assigned card for player:", this.yourCard);
+        // this.yourCard = this.assignRandomCard(imagesList);
+
+
 
         console.log("question is ", this.question)
         this.questionResponse;
         this.cardsToDrop = [];
 
 
+
         console.log("YOUR PLAYER ID IS", this.client.playerID);
         console.log("YOUR MATCH ID IS", this.client.matchID);
 
         this.client.start();
+
+
+
+        this.yourCard;
+
+
         this.opID = this.client.playerID == "0" ? "1" : "0";
 
 
@@ -63,6 +70,8 @@ class GuessWhoClient {
         this.rootElement.querySelector("#left").innerHTML += "<h1>Guess Who</h1>";
         this.rootElement.querySelector("#left").innerHTML += "<h2 id='turn'>Player Turn: </h2>";
 
+
+
         this.createYourBoard(playerID, imagesList, this.yourCard);
         this.createOpBoard();
 
@@ -76,10 +85,12 @@ class GuessWhoClient {
         });
 
 
+
+
     }
 
     assignRandomCard(imagesList) {
-        const randomIndex = Math.floor(Math.random() * imagesList.length);
+        const randomIndex = this.client.getInitialState();
         return imagesList[randomIndex];
     }
 
@@ -193,12 +204,12 @@ class GuessWhoClient {
         let board = this.rootElement.querySelector("#playerBoard");
         const rows = [];
         console.log(board);
-    
+
         for (let i = 0; i < 5; i++) {
             const cells = [];
             for (let j = 0; j < 6; j++) {
                 const id = 6 * i + j;
-    
+
                 let temp = `<td class="cellWrapper"><div class="cell" data-id="${id}" data-tablenum="${tableNum}" style="background-image: url(${images[id].image.value})"></div></td>`;
                 cells.push(temp);
             }
@@ -207,23 +218,23 @@ class GuessWhoClient {
         board.innerHTML = `
           <table>${rows.join('')}</table>
           <p class="winner"></p>`;
-    
-        let assignedCardContainer = this.rootElement.querySelector("#assignedCard");
-        console.log("Assigned Card Image URL:", assignedCard.image.value); // Log the image URL
-        assignedCardContainer.style.backgroundImage = `url(${assignedCard.image.value})`;
-        assignedCardContainer.style.width = '120px'; // Ensure this matches your cell size
-        assignedCardContainer.style.height = '160px'; // Ensure this matches your cell size
 
-        const nameEl = assignedCardData.querySelector("#name");
-        const heightEl = assignedCardData.querySelector("#height");
-        const dobEl = assignedCardData.querySelector("#dob");
+        // let assignedCardContainer = this.rootElement.querySelector("#assignedCard");
+        // console.log("Assigned Card Image URL:", assignedCard.image.value); // Log the image URL
+        // assignedCardContainer.style.backgroundImage = `url(${assignedCard.image.value})`;
+        // assignedCardContainer.style.width = '120px'; // Ensure this matches your cell size
+        // assignedCardContainer.style.height = '160px'; // Ensure this matches your cell size
 
-        nameEl.innerHTML = (assignedCard.actorLabel == undefined ? "Unknown" : assignedCard.actorLabel.value);
-        heightEl.innerHTML = (assignedCard.height == undefined ? "Unknown" : assignedCard.height.value + "m");
-        dobEl.innerHTML = (assignedCard.date_of_birth == undefined ? "Unknown" : assignedCard.date_of_birth.value.split('-')[0]);
-        
+        // const nameEl = assignedCardData.querySelector("#name");
+        // const heightEl = assignedCardData.querySelector("#height");
+        // const dobEl = assignedCardData.querySelector("#dob");
+
+        // nameEl.innerHTML = (assignedCard.actorLabel == undefined ? "Unknown" : assignedCard.actorLabel.value);
+        // heightEl.innerHTML = (assignedCard.height == undefined ? "Unknown" : assignedCard.height.value + "m");
+        // dobEl.innerHTML = (assignedCard.date_of_birth == undefined ? "Unknown" : assignedCard.date_of_birth.value.split('-')[0]);
+
     }
-    
+
 
     createOpBoard() {
         let board = this.rootElement.querySelector("#opponentBoard");
@@ -363,6 +374,22 @@ class GuessWhoClient {
 
     update(state) {
         if (state === null) return;
+
+        let assignedCardContainer = this.rootElement.querySelector("#assignedCard");
+        this.yourCard = this.cardData[state.G.assignedCards[this.client.playerID]];
+        let assignedCard = this.yourCard;
+        assignedCardContainer.style.backgroundImage = `url(${assignedCard.image.value})`;
+        assignedCardContainer.style.width = '120px'; // Ensure this matches your cell size
+        assignedCardContainer.style.height = '160px'; // Ensure this matches your cell size
+
+        const nameEl = assignedCardData.querySelector("#name");
+        const heightEl = assignedCardData.querySelector("#height");
+        const dobEl = assignedCardData.querySelector("#dob");
+
+        nameEl.innerHTML = (assignedCard.actorLabel == undefined ? "Unknown" : assignedCard.actorLabel.value);
+        heightEl.innerHTML = (assignedCard.height == undefined ? "Unknown" : assignedCard.height.value + "m");
+        dobEl.innerHTML = (assignedCard.date_of_birth == undefined ? "Unknown" : assignedCard.date_of_birth.value.split('-')[0]);
+
         if (("gameover" in state.ctx)) {
             if (state.ctx.gameover.winner == this.client.playerID) {
                 document.getElementById("guess").innerHTML = "<h1>You Win!</h1>";

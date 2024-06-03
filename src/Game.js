@@ -12,6 +12,10 @@ export const GuessWho = {
         guess: {
             "0": false,
             "1": false
+        },
+        assignedCards: {
+            '0': Math.floor(Math.random() * 50),
+            '1': Math.floor(Math.random() * 50)
         }
     }),
 
