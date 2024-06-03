@@ -201,8 +201,7 @@ class GuessWhoClient {
             rows.push(`<tr>${cells.join('')}</tr>`);
         }
         board.innerHTML += `
-      <table>${rows.join('')}</table>
-      <p class="winner"></p>`;
+      <table>${rows.join('')}</table>`;
 
     }
 
@@ -229,10 +228,6 @@ class GuessWhoClient {
       <p class="winner"></p>`;
 
     }
-
-
-
-
 
     attachListeners() {
         // This event handler will read the cell id from a cell’s
@@ -344,6 +339,8 @@ class GuessWhoClient {
 
     update(state) {
         if (state === null) return;
+
+        // If the game is over, show the gameover message.
         if (("gameover" in state.ctx)) {
             if (state.ctx.gameover.winner == this.client.playerID) {
                 document.getElementById("guess").innerHTML = "<h1>You Win!</h1>";
@@ -409,17 +406,7 @@ class GuessWhoClient {
 
 
 
-        // Get the gameover message element.
-        const messageEl = this.rootElement.querySelector('.winner');
-        // Update the element to show a winner if any.
-        if (state.ctx.gameover) {
-            messageEl.textContent =
-                state.ctx.gameover.winner !== undefined
-                    ? 'Winner: ' + state.ctx.gameover.winner
-                    : 'Draw!';
-        } else {
-            messageEl.textContent = '';
-        }
+
 
         //update chat element to hide if not in askQuestionStage
         const chatElement = document.getElementById('questionBox');
@@ -480,6 +467,13 @@ class GuessWhoClient {
 
 
     }
+
+
+
+
+
+
+
 
 }
 
