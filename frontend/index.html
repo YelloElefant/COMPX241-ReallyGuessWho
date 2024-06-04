@@ -5,25 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Guess Who?</title>
     <link rel="stylesheet" href="style.css" />
-    <!-- Links to styling css file -->
   </head>
   <body>
     <div id="gameArea">
-      <!-- Container div for the game area-->
       <div id="playerArea">
         <h1>You</h1>
         <div id="board1" class="board large-board"></div>
-        <!-- Div that will hold Player 1's cards-->
       </div>
       <div id="opponentArea">
         <h1>Opponent</h1>
         <div id="board2" class="board small-board"></div>
-        <!-- Div that will hold Player 2's cards-->
       </div>
     </div>
 
     <div id="dataSection">
-      <!-- Container for the data section -->
       <h2>Details</h2>
       <label for="nameInput">Name:</label>
       <input type="text" id="nameInput" name="nameInput" /><br />
@@ -42,7 +37,6 @@
     </div>
 
     <div id="questionBox">
-      <!-- Container for the question box -->
       <h2>Ask a Question</h2>
       <label for="questionInput">Question:</label>
       <input type="text" id="questionInput" name="questionInput" />
@@ -73,7 +67,7 @@
           board.appendChild(card);
         }
       }
-      createBoard("board1"); // Calls the function
+      createBoard("board1");
       createBoard("board2");
     </script>
   </body>
