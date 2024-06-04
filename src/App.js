@@ -51,9 +51,11 @@ class GuessWhoClient {
 
         this.rootElement = rootElement.appElement;
 
+        console.log("players names are", this.playersNames)
+
         let boardHeads = this.rootElement.querySelectorAll(".boardHead")
         for (let i = 0; i < boardHeads.length; i++) {
-            boardHeads[i].innerHTML = "Player " + (i == 1 ? playerID : this.opID) + " Board";
+            boardHeads[i].innerHTML = "Player " + (i == 1 ? this.playersNames[1] : this.playersNames[this.opID]) + " Board";
         }
 
 
