@@ -148,7 +148,7 @@ class GuessWhoClient {
             chatContainer.appendChild(messageElement);
 
             if ((this.answer && message.sender !== this.client.playerID) && !this.answeredQuestions.includes(message.id)) {
-                let response = prompt(message.payload);
+                let response = prompt(message.payload.replace("atrQuest", ''));
                 this.answeredQuestions.push(message.id);
                 this.client.moves.answerQuestion("res" + response, message.id, this.client.sendChatMessage);
             }
