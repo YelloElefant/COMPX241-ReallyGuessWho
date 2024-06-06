@@ -81,6 +81,7 @@ export const GuessWho = {
 };
 
 function askQuestion({ G, ctx, playerID, events }, message, sendChatMessage) {
+
     sendChatMessage("atrQuest" + message)
     console.log(playerID, "asked a question: ", message)
     events.setStage("dropCardStage");

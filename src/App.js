@@ -5,7 +5,7 @@ import request from 'request';
 import { SocketIO } from 'boardgame.io/multiplayer'
 import { LobbyClient } from 'boardgame.io/client';
 
-const lobbyClient = new LobbyClient({ server: 'http://192.168.1.29:8081' });
+const lobbyClient = new LobbyClient({ server: 'http://127.0.0.1:8081' });
 
 
 
@@ -16,7 +16,7 @@ class GuessWhoClient {
             numPlayers: 2,
             matchID: matchID,
             game: GuessWho,
-            multiplayer: SocketIO({ server: '192.168.1.29:8000' }),
+            multiplayer: SocketIO({ server: '127.0.0.1:8000' }),
             playerID: playerID,
             credentials: playerCredentials,
         });
