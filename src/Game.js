@@ -99,17 +99,11 @@ function clickCell({ G, playerID }, id, tableNum, undo) {
 
 }
 
-function dropCard({ G, playerID }) {
-    console.log(playerID, "dropped a card")
-}
-
 function answerQuestion({ G, playerID }, response, messageID, sendChatMessage) {
     console.log(playerID, "answered a question")
     sendChatMessage(response)
 
 }
-
-
 
 function guessWho({ G, events, playerID }) {
     console.log(playerID, "made a guess")

@@ -11,7 +11,8 @@ const lobbyClient = new LobbyClient({ server: 'http://127.0.0.1:8081' });
 
 class GuessWhoClient {
 
-    constructor(rootElement, imagesList, matchID, playersNames, playerCredentials, { playerID } = {}) {
+    constructor(rootElement, imagesList, matchID,
+        playersNames, playerCredentials, { playerID } = {}) {
         this.client = Client({
             numPlayers: 2,
             matchID: matchID,
